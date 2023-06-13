@@ -4,19 +4,18 @@ import LikeIcon from './icons/IconLike.vue'
 </script>
 <template>
     <div class="avatararea">
-        <a class="avatar"><img src="https://iconfont.alicdn.com/p/avatar/E7u3JgKfEInR.jpg" /></a>
+        <a class="avatar"><img src="https://pbs.twimg.com/profile_images/1590968738358079488/IY9Gx6Ok_200x200.jpg" /></a>
     </div>
     <div class="content">
         <div class="author">
-            <a href="">Fabrizio Romano</a>
-            <span>@FabrizioRomano</span>
+            <a href="">Elon Musk</a>
+            <span>@elonmusk</span>
             · 12小时
         </div>
         <div class="raw">
-            🚨 Kylian Mbappé has informed PSG of his decision: he’ll NOT trigger the option to extend current contract until
-            2025, it means that deal would expire next June 2024 — as L’Équipé called.<br /><br />
-            PSG position: NO plan to lose Kylian for free. <br /><br />
-            Sign new deal now or he could be sold.
+            In a few weeks, X/Twitter will start paying creators for ads served in their replies. First block payment totals $5M.
+<br /><br />
+Note, the creator must be verified and only ads served to verified users count.
         </div>
         <div class="op">
             <a>

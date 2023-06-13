@@ -16,6 +16,11 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue')
+    },
+    {
+      path: '/authorize/google',
+      name: 'authorizeGoogle',
+      component: () => import('../views/ExploreView.vue')
     }
   ]
 })

@@ -21,9 +21,9 @@ import GoogleIcon from './icons/IconGoogle.vue'
 .sidelogin {
     width: 300px;
     border: 1px solid rgb(239, 243, 244);
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 5px 15px;
-
+    margin-top: 20px;
 }
 
 .sidelogin .loginbtn {

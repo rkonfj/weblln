@@ -1,9 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import Login from './components/Login.vue'
+import Labels from './components/Labels.vue'
+
 import ExploreIcon from './components/icons/IconExplore.vue'
 import SettingsIcon from './components/icons/IconSettings.vue'
 import HomeIcon from './components/icons/IconHome.vue'
+import MessageIcon from './components/icons/IconMessage.vue'
+import BookmarkIcon from './components/icons/IconBookmark.vue'
+import ProfileIcon from './components/icons/IconProfile.vue'
 
 </script>
 
@@ -18,6 +23,15 @@ import HomeIcon from './components/icons/IconHome.vue'
           <RouterLink to="/explore"><ExploreIcon /><span>探索</span></RouterLink>
         </li>
         <li>
+          <RouterLink to="/messages"><MessageIcon /><span>消息</span></RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/bookmarks"><BookmarkIcon /><span>书签</span></RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/profile"><ProfileIcon /><span>主页</span></RouterLink>
+        </li>
+        <li>
           <RouterLink to="/settings"><SettingsIcon /><span>设置</span></RouterLink>
         </li>
       </ul>
@@ -29,6 +43,7 @@ import HomeIcon from './components/icons/IconHome.vue'
   <div class="right-sidebar">
     <footer>
       <Login />
+      <Labels />
     </footer>
   </div>
 </template>
@@ -85,5 +100,5 @@ nav a span {
 
 footer {
   position: fixed;
-  padding: 20px;
+  padding: 0 20px;
 }</style>
