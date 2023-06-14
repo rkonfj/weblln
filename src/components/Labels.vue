@@ -1,21 +1,30 @@
 <script setup>
+import Loadding from '../components/Loadding.vue'
 import { ref, onMounted } from 'vue'
 
+const emit = defineEmits(['posted'])
 const labels =  ref()
 
 onMounted(async ()=>{
-    labels.value = await (await fetch('https://api.lowlevelnews.com/o/labels')).json()
+    let resp = await fetch('https://api.lowlevelnews.com/o/labels')
+    if(resp.headers.get("X-Session-Valid") == "false") {
+        emit("sessionExpired")
+    }
+    labels.value = await resp.json()
 })
 </script>
 <template>
-    <div v-if="labels" class="sidelabels">
-        <h2>热点</h2>
-        <ul>
-            <li v-for="label in labels">
-                <div class="label">#{{ label.value }}</div>
-                <div class="count">{{ label.count }}</div>
-            </li>
-        </ul>
+    <div class="sidelabels">
+        <div v-if="labels">
+            <h2>热点</h2>
+            <ul>
+                <li v-for="label in labels">
+                    <div class="label">#{{ label.value }}</div>
+                    <div class="count">{{ label.count }}</div>
+                </li>
+            </ul>
+        </div>
+        <Loadding v-if="!labels" />
     </div>
 </template>
 <style scoped>

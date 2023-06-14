@@ -1,12 +1,16 @@
 <script setup>
 import { watchEffect, ref, onMounted } from 'vue'
 
+const emit = defineEmits(['posted'])
+
 const sessionUniqueName = ref("")
 const sessionPicture = ref("")
 const activeClass = ref("")
 const session = ref(null)
 const contentRaw = ref("")
 const contentFormatted = ref([])
+const loadding = ref(false)
+
 
 onMounted(() => {
     let sessionStr = window.localStorage.getItem("session")
@@ -27,9 +31,10 @@ watchEffect(() => {
 })
 
 async function newStatus() {
-    if (contentRaw.value.length == 0) {
+    if (contentRaw.value.length == 0 || loadding.value) {
         return
     }
+    loadding.value = true
     const div = document.createElement('div')
     div.innerHTML = contentRaw.value
     contentFormatted.value = []
@@ -44,10 +49,11 @@ async function newStatus() {
             content: contentFormatted.value,
         })
     })
-
+    loadding.value = false
     if (resp.status == 200) {
         document.querySelector('.postarea .content .raw').innerHTML = ''
         contentRaw.value = ''
+        emit('posted')
     } else if (resp.status == 401) {
         alert("401")
     } else {
@@ -111,7 +117,7 @@ function processNode(node) {
             <div class="raw" contenteditable="true" @dragover.prevent @drop="handleDragEnter" @paste="paseText"
                 @input="updateContentModel" placeholder="有什么新鲜事？"></div>
             <div class="operate">
-                <button :class="activeClass" @click="newStatus()">推送</button>
+                <button :class="activeClass" @click="newStatus()">{{ loadding?"···":"推送" }}</button>
             </div>
         </div>
     </div>
@@ -142,7 +148,7 @@ function processNode(node) {
 .content .raw {
     width: 100%;
     min-height: 4rem;
-    padding: .5rem;
+    padding: .5rem 0;
     outline: none;
     border: none;
 }

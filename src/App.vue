@@ -21,6 +21,9 @@ onMounted(() => {
   }
 })
 
+function logout() {
+  session.value = null
+}
 </script>
 
 <template>
@@ -54,7 +57,7 @@ onMounted(() => {
   <div class="right-sidebar">
     <footer>
       <Login v-if="!session" />
-      <Labels />
+      <Labels @session-expired="logout"/>
     </footer>
   </div>
 </template>
@@ -106,6 +109,7 @@ nav a span {
 }
 
 .right-sidebar {
+  display: flex;
   flex: 0 0 600px;
 }
 
