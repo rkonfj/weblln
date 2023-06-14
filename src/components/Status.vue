@@ -1,21 +1,20 @@
 <script setup>
 import CommentIcon from './icons/IconComment.vue'
 import LikeIcon from './icons/IconLike.vue'
+defineProps(['status'])
 </script>
 <template>
     <div class="avatararea">
-        <a class="avatar"><img src="https://pbs.twimg.com/profile_images/1590968738358079488/IY9Gx6Ok_200x200.jpg" /></a>
+        <a class="avatar"><img :src="status.user.picture" alt="avatar" /></a>
     </div>
     <div class="content">
         <div class="author">
-            <a href="">Elon Musk</a>
-            <span>@elonmusk</span>
+            <a :href="'/' + status.user.uniqueName">{{ status.user.name }}</a>
+            <span>@{{ status.user.uniqueName }}</span>
             · 12小时
         </div>
         <div class="raw">
-            In a few weeks, X/Twitter will start paying creators for ads served in their replies. First block payment totals $5M.
-<br /><br />
-Note, the creator must be verified and only ads served to verified users count.
+            <p v-for="c in status.content">{{ c.value }}</p>
         </div>
         <div class="op">
             <a>

@@ -10,6 +10,17 @@ import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
 import ProfileIcon from './components/icons/IconProfile.vue'
 
+import { ref, onMounted } from 'vue'
+
+const session = ref(null)
+
+onMounted(() => {
+  let sessionStr = window.localStorage.getItem("session")
+  if(sessionStr) {
+    session.value = JSON.parse(sessionStr)
+  }
+})
+
 </script>
 
 <template>
@@ -20,16 +31,16 @@ import ProfileIcon from './components/icons/IconProfile.vue'
           <RouterLink to="/"><HomeIcon /></RouterLink>
         </li>
         <li>
-          <RouterLink to="/explore"><ExploreIcon /><span>探索</span></RouterLink>
+          <RouterLink to="/explore"><ExploreIcon /><span>{{ session?'主页':'探索' }}</span></RouterLink>
         </li>
-        <li>
+        <li v-if="session">
           <RouterLink to="/messages"><MessageIcon /><span>消息</span></RouterLink>
         </li>
-        <li>
+        <li v-if="session">
           <RouterLink to="/bookmarks"><BookmarkIcon /><span>书签</span></RouterLink>
         </li>
-        <li>
-          <RouterLink to="/profile"><ProfileIcon /><span>主页</span></RouterLink>
+        <li v-if="session">
+          <RouterLink :to="'/' + session.uniqueName"><ProfileIcon /><span>个人资料</span></RouterLink>
         </li>
         <li>
           <RouterLink to="/settings"><SettingsIcon /><span>设置</span></RouterLink>
@@ -42,7 +53,7 @@ import ProfileIcon from './components/icons/IconProfile.vue'
   </div>
   <div class="right-sidebar">
     <footer>
-      <Login />
+      <Login v-if="!session" />
       <Labels />
     </footer>
   </div>
@@ -66,8 +77,8 @@ nav a.router-link-exact-active span {
 nav a {
   display: flex;
   align-items: center;
-  width: 120px;
-  padding: 10px 15px;
+  padding: 10px 20px 10px 15px;
+  width: fit-content;
   border-radius: 30px;
   color: var(--color-text);
 }

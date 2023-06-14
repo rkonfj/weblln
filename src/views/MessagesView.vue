@@ -3,7 +3,7 @@ import Title from '../components/Title.vue'
 </script>
 <template>
     <main>
-      <Title title="设置" />
+      <Title title="消息" />
     </main>
 </template>
 

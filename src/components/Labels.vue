@@ -1,50 +1,19 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const labels =  ref()
+
+onMounted(async ()=>{
+    labels.value = await (await fetch('https://api.lowlevelnews.com/o/labels')).json()
+})
+</script>
 <template>
-    <div class="sidelabels">
+    <div v-if="labels" class="sidelabels">
         <h2>热点</h2>
         <ul>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#Bitcoin</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#Bitcoin</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#Bitcoin</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#Bitcoin</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#Bitcoin</div>
-                <div class="count">10K</div>
-            </li>
-            <li>
-                <div class="label">#AI</div>
-                <div class="count">10K</div>
+            <li v-for="label in labels">
+                <div class="label">#{{ label.value }}</div>
+                <div class="count">{{ label.count }}</div>
             </li>
         </ul>
     </div>
@@ -71,7 +40,7 @@
 }
 .sidelabels .label {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
 }
 .sidelabels .count {
     font-size: 14px;
@@ -81,5 +50,6 @@ h2 {
     padding: 6px 15px;
     font-size: 20px;
     font-weight: bold;
+    color: #000;
 }
 </style>

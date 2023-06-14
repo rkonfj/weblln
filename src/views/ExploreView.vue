@@ -1,47 +1,36 @@
 <script setup>
 import Status from '../components/Status.vue'
+import Post from '../components/Post.vue'
+import Title from '../components/Title.vue'
+
+import { ref, onMounted } from 'vue'
+
+const session = ref(null)
+const status = ref(null)
+
+onMounted(async () => {
+  let sessionStr = window.localStorage.getItem("session")
+  if(sessionStr) {
+    session.value = JSON.parse(sessionStr)
+  }
+  let resp = await fetch('https://api.lowlevelnews.com/o/explore')
+  status.value = await resp.json()
+})
+
 </script>
 <template>
   <main>
-    <h2>探索</h2>
+    <Title :title="session?'主页':'探索'" />
+    <Post v-if="session" />
     <ul>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
-      </li>
-      <li>
-        <Status />
+      <li v-for="s in status">
+        <Status :status="s" />
       </li>
     </ul>
   </main>
 </template>
 
 <style scoped>
-h2 {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 10px 20px;
-  display: block;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(10px);
-}
 main {
   border-left: 1px solid rgb(239, 243, 244);
   border-right: 1px solid rgb(239, 243, 244);

@@ -18,9 +18,24 @@ const router = createRouter({
       component: () => import('../views/SettingsView.vue')
     },
     {
-      path: '/authorize/google',
-      name: 'authorizeGoogle',
-      component: () => import('../views/ExploreView.vue')
+      path: '/messages',
+      name: 'messages',
+      component: () => import('../views/MessagesView.vue')
+    },
+    {
+      path: '/bookmarks',
+      name: 'bookmarks',
+      component: () => import('../views/BookmarksView.vue')
+    },
+    {
+      path: '/authorize/:provider',
+      name: 'authorize',
+      component: () => import('../views/AuthorizeView.vue')
+    },
+    {
+      path: '/:uniqueName',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue')
     }
   ]
 })
