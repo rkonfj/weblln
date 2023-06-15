@@ -22,11 +22,14 @@ onMounted(async () => {
         emit("sessionExpired")
     }
     labels.value = await resp.json()
+    if (labels.value == null) {
+        labels.value = []
+    }
 })
 </script>
 <template>
-    <div class="sidelabels">
-        <div v-if="labels">
+    <div v-if="!labels || labels.length > 0" class="sidelabels">
+        <div v-if="labels && labels.length > 0">
             <h2>热点</h2>
             <ul>
                 <li v-for="label in labels">
@@ -75,4 +78,5 @@ h2 {
     font-size: 20px;
     font-weight: bold;
     color: #000;
-}</style>
+}
+</style>

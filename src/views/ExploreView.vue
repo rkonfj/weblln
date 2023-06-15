@@ -3,12 +3,12 @@ import Status from '../components/Status.vue'
 import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
 import Loadding from '../components/Loadding.vue'
-
-
+import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
-const session = ref(null)
-const status = ref(null)
+const router = useRouter()
+const session = ref()
+const status = ref()
 
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
@@ -30,6 +30,9 @@ async function loadExploreData() {
     session.value = null
   }
   status.value = await resp.json()
+  if (status.value == null) {
+    status.value = []
+  }
 }
 
 </script>
@@ -38,7 +41,7 @@ async function loadExploreData() {
     <Title :title="session ? '主页' : '探索'" />
     <Post v-if="session" @posted="loadExploreData" />
     <ul v-if="status">
-      <li v-for="s in status">
+      <li v-for="s in status" @click="router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" />
       </li>
     </ul>

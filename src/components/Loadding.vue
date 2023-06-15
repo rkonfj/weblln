@@ -1,6 +1,6 @@
 <template>
-    <div class="loaddingarea">
-        <div class="loadding"></div>
+    <div class="loadingarea">
+        <div class="loading"></div>
     </div>
 </template>
 
@@ -10,13 +10,13 @@
   100% { transform: rotate(360deg); }
 }
 
-.loaddingarea {
+.loadingarea {
     display: flex;
     width: 100%;
-    padding: 20px 0;
+    padding: 30px 0;
     justify-content: center;
 }
-.loadding {
+.loading {
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;

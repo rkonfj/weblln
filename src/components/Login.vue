@@ -8,7 +8,7 @@ import { RouterLink } from 'vue-router'
         <h2>一见如旧，请先登录</h2>
         <div class="tips">看来你是新来的。立即认证，获取你自己的个性化时间线！</div>
         <div class="btnarea">
-            <a class="loginbtn" href="https://api.lowlevelnews.com/o/oidc/google">
+            <a class="loginbtn" :href="`https://api.lowlevelnews.com/o/oidc/google?jump=${$route.path}`">
                 <GoogleIcon /><span>使用 Google 账号认证</span>
             </a>
         </div>

@@ -5,33 +5,35 @@ import moment from 'moment'
 defineProps(['status'])
 </script>
 <template>
-    <div class="avatararea">
-        <a :href="'/' + status.user.uniqueName" class="avatar"><img :src="status.user.picture" alt="avatar" /></a>
+  <div class="avatararea">
+    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar"><img :src="status.user.picture" alt="avatar" /></RouterLink>
+  </div>
+  <div class="content">
+    <div class="author">
+      <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+      <span>@{{ status.user.uniqueName }}</span>
+      · {{ moment.duration(moment().diff(moment(status.createTime))).humanize() }}
     </div>
-    <div class="content">
-        <div class="author">
-            <a :href="'/' + status.user.uniqueName">{{ status.user.name }}</a>
-            <span>@{{ status.user.uniqueName }}</span>
-            · {{ moment.duration(moment().diff(moment(status.createTime))).humanize() }}
-        </div>
-        <div class="raw">
-            <p v-for="c in status.content">{{ c.value }}</p>
-        </div>
-        <div class="op">
-            <a>
-                <div class="icon">
-                    <CommentIcon />
-                </div><span>544</span>
-            </a>
-        <a>
-            <div class="icon">
-                <LikeIcon />
-            </div><span>7.2万</span>
-        </a>
+    <div class="raw">
+      <p v-for="c in status.content">{{ c.value }}</p>
     </div>
-</div></template>
+    <div class="op">
+      <a>
+        <div class="icon">
+          <CommentIcon />
+        </div><span>544</span>
+      </a>
+      <a>
+        <div class="icon">
+          <LikeIcon />
+        </div><span>7.2万</span>
+      </a>
+    </div>
+  </div>
+</template>
 <style scoped>
-.avatar, .avatar img {
+.avatar,
+.avatar img {
   display: inline-block;
   width: 40px;
   height: 40px;
@@ -42,6 +44,10 @@ defineProps(['status'])
   padding: 0 10px;
 }
 
+.content .author {
+  line-height: 16px;
+  margin-bottom: 5px;
+}
 .content .author span {
   color: #666;
   margin-left: 10px;
@@ -57,10 +63,12 @@ defineProps(['status'])
   text-decoration-color: #222;
   background: none;
 }
+
 .content .op {
   display: flex;
   margin: 5px 0 0 -6px;
 }
+
 .content .op a {
   display: flex;
   align-items: center;
@@ -73,7 +81,7 @@ defineProps(['status'])
 }
 
 .content .op a:hover .icon {
-  background-color: rgba(29, 155, 240,0.1);
+  background-color: rgba(29, 155, 240, 0.1);
   transition: 0.4s;
 }
 
@@ -99,5 +107,4 @@ defineProps(['status'])
   width: 30px;
   border-radius: 50%;
 }
-
 </style>

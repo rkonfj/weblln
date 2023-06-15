@@ -1,29 +1,36 @@
 <template>
-    <h2>{{ title }}</h2>
+    <h2><a v-if="backbtn"><IconBack @click="$router.go(-1)" /></a><span>{{ title }}</span></h2>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      required: true
-    }
-  }
-}
+<script setup>
+import IconBack from './icons/IconBack.vue'
+defineProps(['title','backbtn'])
 </script>
 
 <style scoped>
 h2 {
-  font-size: 20px;
-  font-weight: bold;
   padding: .5rem 1rem;
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   position: sticky;
   top: 0;
   backdrop-filter: blur(10px);
+}
+h2 span {
+  font-size: 20px;
+  font-weight: bold;
   color: #000;
+}
+h2 a {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 23px;
+  cursor: pointer;
+  border-radius: 50%;
 }
 </style>
