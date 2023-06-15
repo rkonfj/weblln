@@ -1,18 +1,28 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+
 import Login from './components/Login.vue'
 import Labels from './components/Labels.vue'
-
 import ExploreIcon from './components/icons/IconExplore.vue'
 import SettingsIcon from './components/icons/IconSettings.vue'
 import HomeIcon from './components/icons/IconHome.vue'
 import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
 import LogoutIcon from './components/icons/IconLogout.vue'
+import Loadding from './components/Loadding.vue'
 
-import { ref, onMounted } from 'vue'
+const session = ref()
+const loading = ref()
+const router = useRouter()
 
-const session = ref(null)
+router.beforeEach(() => {
+  loading.value = true
+})
+
+router.afterEach(() => {
+  loading.value = false
+})
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
@@ -72,7 +82,8 @@ function logout() {
 
   </div>
   <div class="main-content">
-    <RouterView />
+    <RouterView v-if="!loading" />
+    <Loadding v-if="loading" />
   </div>
   <div class="right-sidebar">
     <footer>
@@ -185,6 +196,8 @@ nav a span {
 
 .main-content {
   flex: 1;
+  display: flex;
+  flex-direction: row;
 }
 
 .right-sidebar {
@@ -201,10 +214,12 @@ footer .foot {
   padding: 15px 15px;
   font-size: 14px;
 }
+
 footer .foot a {
   color: #666;
   margin: 0 10px 0 0;
 }
+
 footer .foot a:hover {
   text-decoration: underline;
   text-decoration-color: #666;
