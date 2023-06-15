@@ -1,5 +1,6 @@
 <script setup>
 import Title from '../components/Title.vue'
+import Loadding from '../components/Loadding.vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -24,7 +25,8 @@ onMounted(async () => {
 <template>
     <main>
         <Title title="认证" />
-        <div  v-if="message" class="tips">{{ message }}</div>
+        <div v-if="message" class="tips">{{ message }}</div>
+        <Loadding v-if="!message" />
     </main>
 </template>
 <style scoped>
