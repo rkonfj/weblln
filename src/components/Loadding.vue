@@ -13,7 +13,7 @@
 .loaddingarea {
     display: flex;
     width: 100%;
-    padding: 120px 0;
+    padding: 20px 0;
     justify-content: center;
 }
 .loadding {

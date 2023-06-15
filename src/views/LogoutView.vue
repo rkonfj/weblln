@@ -1,10 +1,14 @@
 <script setup>
 import Title from '../components/Title.vue'
+import Loadding from '../components/Loadding.vue'
+window.localStorage.removeItem('session')
+window.location.href = '/'
 </script>
 <template>
-    <main>
-      <Title title="书签" />
-    </main>
+  <main>
+    <Title title="登出" />
+    <Loadding />
+  </main>
 </template>
 
 <style scoped>

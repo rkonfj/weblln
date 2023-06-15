@@ -2,12 +2,23 @@
 import Loadding from '../components/Loadding.vue'
 import { ref, onMounted } from 'vue'
 
-const emit = defineEmits(['posted'])
-const labels =  ref()
+const emit = defineEmits(['sessionExpired'])
+const labels = ref()
+const session = ref()
 
-onMounted(async ()=>{
-    let resp = await fetch('https://api.lowlevelnews.com/o/labels')
-    if(resp.headers.get("X-Session-Valid") == "false") {
+onMounted(async () => {
+    let sessionStr = window.localStorage.getItem("session")
+    if (sessionStr) {
+        session.value = JSON.parse(sessionStr)
+    }
+    let opts = {}
+    if (session.value) {
+        opts.headers = {
+            "Authorization": session.value.apiKey,
+        }
+    }
+    let resp = await fetch('https://api.lowlevelnews.com/o/labels', opts)
+    if (resp.headers.get("X-Session-Valid") == "false") {
         emit("sessionExpired")
     }
     labels.value = await resp.json()
@@ -42,23 +53,26 @@ onMounted(async ()=>{
     display: flex;
     justify-content: space-between;
 }
+
 .sidelabels li:hover {
-    background-color: rgba(0,0,0,0.04);
+    background-color: rgba(0, 0, 0, 0.04);
     cursor: pointer;
     transition: 0.4s;
 }
+
 .sidelabels .label {
     font-weight: bold;
     font-size: 15px;
 }
+
 .sidelabels .count {
     font-size: 14px;
     color: #666;
 }
+
 h2 {
     padding: 6px 15px;
     font-size: 20px;
     font-weight: bold;
     color: #000;
-}
-</style>
+}</style>

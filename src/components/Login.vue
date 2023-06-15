@@ -1,5 +1,6 @@
 <script setup>
 import GoogleIcon from './icons/IconGoogle.vue'
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
@@ -12,7 +13,7 @@ import GoogleIcon from './icons/IconGoogle.vue'
             </a>
         </div>
         <div class="tips">
-            认证即表示同意 <a href="/rules">服务条款</a> 及 <a href="/privacypolicy">隐私政策</a>。
+            认证即表示同意 <RouterLink to="/rules">服务条款</RouterLink> 及 <RouterLink to="/privacypolicy">隐私政策</RouterLink>。
         </div>
     </div>
 </template>

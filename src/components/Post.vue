@@ -1,4 +1,5 @@
 <script setup>
+import MediaIcon from './icons/IconMedia.vue'
 import { watchEffect, ref, onMounted } from 'vue'
 
 const emit = defineEmits(['posted'])
@@ -117,7 +118,12 @@ function processNode(node) {
             <div class="raw" contenteditable="true" @dragover.prevent @drop="handleDragEnter" @paste="paseText"
                 @input="updateContentModel" placeholder="有什么新鲜事？"></div>
             <div class="operate">
-                <button :class="activeClass" @click="newStatus()">{{ loadding?"···":"推送" }}</button>
+                <div class="func">
+                    <a title="媒体（不可用状态）">
+                        <MediaIcon />
+                    </a>
+                </div>
+                <button :class="activeClass" @click="newStatus()">{{ loadding ? "···" : "推送" }}</button>
             </div>
         </div>
     </div>
@@ -160,10 +166,31 @@ function processNode(node) {
 
 .content .operate {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.content .operate .func {
+    display: flex;
+    justify-content: center;
+    height: 36px;
+    align-items: center;
+    margin-left: -10px;
+}
+
+.content .operate .func a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
 .content .operate button {
+    user-select: none;
     display: inline-block;
     border: none;
     background-color: hsla(160, 100%, 37%, .7);
