@@ -76,14 +76,14 @@ main ul li:hover {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  margin: -65px 0 0 15px;
+  margin: -78px 0 0 15px;
   border: 5px solid #fff;
   display: flex;
   background-color: #fff;
 }
 
 .mainarea .info {
-  padding: 0 15px;
+  padding: 8px 15px;
 }
 
 .mainarea .profile .n {

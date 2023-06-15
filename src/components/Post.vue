@@ -139,7 +139,7 @@ function processNode(node) {
 
 .postarea {
     display: flex;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-bottom: .5px solid rgb(239, 243, 244);
 }
 

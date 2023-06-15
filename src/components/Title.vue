@@ -29,7 +29,7 @@ h2 a {
   height: 30px;
   justify-content: center;
   align-items: center;
-  margin-right: 23px;
+  margin:0 25px 0 -7px;
   cursor: pointer;
   border-radius: 50%;
 }

@@ -9,7 +9,7 @@ import SettingsIcon from './components/icons/IconSettings.vue'
 import HomeIcon from './components/icons/IconHome.vue'
 import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
-import LogoutIcon from './components/icons/IconLogout.vue'
+import SessionUser from './components/SessionUser.vue'
 import Loadding from './components/Loadding.vue'
 
 const session = ref()
@@ -66,24 +66,17 @@ function logout() {
           </RouterLink>
         </li>
       </ul>
-      <div class="user" v-if="session">
-        <RouterLink class="profile" :to="'/' + session.uniqueName">
-          <img :src="session.picture" alt="avatar" />
-          <div class="namearea">
-            <div class="n1">{{ session.name }}</div>
-            <div class="n2">@{{ session.uniqueName }}</div>
-          </div>
-        </RouterLink>
-        <RouterLink class="logout" to="/logout">
-          <LogoutIcon />
-        </RouterLink>
-      </div>
+      <SessionUser v-if="session" :session="session" />
     </nav>
 
   </div>
   <div class="main-content">
     <RouterView v-if="!loading" />
     <Loadding v-if="loading" />
+    <Login v-if="!session" />
+    <div v-if="session" class="onmobile">
+      <SessionUser :session="session" />
+    </div>
   </div>
   <div class="right-sidebar">
     <footer>
@@ -140,58 +133,9 @@ nav a span {
 .sidebar {
   display: flex;
   flex-direction: column;
-  flex: 0 0 600px;
+  flex: 0 0 38rem;
   align-items: flex-end;
   justify-content: space-between;
-}
-
-.sidebar .user {
-  display: flex;
-  border-radius: 80px;
-  width: 250px;
-  cursor: pointer;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  height: 68px;
-}
-
-.sidebar .user img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.sidebar .user .namearea {
-  margin-left: 10px;
-}
-
-.sidebar .user .profile {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 68px;
-}
-
-.sidebar .user .logout {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  padding: 0;
-  margin-right: -5px;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-}
-
-.sidebar .user a .n1 {
-  font-weight: bold;
-}
-
-.sidebar .user a .n2 {
-  font-size: 12px;
-  color: #666;
 }
 
 .main-content {
@@ -200,9 +144,17 @@ nav a span {
   flex-direction: row;
 }
 
+.main-content .sidelogin {
+  display: none;
+}
+
+.main-content .onmobile {
+  display: none;
+}
+
 .right-sidebar {
   display: flex;
-  flex: 0 0 600px;
+  flex: 0 0 38rem;
 }
 
 footer {
@@ -225,4 +177,86 @@ footer .foot a:hover {
   text-decoration-color: #666;
   background: none;
 }
-</style>
+
+@media (max-width: 60rem) {
+
+  .sidebar,
+  .right-sidebar {
+    display: none;
+  }
+  .main-content {
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+  }
+  .main-content .sidelogin {
+    display: block;
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .main-content .onmobile  {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    justify-content: center;
+    background-color: #fff;
+  }
+
+  .main-content .onmobile .sessionuser {
+    width: 100%;
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 60rem) and (max-width: 80rem) {
+  .right-sidebar {
+    display: none;
+  }
+
+  .sidebar {
+    flex: 0 0 20rem;
+  }
+}
+
+@media (min-width: 80rem) and (max-width: 90rem) {
+
+  .sidebar,
+  .right-sidebar {
+    flex: 0 0 20rem;
+  }
+}
+
+@media (min-width: 90rem) and (max-width: 100rem) {
+
+  .sidebar,
+  .right-sidebar {
+    flex: 0 0 25rem;
+  }
+}
+
+@media (min-width: 100rem) and (max-width: 110rem) {
+
+  .sidebar,
+  .right-sidebar {
+    flex: 0 0 28rem;
+  }
+}
+
+@media (min-width: 110rem) and (max-width: 120rem) {
+
+  .sidebar,
+  .right-sidebar {
+    flex: 0 0 33rem;
+  }
+}
+
+@media (min-width: 120rem) and (max-width: 130rem) {
+
+  .sidebar,
+  .right-sidebar {
+    flex: 0 0 38rem;
+  }
+}</style>

@@ -57,7 +57,7 @@ main {
 
 main ul li {
   display: flex;
-  padding: 10px 20px;
+  padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid rgb(239, 243, 244);
 }
