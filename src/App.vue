@@ -14,6 +14,7 @@ import Loadding from './components/Loadding.vue'
 
 const session = ref()
 const loading = ref()
+const shouldLogin = ref()
 const router = useRouter()
 
 router.beforeEach(() => {
@@ -33,6 +34,12 @@ onMounted(() => {
 
 function logout() {
   session.value = null
+  window.localStorage.removeItem('session')
+}
+
+function shakeLogin() {
+  shouldLogin.value = true
+  setTimeout(() => shouldLogin.value = false, 1000)
 }
 </script>
 
@@ -71,16 +78,16 @@ function logout() {
 
   </div>
   <div class="main-content">
-    <RouterView v-if="!loading" />
+    <RouterView v-if="!loading" @shouldLogin="shakeLogin" />
     <Loadding v-if="loading" />
-    <Login v-if="!session" />
+    <Login v-if="!session" :class="{'shake' : shouldLogin}" />
     <div v-if="session" class="onmobile">
       <SessionUser :session="session" />
     </div>
   </div>
   <div class="right-sidebar">
     <footer>
-      <Login v-if="!session" />
+      <Login v-if="!session" :class="{'shake' : shouldLogin}"/>
       <Labels @session-expired="logout" />
       <div v-if="session" class="foot">
         <RouterLink to="/rules">服务条款</RouterLink>
@@ -176,6 +183,18 @@ footer .foot a:hover {
   text-decoration: underline;
   text-decoration-color: #666;
   background: none;
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
 }
 
 @media (max-width: 60rem) {

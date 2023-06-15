@@ -1,12 +1,53 @@
 <script setup>
+import { onMounted, ref } from 'vue';
 import CommentIcon from './icons/IconComment.vue'
 import LikeIcon from './icons/IconLike.vue'
 import moment from 'moment'
-defineProps(['status'])
+
+const emit = defineEmits(['shouldLogin'])
+const props = defineProps(['status', 'timeline'])
+const session = ref()
+
+onMounted(() => {
+  let sessionStr = window.localStorage.getItem("session")
+  if (sessionStr) {
+    session.value = JSON.parse(sessionStr)
+  }
+})
+
+async function likeStatus() {
+  if (!session.value) {
+    emit('shouldLogin')
+    return
+  }
+  let resp = await fetch(`https://api.lowlevelnews.com/i/like/status/${props.status.id}`, {
+    method: 'post',
+    headers: {
+      "Authorization": session.value.apiKey,
+    }
+  })
+  if (resp.status == 401) {
+    emit('shouldLogin')
+    return
+  }
+  if (resp.status != 200) {
+    alert(await resp.text())
+    return
+  }
+  
+  props.status.liked = !props.status.liked
+  if(!props.status.liked) {
+    props.status.likeCount--
+  } else {
+    props.status.likeCount++
+  }
+}
 </script>
 <template>
   <div class="avatararea">
-    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar"><img :src="status.user.picture" alt="avatar" /></RouterLink>
+    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar"><img :src="status.user.picture"
+        alt="avatar" /></RouterLink>
+    <div v-if="timeline" class="timeline"></div>
   </div>
   <div class="content">
     <div class="author">
@@ -21,17 +62,32 @@ defineProps(['status'])
       <a>
         <div class="icon">
           <CommentIcon />
-        </div><span>544</span>
+        </div><span>{{ status.comments }}</span>
       </a>
-      <a>
+      <a @click.stop="likeStatus">
         <div class="icon">
           <LikeIcon />
-        </div><span>7.2万</span>
+        </div><span>{{ status.likeCount }}</span>
       </a>
     </div>
   </div>
 </template>
 <style scoped>
+.avatararea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatararea .timeline {
+  display: flex;
+  width: 2px;
+  background-color: rgb(207, 217, 222);
+  flex-grow: 1;
+  min-height: calc(100% - 26px);
+  margin-top: 3px;
+}
+
 .avatar,
 .avatar img {
   display: inline-block;
@@ -48,6 +104,7 @@ defineProps(['status'])
   line-height: 16px;
   margin-bottom: 5px;
 }
+
 .content .author span {
   color: #666;
   margin-left: 10px;

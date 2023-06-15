@@ -162,6 +162,8 @@ function processNode(node) {
     padding: .5rem 0;
     outline: none;
     border: none;
+    max-width: 100%;
+    word-break: break-all;
 }
 
 .content [contenteditable=true]:empty:before {
