@@ -39,7 +39,7 @@ async function loadExploreData() {
 <template>
   <main>
     <Title :title="session ? '主页' : '探索'" />
-    <Post v-if="session" @posted="loadExploreData" />
+    <Post v-if="session" @posted="loadExploreData" placeholder="有什么新鲜事？" btntext="推送" />
     <ul v-if="status">
       <li v-for="s in status" @click="router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" />

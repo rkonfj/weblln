@@ -2,6 +2,7 @@
 import MediaIcon from './icons/IconMedia.vue'
 import { watchEffect, ref, onMounted } from 'vue'
 
+const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
 
 const sessionUniqueName = ref("")
@@ -41,14 +42,18 @@ async function newStatus() {
     contentFormatted.value = []
     processNode(div)
     console.log(contentFormatted.value)
+    let postBody = {
+        content: contentFormatted.value,
+    }
+    if(props.prevstatus) {
+        postBody.prev = props.prevstatus
+    }
     let resp = await fetch('https://api.lowlevelnews.com/i/status', {
         method: 'post',
         headers: {
             "Authorization": session.value.apiKey,
         },
-        body: JSON.stringify({
-            content: contentFormatted.value,
-        })
+        body: JSON.stringify(postBody)
     })
     loadding.value = false
     if (resp.status == 200) {
@@ -116,14 +121,14 @@ function processNode(node) {
         </div>
         <div class="content">
             <div class="raw" contenteditable="true" @dragover.prevent @drop="handleDragEnter" @paste="paseText"
-                @input="updateContentModel" placeholder="有什么新鲜事？"></div>
+                @input="updateContentModel" :placeholder="placeholder"></div>
             <div class="operate">
                 <div class="func">
                     <a title="媒体（不可用状态）">
                         <MediaIcon />
                     </a>
                 </div>
-                <button :class="activeClass" @click="newStatus()">{{ loadding ? "···" : "推送" }}</button>
+                <button :class="activeClass" @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
             </div>
         </div>
     </div>
