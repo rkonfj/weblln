@@ -3,12 +3,17 @@ import Title from '../components/Title.vue'
 import Status from '../components/Status.vue'
 import Loadding from '../components/Loadding.vue'
 import Post from '../components/Post.vue'
+import BookmarkIcon from '../components/icons/IconBookmark.vue'
+import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
+
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
+const emit = defineEmits(['shouldLogin'])
 const status = ref([])
 const session = ref()
 const comments = ref()
+const bookmarked = ref()
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
@@ -41,17 +46,47 @@ function loadComments() {
     })
 }
 
+async function bookmark() {
+  if (!session.value) {
+    emit('shouldLogin')
+    return
+  }
+  let resp = await fetch(`https://api.lowlevelnews.com/i/bookmark/status/${route.params.id}`, {
+    method: 'post',
+    headers: {
+      "Authorization": session.value.apiKey,
+    }
+  })
+  if (resp.status == 401) {
+    session.value = null
+    emit('shouldLogin')
+    return
+  }
+  if (resp.status != 200) {
+    alert(await resp.text())
+    return
+  }
+  bookmarked.value = !bookmarked.value
+
+}
+
 </script>
 <template>
   <main>
     <Title title="主题" :backbtn="true" />
     <ul class="status" v-if="status.length > 0">
-      <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status :status="s" @shouldLogin="$emit('shouldLogin')" timeline="true" />
+      <li v-for="(s, index) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+        <Status :status="s" @shouldLogin="$emit('shouldLogin')" :timeline="index != status.length - 1" />
       </li>
     </ul>
+    <div class="operate">
+      <a @click="bookmark" title="加入书签">
+        <BookmarkIcon v-if="!bookmarked" />
+        <BookmarkedIcon v-if="bookmarked" />
+      </a>
+    </div>
     <Post v-if="status.length > 0 && session" @posted="loadComments" placeholder="发布你的回复！" btntext="回复"
-      :prevstatus="status[status.length-1].id" />
+      :prevstatus="status[status.length - 1].id" />
     <ul v-if="comments">
       <li v-for="s in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" />
@@ -79,16 +114,41 @@ main ul li:hover {
   cursor: pointer;
 }
 
+.operate {
+  height: 60px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(239, 243, 244);
+}
+
+.operate a {
+  display: flex;
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+
+.operate svg {
+  height: 22px;
+  fill: rgb(83, 100, 113);
+}
+
 .status {
   border-bottom: 1px solid rgb(239, 243, 244);
 }
+
 .status li {
   border-bottom: none;
 }
+
 .status li:last-child {
   background: none;
   cursor: auto;
 }
-
-
 </style>

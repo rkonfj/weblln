@@ -9,7 +9,7 @@ defineProps(['title','backbtn'])
 
 <style scoped>
 h2 {
-  padding: .5rem 1rem;
+  padding: .7rem 1rem;
   display: flex;
   align-items: center;
   width: 100%;

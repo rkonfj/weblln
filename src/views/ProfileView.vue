@@ -69,14 +69,14 @@ main ul li:hover {
 
 .mainarea .bg {
   height: 200px;
-  background-color: #f0f0f0;
+  background-color: rgb(207, 217, 222);
 }
 
 .mainarea .avatar {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  margin: -78px 0 0 15px;
+  margin: -78px 0 0 20px;
   border: 5px solid #fff;
   display: flex;
   background-color: #fff;

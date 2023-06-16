@@ -40,6 +40,7 @@ function logout() {
 function shakeLogin() {
   shouldLogin.value = true
   setTimeout(() => shouldLogin.value = false, 1000)
+  logout()
 }
 </script>
 
