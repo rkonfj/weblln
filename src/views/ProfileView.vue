@@ -38,7 +38,7 @@ onMounted(async () => {
     </div>
     <ul v-if="status">
       <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status :status="s" />
+        <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
     <Loadding v-if="!profile || !status" />
