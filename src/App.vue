@@ -149,7 +149,7 @@ nav a span {
 .main-content {
   flex: 1;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .main-content .sidelogin {
@@ -205,9 +205,8 @@ footer .foot a:hover {
     display: none;
   }
   .main-content {
-    flex-direction: column;
     min-height: 100vh;
-    justify-content: center;
+    justify-content: space-between;
   }
   .main-content .sidelogin {
     display: block;
