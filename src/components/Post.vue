@@ -159,17 +159,19 @@ function processNode(node) {
 
 .content .raw {
     width: 100%;
-    min-height: 4rem;
-    padding: .5rem 0;
+    min-height: 4.5rem;
+    padding: 0.3rem 0 .5rem 0;
     outline: none;
     border: none;
     max-width: 100%;
+    font-size: 18px;
     word-break: break-all;
 }
 
 .content [contenteditable=true]:empty:before {
     content: attr(placeholder);
     color: #536471;
+    font-size: 18px;
 }
 
 .content .operate {
