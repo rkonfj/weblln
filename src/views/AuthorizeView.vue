@@ -24,7 +24,7 @@ onMounted(async () => {
 </script>
 <template>
     <main>
-        <Title title="认证" />
+        <Title :title="$t('nav.authorize')" />
         <div v-if="message" class="tips">{{ message }}</div>
         <Loadding v-if="!message" />
     </main>

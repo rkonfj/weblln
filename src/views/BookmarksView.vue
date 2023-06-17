@@ -35,7 +35,7 @@ onMounted(async () => {
 </script>
 <template>
   <main>
-    <Title title="书签" />
+    <Title :title="$t('nav.bookmarks')" />
     <ul v-if="bookmarks">
       <li v-for="s in bookmarks" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />

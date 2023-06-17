@@ -30,7 +30,7 @@ onMounted(async () => {
 <template>
     <div v-if="!labels || labels.length > 0" class="sidelabels">
         <div v-if="labels && labels.length > 0">
-            <h2>热点</h2>
+            <h2>{{ $t('nav.hot') }}</h2>
             <ul>
                 <li v-for="label in labels">
                     <div class="label">#{{ label.value }}</div>

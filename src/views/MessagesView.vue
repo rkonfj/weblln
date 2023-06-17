@@ -4,7 +4,7 @@ import NoMsgIcon from '../components/icons/IconNoMsg.vue'
 </script>
 <template>
     <main>
-      <Title title="消息" />
+      <Title :title="$t('nav.messages')" />
       <div class="empty">
       <NoMsgIcon />
       </div>

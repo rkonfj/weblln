@@ -36,8 +36,8 @@ async function loadExploreData() {
 </script>
 <template>
   <main>
-    <Title :title="session ? '主页' : '探索'" />
-    <Post v-if="session" @posted="loadExploreData" placeholder="有什么新鲜事？" btntext="推送" />
+    <Title :title="session ? $t('nav.home') : $t('nav.explore')" />
+    <Post v-if="session" @posted="loadExploreData" :placeholder="$t('status.prompt')" :btntext="$t('status.post')" />
     <ul v-if="status">
       <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />

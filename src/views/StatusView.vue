@@ -73,7 +73,7 @@ async function bookmark() {
 </script>
 <template>
   <main>
-    <Title title="主题" :backbtn="true" />
+    <Title :title="$t('nav.thread')" :backbtn="true" />
     <ul class="status" v-if="status.length > 0">
       <li v-for="(s, index) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" :timeline="index != status.length - 1" />
@@ -85,7 +85,7 @@ async function bookmark() {
         <BookmarkedIcon v-if="bookmarked" />
       </a>
     </div>
-    <Post v-if="status.length > 0 && session" @posted="loadComments" placeholder="发布你的回复！" btntext="回复"
+    <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')" :btntext="$t('status.reply')"
       :prevstatus="status[status.length - 1].id" />
     <ul v-if="comments">
       <li v-for="s in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">

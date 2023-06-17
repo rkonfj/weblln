@@ -3,7 +3,7 @@ import Title from '../components/Title.vue'
 </script>
 <template>
     <main>
-      <Title title="服务条款" />
+      <Title :title="$t('nav.termsofservice')" />
     </main>
 </template>
 

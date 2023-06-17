@@ -45,7 +45,7 @@ async function newStatus() {
     let postBody = {
         content: contentFormatted.value,
     }
-    if(props.prevstatus) {
+    if (props.prevstatus) {
         postBody.prev = props.prevstatus
     }
     let resp = await fetch('https://api.lowlevelnews.com/i/status', {
@@ -128,7 +128,8 @@ function processNode(node) {
                         <MediaIcon />
                     </a>
                 </div>
-                <button :class="activeClass" @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
+                <button :class="activeClass" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''"
+                    @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
             </div>
         </div>
     </div>

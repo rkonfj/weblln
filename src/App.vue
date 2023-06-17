@@ -55,22 +55,22 @@ function shakeLogin() {
         </li>
         <li>
           <RouterLink to="/explore">
-            <ExploreIcon /><span>{{ session ? '主页' : '探索' }}</span>
+            <ExploreIcon /><span>{{ session ? $t('nav.home') : $t('nav.explore') }}</span>
           </RouterLink>
         </li>
         <li v-if="session">
           <RouterLink to="/messages">
-            <MessageIcon /><span>消息</span>
+            <MessageIcon /><span>{{ $t('nav.messages') }}</span>
           </RouterLink>
         </li>
         <li v-if="session">
           <RouterLink to="/bookmarks">
-            <BookmarkIcon /><span>书签</span>
+            <BookmarkIcon /><span>{{ $t('nav.bookmarks') }}</span>
           </RouterLink>
         </li>
         <li>
           <RouterLink to="/settings">
-            <SettingsIcon /><span>设置</span>
+            <SettingsIcon /><span>{{ $t('nav.settings') }}</span>
           </RouterLink>
         </li>
       </ul>
@@ -91,8 +91,8 @@ function shakeLogin() {
       <Login v-if="!session" :class="{'shake' : shouldLogin}"/>
       <Labels @session-expired="logout" />
       <div v-if="session" class="foot">
-        <RouterLink to="/rules">服务条款</RouterLink>
-        <RouterLink to="/privacypolicy">隐私政策</RouterLink>
+        <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink>
+        <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
       </div>
     </footer>
   </div>
@@ -172,7 +172,7 @@ footer {
 
 footer .foot {
   padding: 15px 15px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 footer .foot a {

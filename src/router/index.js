@@ -36,9 +36,9 @@ const router = createRouter({
       name: 'logout',
       component: () => import('../views/LogoutView.vue')
     },{
-      path: '/rules',
-      name: 'rules',
-      component: () => import('../views/RulesView.vue')
+      path: '/termsofservice',
+      name: 'termsofservice',
+      component: () => import('../views/TermsOfServiceView.vue')
     },{
       path: '/privacypolicy',
       name: 'privacypolicy',

@@ -6,7 +6,7 @@ window.location.href = '/'
 </script>
 <template>
   <main>
-    <Title title="登出" />
+    <Title :title="$t('logout')" />
     <Loadding />
   </main>
 </template>
