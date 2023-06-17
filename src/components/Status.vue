@@ -1,17 +1,24 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import CommentIcon from './icons/IconComment.vue'
+import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import moment from 'moment'
 
 const emit = defineEmits(['shouldLogin'])
 const props = defineProps(['status', 'timeline'])
 const session = ref()
+const avatar = ref()
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
+  }
+  const image = new Image()
+  image.src = props.status.user.picture
+  image.onload = () => {
+    avatar.value = image.src
   }
 })
 
@@ -45,8 +52,10 @@ async function likeStatus() {
 </script>
 <template>
   <div class="avatararea">
-    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar"><img :src="status.user.picture"
-        alt="avatar" /></RouterLink>
+    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar">
+      <img v-if="avatar" class="avatarimg" :src="status.user.picture" alt="avatar" />
+      <DefaultAvatarIcon class="avatarimg" v-else />
+    </RouterLink>
     <div v-if="timeline" class="timeline"></div>
   </div>
   <div class="content">
@@ -89,11 +98,16 @@ async function likeStatus() {
 }
 
 .avatar,
-.avatar img {
+.avatar .avatarimg {
   display: inline-block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+.avatar svg {
+  width: 40px;
+  height: 40px;
 }
 
 .content {

@@ -16,6 +16,9 @@ onMounted(async () => {
   profile.value = await resp.json()
   resp = await fetch(`https://api.lowlevelnews.com/o/user/${route.params.uniqueName}/status`)
   status.value = await resp.json()
+  if (status.value == null) {
+    status.value = []
+  }
 })
 </script>
 <template>
@@ -105,4 +108,5 @@ main ul li:hover {
 
 .mainarea .profile .join span {
   margin: 0 10px 0 5px;
-}</style>
+}
+</style>

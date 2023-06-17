@@ -79,7 +79,7 @@ async function bookmark() {
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" :timeline="index != status.length - 1" />
       </li>
     </ul>
-    <div class="operate">
+    <div class="operate" v-if="status.length > 0">
       <a @click="bookmark" title="加入书签">
         <BookmarkIcon v-if="!bookmarked" />
         <BookmarkedIcon v-if="bookmarked" />
