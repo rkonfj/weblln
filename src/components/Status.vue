@@ -41,9 +41,9 @@ async function likeStatus() {
     alert(await resp.text())
     return
   }
-  
+
   props.status.liked = !props.status.liked
-  if(!props.status.liked) {
+  if (!props.status.liked) {
     props.status.likeCount--
   } else {
     props.status.likeCount++
@@ -65,7 +65,12 @@ async function likeStatus() {
       · {{ moment.duration(moment().diff(moment(status.createTime))).humanize() }}
     </div>
     <div class="raw">
-      <p v-for="c in status.content">{{ c.value }}</p>
+      <div class="sf" v-for="c in status.content">
+        <p v-if="c.type==='text'">{{ c.value }}</p>
+        <div class="image" v-else-if="c.type==='img'">
+          <img :src="c.value" :alt="`${status.user.name}'s Image`" />
+        </div>
+      </div>
     </div>
     <div class="op">
       <a>
@@ -111,6 +116,8 @@ async function likeStatus() {
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
   padding: 0 10px;
 }
 
@@ -133,6 +140,23 @@ async function likeStatus() {
   text-decoration: underline;
   text-decoration-color: #222;
   background: none;
+}
+
+.content .sf {
+  display: flex;
+  width: 100%;
+}
+.content .image {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 15px;
+  margin: 10px 0;
+  width: 500px;
+  max-height: 500px;
+  box-shadow: 0 0 3px #bcbcbc;
 }
 
 .content .op {
