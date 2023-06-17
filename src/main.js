@@ -12,6 +12,11 @@ const i18n = createI18n({
     messages: messages,
 })
 
+router.beforeEach((to, from, next) => {
+    document.title = i18n.global.t(`nav.${to.name}`, document.title)
+    next()
+})
+
 const app = createApp(App)
 
 app.use(router)

@@ -5,15 +5,15 @@ import { RouterLink } from 'vue-router'
 
 <template>
     <div class="sidelogin">
-        <h2>一见如旧，请先登录</h2>
-        <div class="tips">看来你是新来的。立即认证，获取你自己的个性化时间线！</div>
+        <h2>{{ $t('nav.hello') }}</h2>
+        <div class="tips">{{ $t('nav.welcome') }}</div>
         <div class="btnarea">
             <a class="loginbtn" :href="`https://api.lowlevelnews.com/o/oidc/google?jump=${$route.path}`">
-                <GoogleIcon /><span>使用 Google 账号认证</span>
+                <GoogleIcon /><span>{{ $t('nav.googleauth') }}</span>
             </a>
         </div>
         <div class="tips">
-            认证即表示同意 <RouterLink to="/rules">服务条款</RouterLink> 及 <RouterLink to="/privacypolicy">隐私政策</RouterLink>。
+            By signing in, you agree to the <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> and <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>
 </template>
