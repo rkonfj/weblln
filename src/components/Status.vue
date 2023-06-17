@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
+import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import moment from 'moment'
 
@@ -9,6 +10,8 @@ const emit = defineEmits(['shouldLogin'])
 const props = defineProps(['status', 'timeline'])
 const session = ref()
 const avatar = ref()
+const images = ref([])
+const error = ref()
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
@@ -19,6 +22,14 @@ onMounted(() => {
   image.src = props.status.user.picture
   image.onload = () => {
     avatar.value = image.src
+  }
+  for (let c of props.status.content) {
+    if (c.type == 'img') {
+      let img = new Image()
+      img.src = c.value
+      img.onload = () => images.value.push(c.value)
+      img.onerror = () => error.value = true
+    }
   }
 })
 
@@ -66,9 +77,29 @@ async function likeStatus() {
     </div>
     <div class="raw">
       <div class="sf" v-for="c in status.content">
-        <p v-if="c.type==='text'">{{ c.value }}</p>
-        <div class="image" v-else-if="c.type==='img'">
-          <img :src="c.value" :alt="`${status.user.name}'s Image`" />
+        <p v-if="c.type === 'text'">{{ c.value }}</p>
+      </div>
+      <div class="sf" v-if="error">
+        <ErrorIcon class="icon" />
+        <span class="error">一些图片没有加载成功</span>
+      </div>
+      <div class="media" v-if="images.length > 0">
+        <div v-if="images.length == 1" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img :src="images[1]" alt="Image" /></div>
+
+        <div v-if="images.length == 3" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 3" class="fc">
+          <div class="image h50"><img :src="images[1]" alt="Image" /></div>
+          <div class="image h50"><img :src="images[2]" alt="Image" /></div>
+        </div>
+        <div v-if="images.length == 4" class="fc">
+          <div class="image h50"><img :src="images[0]" alt="Image" /></div>
+          <div class="image h50"><img :src="images[1]" alt="Image" /></div>
+        </div>
+        <div v-if="images.length == 4" class="fc">
+          <div class="image h50"><img :src="images[2]" alt="Image" /></div>
+          <div class="image h50"><img :src="images[3]" alt="Image" /></div>
         </div>
       </div>
     </div>
@@ -119,6 +150,7 @@ async function likeStatus() {
   display: flex;
   flex-direction: column;
   padding: 0 10px;
+  flex: 1;
 }
 
 .content .author {
@@ -142,21 +174,93 @@ async function likeStatus() {
   background: none;
 }
 
+.content .raw {
+  display: flex;
+  flex-direction: column;
+}
+
 .content .sf {
   display: flex;
-  width: 100%;
+  align-items: center;
 }
-.content .image {
+
+.content .sf .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.content .sf .error {
+  color: red;
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.content .media {
   display: flex;
-  flex-grow: 1;
+  height: 360px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 10px 0;
+}
+
+.content .media .fc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 360px;
+  flex: 1;
+  width: 0;
+  margin-right: 5px;
+}
+
+.content .media .fc .h50:first-child {
+  margin-bottom: 5px;
+}
+
+.content .media .image {
+  display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border-radius: 15px;
-  margin: 10px 0;
-  width: 500px;
-  max-height: 500px;
+  flex: 1;
+  width: 0;
   box-shadow: 0 0 3px #bcbcbc;
+  box-sizing: content-box;
+}
+
+.content .media .w50 {
+  margin-right: 5px;
+}
+
+.content .media .h50 {
+  width: auto;
+}
+
+.content .media .h100 {
+  height: 360px;
+}
+
+
+.content .media img {
+  flex-grow: 1;
+  min-height: 360px;
+}
+
+@media (max-width: 60rem) {
+
+  .content .media,
+  .content .media .fc,
+  .content .media .h100 {
+    height: 220px;
+  }
+
+  .content .media img {
+    min-height: 220px;
+    transform: scale(0.8);
+  }
 }
 
 .content .op {
