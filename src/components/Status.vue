@@ -92,22 +92,36 @@ async function likeStatus() {
         <span class="error">一些图片没有加载成功</span>
       </div>
       <div class="media" v-if="images.length > 0">
-        <div v-if="images.length == 1" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
+        <div v-if="images.length == 1" class="image w50 h100"><img
+            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+            alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img
+            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+            alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img
+            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]"
+            alt="Image" /></div>
 
-        <div v-if="images.length == 3" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 3" class="image w50 h100"><img
+            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+            alt="Image" /></div>
         <div v-if="images.length == 3" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)" :src="images[2]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
+              :src="images[1]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
+              :src="images[2]" alt="Image" /></div>
         </div>
         <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
+              :src="images[0]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
+              :src="images[1]" alt="Image" /></div>
         </div>
         <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)" :src="images[2]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)" :src="images[3]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
+              :src="images[2]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)"
+              :src="images[3]" alt="Image" /></div>
         </div>
       </div>
     </div>
@@ -205,19 +219,18 @@ async function likeStatus() {
 
 .content .media {
   display: flex;
-  height: 360px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px 0;
+  width: auto;
 }
 
 .content .media .fc {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 360px;
   flex: 1;
   width: 0;
   margin-right: 5px;
@@ -235,7 +248,7 @@ async function likeStatus() {
   border-radius: 15px;
   flex: 1;
   width: 0;
-  box-shadow: 0 0 2px #bbb;
+  border: 1px solid #bbb;
   box-sizing: content-box;
 }
 
@@ -244,38 +257,38 @@ async function likeStatus() {
 }
 
 .content .media .h50 img {
-  transform: scale(0.7);
+  min-height: 120px;
+  max-height: 280px;
 }
 
 .content .media .h50 {
   width: auto;
 }
 
-.content .media .h100 {
-  height: 360px;
+.content .media .h100 img {
+  min-height: 240px;
+  max-height: 564px;
 }
 
 
 .content .media img {
   flex-grow: 1;
-  min-height: 360px;
+  min-height: 240px;
 }
 
 @media (max-width: 60rem) {
+  .content .media img {
+    min-height: 180px;
+  }
 
-  .content .media,
-  .content .media .fc,
-  .content .media .h100 {
-    height: 200px;
+  .content .media .h100 img {
+    min-height: 160px;
+    max-height: 364px;
   }
 
   .content .media .h50 img {
-    transform: scale(0.4);
-  }
-
-  .content .media img {
-    min-height: 200px;
-    transform: scale(0.7);
+    min-height: 80px;
+    max-height: 182px;
   }
 }
 

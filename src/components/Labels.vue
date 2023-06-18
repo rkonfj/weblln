@@ -43,7 +43,7 @@ onMounted(async () => {
 </template>
 <style scoped>
 .sidelabels {
-    width: 300px;
+    width: 320px;
     border: 1px solid rgb(239, 243, 244);
     border-radius: 16px;
     padding: 0 0 16px 0;

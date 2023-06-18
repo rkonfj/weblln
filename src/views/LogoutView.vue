@@ -6,7 +6,7 @@ window.location.href = '/'
 </script>
 <template>
   <main>
-    <Title :title="$t('logout')" />
+    <Title :title="$t('nav.logout')" />
     <Loadding />
   </main>
 </template>

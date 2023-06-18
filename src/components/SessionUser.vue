@@ -27,6 +27,7 @@ defineProps(['session'])
   flex-direction: row;
   margin-bottom: 20px;
   height: 68px;
+  z-index: 100000;
 }
 
 .sessionuser img {

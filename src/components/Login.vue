@@ -20,11 +20,12 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .sidelogin {
-    width: 300px;
+    width: 320px;
     border: 1px solid rgb(239, 243, 244);
     border-radius: 16px;
     padding: 5px 15px;
     margin-top: 20px;
+    z-index: 100000;
 }
 
 .sidelogin .loginbtn {

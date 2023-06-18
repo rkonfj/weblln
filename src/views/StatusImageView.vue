@@ -62,6 +62,7 @@ function renderImages(ctx) {
     right: 0;
     display: flex;
     user-select: none;
+    z-index: 1000000;
 }
 
 .mainarea .close {
@@ -113,11 +114,10 @@ function renderImages(ctx) {
     z-index: 10000;
     justify-content: center;
     align-items: center;
-    padding: 30px 0;
 }
 
 .mainarea .imagepreview img {
-    max-height: calc(100vh - 60px);
+    max-height: calc(100vh - 120px);
     max-width: 100%;
 }
 
@@ -135,5 +135,16 @@ function renderImages(ctx) {
 
     .mainarea .imagepreview img {
         max-height: calc(100vh - 160px);
+    }
+    .mainarea .btn {
+        width: 30px;
+        height: 30px;
+    }
+    .mainarea .close, .mainarea .prev {
+        left: 10px;
+    }
+
+    .mainarea .next {
+        right: 10px;
     }
 }</style>
