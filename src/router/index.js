@@ -30,6 +30,10 @@ const router = createRouter({
       path: '/:user/status/:id',
       name: 'status',
       component: () => import('../views/StatusView.vue')
+    },{
+      path: '/:user/status/:id/image/:num',
+      name: 'imagestatus',
+      component: () => import('../views/StatusImageView.vue')
     },
     {
       path: '/logout',

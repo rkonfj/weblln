@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import moment from 'moment'
 
-const emit = defineEmits(['shouldLogin'])
+const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline'])
 const session = ref()
 const avatar = ref()
@@ -27,8 +27,16 @@ onMounted(() => {
     if (c.type == 'img') {
       let img = new Image()
       img.src = c.value
-      img.onload = () => images.value.push(c.value)
-      img.onerror = () => error.value = true
+      img.onload = () => {
+        images.value.push(c.value)
+        emit('imagesReady', {
+          imgs: images.value,
+          err: error.value
+        })
+      }
+      img.onerror = () => {
+        error.value = true
+      }
     }
   }
 })
@@ -84,22 +92,22 @@ async function likeStatus() {
         <span class="error">一些图片没有加载成功</span>
       </div>
       <div class="media" v-if="images.length > 0">
-        <div v-if="images.length == 1" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img :src="images[1]" alt="Image" /></div>
+        <div v-if="images.length == 1" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 2" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
 
-        <div v-if="images.length == 3" class="image w50 h100"><img :src="images[0]" alt="Image" /></div>
+        <div v-if="images.length == 3" class="image w50 h100"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
         <div v-if="images.length == 3" class="fc">
-          <div class="image h50"><img :src="images[1]" alt="Image" /></div>
-          <div class="image h50"><img :src="images[2]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)" :src="images[2]" alt="Image" /></div>
         </div>
         <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img :src="images[0]" alt="Image" /></div>
-          <div class="image h50"><img :src="images[1]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]" alt="Image" /></div>
         </div>
         <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img :src="images[2]" alt="Image" /></div>
-          <div class="image h50"><img :src="images[3]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)" :src="images[2]" alt="Image" /></div>
+          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)" :src="images[3]" alt="Image" /></div>
         </div>
       </div>
     </div>
@@ -227,12 +235,16 @@ async function likeStatus() {
   border-radius: 15px;
   flex: 1;
   width: 0;
-  box-shadow: 0 0 3px #bcbcbc;
+  box-shadow: 0 0 2px #bbb;
   box-sizing: content-box;
 }
 
 .content .media .w50 {
   margin-right: 5px;
+}
+
+.content .media .h50 img {
+  transform: scale(0.7);
 }
 
 .content .media .h50 {
@@ -254,12 +266,16 @@ async function likeStatus() {
   .content .media,
   .content .media .fc,
   .content .media .h100 {
-    height: 220px;
+    height: 200px;
+  }
+
+  .content .media .h50 img {
+    transform: scale(0.4);
   }
 
   .content .media img {
-    min-height: 220px;
-    transform: scale(0.8);
+    min-height: 200px;
+    transform: scale(0.7);
   }
 }
 

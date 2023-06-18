@@ -9,7 +9,7 @@ import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
-const emit = defineEmits(['shouldLogin'])
+const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const status = ref([])
 const session = ref()
 const comments = ref()
@@ -70,13 +70,17 @@ async function bookmark() {
 
 }
 
+function handleImagesReady(ctx) {
+  emit('imagesReady', ctx)
+}
+
 </script>
 <template>
   <main>
     <Title :title="$t('nav.thread')" :backbtn="true" />
     <ul class="status" v-if="status.length > 0">
       <li v-for="(s, index) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status :status="s" @shouldLogin="$emit('shouldLogin')" :timeline="index != status.length - 1" />
+        <Status :status="s" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady" :timeline="index != status.length - 1" />
       </li>
     </ul>
     <div class="operate" v-if="status.length > 0">
@@ -100,6 +104,8 @@ async function bookmark() {
 main {
   border-left: 1px solid rgb(239, 243, 244);
   border-right: 1px solid rgb(239, 243, 244);
+  background-color: #fff;
+  z-index: 10000;
 }
 
 main ul li {

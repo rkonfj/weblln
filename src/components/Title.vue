@@ -17,6 +17,7 @@ h2 {
   position: sticky;
   top: 0;
   backdrop-filter: blur(10px);
+  z-index: 10000;
 }
 h2 span {
   font-size: 20px;
