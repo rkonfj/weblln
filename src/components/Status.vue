@@ -277,18 +277,14 @@ async function likeStatus() {
 }
 
 @media (max-width: 60rem) {
-  .content .media img {
-    min-height: 180px;
-  }
-
-  .content .media .h100 img {
-    min-height: 160px;
-    max-height: 364px;
+  .content .media img, .content .media .h100 img {
+    min-height: 100px;
+    max-height: 309px;
   }
 
   .content .media .h50 img {
-    min-height: 80px;
-    max-height: 182px;
+    min-height: 50px;
+    max-height: 152px;
   }
 }
 
