@@ -91,12 +91,11 @@ function renderImages(ctx) {
     justify-content: center;
     cursor: pointer;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.6);
     transition: 0.4s;
 }
 
 .mainarea .btn:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .mainarea .btn svg {

@@ -92,7 +92,7 @@ async function likeStatus() {
         <span class="error">一些图片没有加载成功</span>
       </div>
       <div class="media" v-if="images.length > 0">
-        <div v-if="images.length == 1" class="image w50 h100"><img
+        <div v-if="images.length == 1" class="image"><img
             @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
             alt="Image" /></div>
         <div v-if="images.length == 2" class="image w50 h100"><img
@@ -257,8 +257,8 @@ async function likeStatus() {
 }
 
 .content .media .h50 img {
-  min-height: 120px;
-  max-height: 280px;
+  min-height: 40px;
+  max-height: 200px;
 }
 
 .content .media .h50 {
@@ -266,25 +266,31 @@ async function likeStatus() {
 }
 
 .content .media .h100 img {
-  min-height: 240px;
-  max-height: 564px;
+  min-height: 80px;
+  max-height: 400px;
 }
 
 
 .content .media img {
   flex-grow: 1;
-  min-height: 240px;
+  min-height: 80px;
+  max-height: 566px;
 }
 
 @media (max-width: 60rem) {
-  .content .media img, .content .media .h100 img {
-    min-height: 100px;
-    max-height: 309px;
+  .content .media img {
+    min-height: 60px;
+    max-height: 300px;
+  }
+
+  .content .media .h100 img {
+    min-height: 40px;
+    max-height: 200px;
   }
 
   .content .media .h50 img {
-    min-height: 50px;
-    max-height: 152px;
+    min-height: 20px;
+    max-height: 97px;
   }
 }
 
