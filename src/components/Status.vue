@@ -23,20 +23,24 @@ onMounted(() => {
   image.onload = () => {
     avatar.value = image.src
   }
+  let idx = 0
   for (let c of props.status.content) {
     if (c.type == 'img') {
-      let img = new Image()
-      img.src = c.value
-      img.onload = () => {
-        images.value.push(c.value)
-        emit('imagesReady', {
-          imgs: images.value,
-          err: error.value
-        })
-      }
-      img.onerror = () => {
-        error.value = true
-      }
+      (function (idx) {
+        let img = new Image()
+        img.src = c.value
+        img.onload = () => {
+          images.value[idx] = c.value
+          emit('imagesReady', {
+            imgs: images.value,
+            err: error.value
+          })
+        }
+        img.onerror = () => {
+          error.value = true
+        }
+      })(idx)
+      idx++
     }
   }
 })
