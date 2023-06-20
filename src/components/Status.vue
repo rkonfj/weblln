@@ -4,7 +4,9 @@ import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
+import LoadingIcon from './icons/LoadingIcon.vue'
 import moment from 'moment'
+import he from 'he'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline'])
@@ -12,6 +14,9 @@ const session = ref()
 const avatar = ref()
 const images = ref([])
 const error = ref()
+const imageCount = ref(0)
+const imageErrCount = ref(0)
+const imageLoadCount = ref(0)
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
@@ -23,7 +28,6 @@ onMounted(() => {
   image.onload = () => {
     avatar.value = image.src
   }
-  let idx = 0
   for (let c of props.status.content) {
     if (c.type == 'img') {
       (function (idx) {
@@ -33,14 +37,18 @@ onMounted(() => {
           images.value[idx] = c.value
           emit('imagesReady', {
             imgs: images.value,
-            err: error.value
+            imgCount: imageCount.value,
+            imgLoadCount: imageLoadCount.value,
+            imgErrCount: imageErrCount.value
           })
+          imageLoadCount.value++
         }
         img.onerror = () => {
           error.value = true
+          imageErrCount.value++
         }
-      })(idx)
-      idx++
+      })(imageCount.value)
+      imageCount.value++
     }
   }
 })
@@ -72,6 +80,11 @@ async function likeStatus() {
     props.status.likeCount++
   }
 }
+const urlRegex = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?$/i
+function renderText(text) {
+  text = he.escape(text)
+  return text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
+}
 </script>
 <template>
   <div class="avatararea">
@@ -89,11 +102,15 @@ async function likeStatus() {
     </div>
     <div class="raw">
       <div class="sf" v-for="c in status.content">
-        <p v-if="c.type === 'text'">{{ c.value }}</p>
+        <p v-if="c.type === 'text'" v-html="renderText(c.value)"></p>
       </div>
-      <div class="sf" v-if="error">
+      <div class="sf" v-if="imageErrCount > 0">
         <ErrorIcon class="icon" />
-        <span class="error">一些图片没有加载成功</span>
+        <span class="error">{{ imageErrCount }} 张图片没有加载成功</span>
+      </div>
+      <div class="sf" v-if="imageCount > 0 && imageLoadCount + imageErrCount < imageCount">
+        <LoadingIcon class="icon" />
+        <span class="tips">{{ imageCount - imageLoadCount - imageErrCount }} 张图片正在加载</span>
       </div>
       <div class="media" v-if="images.length > 0">
         <div v-if="images.length == 1" class="image"><img
@@ -209,7 +226,6 @@ async function likeStatus() {
   display: flex;
   align-items: center;
 }
-
 .content .sf .icon {
   width: 18px;
   height: 18px;
@@ -217,6 +233,12 @@ async function likeStatus() {
 
 .content .sf .error {
   color: red;
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.content .sf .tips {
+  color: #bbb;
   margin-left: 5px;
   font-size: 13px;
 }
@@ -250,8 +272,8 @@ async function likeStatus() {
   justify-content: center;
   overflow: hidden;
   border-radius: 15px;
-  flex: 1;
-  width: 0;
+  min-width: min-content;
+  max-width: 100vw;
   border: 1px solid #bbb;
   box-sizing: content-box;
 }
@@ -276,7 +298,6 @@ async function likeStatus() {
 
 
 .content .media img {
-  flex-grow: 1;
   min-height: 80px;
   max-height: 566px;
 }

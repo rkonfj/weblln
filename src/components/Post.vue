@@ -1,5 +1,6 @@
 <script setup>
 import MediaIcon from './icons/IconMedia.vue'
+import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import { watchEffect, ref, onMounted, inject } from 'vue'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
@@ -12,6 +13,8 @@ const session = ref(null)
 const contentRaw = ref("")
 const contentFormatted = ref([])
 const loadding = ref(false)
+const avatar = ref("")
+let llnApi = ""
 
 onMounted(() => {
     let sessionStr = window.localStorage.getItem("session")
@@ -21,6 +24,12 @@ onMounted(() => {
         sessionUniqueName.value = sessionObj.uniqueName
         sessionPicture.value = sessionObj.picture
     }
+    const image = new Image()
+    image.src = sessionPicture.value
+    image.onload = () => {
+        avatar.value = image.src
+    }
+    llnApi = inject('llnApi')
 })
 
 watchEffect(() => {
@@ -47,7 +56,7 @@ async function newStatus() {
     if (props.prevstatus) {
         postBody.prev = props.prevstatus
     }
-    let resp = await fetch(`${inject('llnApi')}/i/status`, {
+    let resp = await fetch(`${llnApi}/i/status`, {
         method: 'post',
         headers: {
             "Authorization": session.value.apiKey,
@@ -111,19 +120,27 @@ function processNode(node) {
         }
     }
 }
+
+function insertMedia() {
+    const editable = document.querySelector('.postarea .content .raw')
+    editable.innerHTML += '[img][/img]'
+}
 </script>
 
 <template>
     <div class="postarea">
         <div class="avatararea">
-            <a class="avatar" :href="'/' + sessionUniqueName"><img :src="sessionPicture" alt="avatar" /></a>
+            <a class="avatar" :href="'/' + sessionUniqueName">
+                <img :src="sessionPicture" alt="avatar" v-if="avatar" />
+                <DefaultAvatarIcon class="avatarimg" v-else />
+            </a>
         </div>
         <div class="content">
             <div class="raw" contenteditable="true" @dragover.prevent @drop="handleDragEnter" @paste="paseText"
                 @input="updateContentModel" :placeholder="placeholder"></div>
             <div class="operate">
                 <div class="func">
-                    <a title="媒体（不可用状态）">
+                    <a title="媒体" @click="insertMedia">
                         <MediaIcon />
                     </a>
                 </div>
@@ -135,7 +152,8 @@ function processNode(node) {
 </template>
 <style scoped>
 .avatar,
-.avatar img {
+.avatar img,
+.avatar .avatarimg {
     display: inline-block;
     width: 40px;
     height: 40px;

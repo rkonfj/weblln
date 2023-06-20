@@ -12,9 +12,10 @@ const profile = ref()
 const status = ref()
 
 onMounted(async () => {
-  let resp = await fetch(`${inject('llnApi')}/o/user/${route.params.uniqueName}`)
+  let llnApi = inject('llnApi')
+  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`)
   profile.value = await resp.json()
-  resp = await fetch(`${inject('llnApi')}/o/user/${route.params.uniqueName}/status`)
+  resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status`)
   status.value = await resp.json()
   if (status.value == null) {
     status.value = []
