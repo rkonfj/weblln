@@ -250,7 +250,6 @@ function renderText(text) {
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px 0;
-  width: auto;
 }
 
 .content .media .fc {
@@ -273,7 +272,6 @@ function renderText(text) {
   overflow: hidden;
   border-radius: 15px;
   min-width: min-content;
-  max-width: 100vw;
   border: 1px solid #bbb;
   box-sizing: content-box;
 }
@@ -300,6 +298,7 @@ function renderText(text) {
 .content .media img {
   min-height: 80px;
   max-height: 566px;
+  max-width: 100%;
 }
 
 @media (max-width: 60rem) {

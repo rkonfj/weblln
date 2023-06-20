@@ -7,12 +7,14 @@ import { ref, onMounted, inject } from 'vue'
 
 const session = ref()
 const status = ref()
+let llnApi = ""
 
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
+  llnApi = inject('llnApi')
   await loadExploreData()
 })
 
@@ -23,7 +25,7 @@ async function loadExploreData() {
       "Authorization": session.value.apiKey,
     }
   }
-  let resp = await fetch(`${inject('llnApi')}/o/explore`, opts)
+  let resp = await fetch(`${llnApi}/o/explore`, opts)
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }
