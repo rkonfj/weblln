@@ -1,6 +1,11 @@
 <script setup>
+import { inject, ref, onMounted } from 'vue';
 import GoogleIcon from './icons/IconGoogle.vue'
 import { RouterLink } from 'vue-router'
+const llnApi = ref("")
+onMounted(() => {
+    llnApi.value = inject('llnApi')
+})
 </script>
 
 <template>
@@ -8,12 +13,13 @@ import { RouterLink } from 'vue-router'
         <h2>{{ $t('nav.hello') }}</h2>
         <div class="tips">{{ $t('nav.welcome') }}</div>
         <div class="btnarea">
-            <a class="loginbtn" :href="`https://api.lowlevelnews.com/o/oidc/google?jump=${$route.path}`">
+            <a class="loginbtn" :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
                 <GoogleIcon /><span>{{ $t('nav.googleauth') }}</span>
             </a>
         </div>
         <div class="tips">
-            By signing in, you agree to the <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> and <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
+            By signing in, you agree to the <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> and
+            <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>
 </template>

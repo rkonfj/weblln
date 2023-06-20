@@ -3,7 +3,7 @@ import Status from '../components/Status.vue'
 import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
 import Loadding from '../components/Loadding.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 
 const session = ref()
 const status = ref()
@@ -23,7 +23,7 @@ async function loadExploreData() {
       "Authorization": session.value.apiKey,
     }
   }
-  let resp = await fetch('https://api.lowlevelnews.com/o/explore', opts)
+  let resp = await fetch(`${inject('llnApi')}/o/explore`, opts)
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }

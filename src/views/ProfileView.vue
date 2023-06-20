@@ -3,7 +3,7 @@ import Title from '../components/Title.vue'
 import Loadding from '../components/Loadding.vue'
 import Status from '../components/Status.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import moment from 'moment'
 
@@ -12,9 +12,9 @@ const profile = ref()
 const status = ref()
 
 onMounted(async () => {
-  let resp = await fetch(`https://api.lowlevelnews.com/o/user/${route.params.uniqueName}`)
+  let resp = await fetch(`${inject('llnApi')}/o/user/${route.params.uniqueName}`)
   profile.value = await resp.json()
-  resp = await fetch(`https://api.lowlevelnews.com/o/user/${route.params.uniqueName}/status`)
+  resp = await fetch(`${inject('llnApi')}/o/user/${route.params.uniqueName}/status`)
   status.value = await resp.json()
   if (status.value == null) {
     status.value = []

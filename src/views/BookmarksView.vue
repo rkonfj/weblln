@@ -4,7 +4,7 @@ import Status from '../components/Status.vue'
 import Loadding from '../components/Loadding.vue'
 
 import NoBookmarkIcon from '../components/icons/IconNoBookmark.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 const bookmarks = ref()
 const session = ref()
 
@@ -17,7 +17,7 @@ onMounted(async () => {
     $router.push('/')
     return
   }
-  let resp = await fetch('https://api.lowlevelnews.com/i/bookmarks', {
+  let resp = await fetch(`${inject('llnApi')}/i/bookmarks`, {
     headers: {
       "Authorization": session.value.apiKey,
     }

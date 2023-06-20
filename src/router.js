@@ -10,53 +10,53 @@ const router = createRouter({
     {
       path: '/explore',
       name: 'explore',
-      component: () => import('../views/ExploreView.vue')
+      component: () => import('./views/ExploreView.vue')
     },
     {
       path: '/settings',
       name: 'settings',
-      component: () => import('../views/SettingsView.vue')
+      component: () => import('./views/SettingsView.vue')
     },
     {
       path: '/messages',
       name: 'messages',
-      component: () => import('../views/MessagesView.vue')
+      component: () => import('./views/MessagesView.vue')
     },
     {
       path: '/bookmarks',
       name: 'bookmarks',
-      component: () => import('../views/BookmarksView.vue')
+      component: () => import('./views/BookmarksView.vue')
     },{
       path: '/:user/status/:id',
       name: 'status',
-      component: () => import('../views/StatusView.vue')
+      component: () => import('./views/StatusView.vue')
     },{
       path: '/:user/status/:id/image/:num',
       name: 'imagestatus',
-      component: () => import('../views/StatusImageView.vue')
+      component: () => import('./views/StatusImageView.vue')
     },
     {
       path: '/logout',
       name: 'logout',
-      component: () => import('../views/LogoutView.vue')
+      component: () => import('./views/LogoutView.vue')
     },{
       path: '/termsofservice',
       name: 'termsofservice',
-      component: () => import('../views/TermsOfServiceView.vue')
+      component: () => import('./views/TermsOfServiceView.vue')
     },{
       path: '/privacypolicy',
       name: 'privacypolicy',
-      component: () => import('../views/PrivacyPolicyView.vue')
+      component: () => import('./views/PrivacyPolicyView.vue')
     },
     {
       path: '/authorize/:provider',
       name: 'authorize',
-      component: () => import('../views/AuthorizeView.vue')
+      component: () => import('./views/AuthorizeView.vue')
     },
     {
       path: '/:uniqueName',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('./views/ProfileView.vue')
     }
   ]
 })

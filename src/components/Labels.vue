@@ -1,6 +1,6 @@
 <script setup>
 import Loadding from '../components/Loadding.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 
 const emit = defineEmits(['sessionExpired'])
 const labels = ref()
@@ -17,7 +17,7 @@ onMounted(async () => {
             "Authorization": session.value.apiKey,
         }
     }
-    let resp = await fetch('https://api.lowlevelnews.com/o/labels', opts)
+    let resp = await fetch(`${inject('llnApi')}/o/labels`, opts)
     if (resp.headers.get("X-Session-Valid") == "false") {
         emit("sessionExpired")
     }

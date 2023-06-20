@@ -1,6 +1,6 @@
 <script setup>
 import MediaIcon from './icons/IconMedia.vue'
-import { watchEffect, ref, onMounted } from 'vue'
+import { watchEffect, ref, onMounted, inject } from 'vue'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
@@ -12,7 +12,6 @@ const session = ref(null)
 const contentRaw = ref("")
 const contentFormatted = ref([])
 const loadding = ref(false)
-
 
 onMounted(() => {
     let sessionStr = window.localStorage.getItem("session")
@@ -48,7 +47,7 @@ async function newStatus() {
     if (props.prevstatus) {
         postBody.prev = props.prevstatus
     }
-    let resp = await fetch('https://api.lowlevelnews.com/i/status', {
+    let resp = await fetch(`${inject('llnApi')}/i/status`, {
         method: 'post',
         headers: {
             "Authorization": session.value.apiKey,

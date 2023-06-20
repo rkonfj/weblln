@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
+import { llnApi } from './config'
 
 const i18n = createI18n({
     legacy: false,
@@ -18,6 +19,8 @@ router.beforeEach((to, from, next) => {
 })
 
 const app = createApp(App)
+
+app.provide('llnApi', llnApi)
 
 app.use(router)
 app.use(i18n)

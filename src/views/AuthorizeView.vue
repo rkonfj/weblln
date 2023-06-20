@@ -1,13 +1,13 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Loadding from '../components/Loadding.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 let message = ref("")
 
 onMounted(async () => {
-    let resp = await fetch(`https://api.lowlevelnews.com/o/authorize/${route.params.provider}?state=${route.query.state}&code=${route.query.code}`, {
+    let resp = await fetch(`${inject('llnApi')}/o/authorize/${route.params.provider}?state=${route.query.state}&code=${route.query.code}`, {
         method: "post",
     })
     let sessionObj = await resp.json()

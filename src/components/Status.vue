@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
@@ -50,7 +50,7 @@ async function likeStatus() {
     emit('shouldLogin')
     return
   }
-  let resp = await fetch(`https://api.lowlevelnews.com/i/like/status/${props.status.id}`, {
+  let resp = await fetch(`${inject('llnApi')}/i/like/status/${props.status.id}`, {
     method: 'post',
     headers: {
       "Authorization": session.value.apiKey,

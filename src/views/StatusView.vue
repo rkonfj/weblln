@@ -6,7 +6,7 @@ import Post from '../components/Post.vue'
 import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,inject } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
@@ -20,7 +20,7 @@ onMounted(() => {
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  fetch(`https://api.lowlevelnews.com/o/status/${route.params.id}`)
+  fetch(`${inject('llnApi')}/o/status/${route.params.id}`)
     .then(async resp => {
       let s = await resp.json()
       let prev = s.prev
