@@ -7,6 +7,8 @@ import { ref, onMounted, inject } from 'vue'
 
 const session = ref()
 const status = ref()
+const loading = ref()
+const haveMore = ref(true)
 let llnApi = ""
 
 onMounted(async () => {
@@ -18,22 +20,40 @@ onMounted(async () => {
   await loadExploreData()
 })
 
-async function loadExploreData() {
+async function loadExploreData(after) {
+  loading.value = true
   let opts = {}
   if (session.value) {
     opts.headers = {
       "Authorization": session.value.apiKey,
     }
   }
-  let resp = await fetch(`${llnApi}/o/explore`, opts)
+  let afterQuery = ''
+  if (after) {
+    afterQuery = '?after=' + after
+  }
+  let resp = await fetch(`${llnApi}/o/explore${afterQuery}`, opts)
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }
-  status.value = []
-  status.value = await resp.json()
-  if (status.value == null) {
-    status.value = []
+  let ss = await resp.json()
+  if (!after) {
+    if (ss == null) {
+      status.value = []
+    } else {
+      status.value = []
+      status.value = ss
+    }
+  } else {
+    if (ss != null) {
+      for (let s of ss) {
+        status.value.push(s)
+      }
+    } else {
+      haveMore.value = false
+    }
   }
+  loading.value = false
 }
 
 </script>
@@ -46,7 +66,9 @@ async function loadExploreData() {
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <Loadding v-if="!status" />
+    <div class="loadbtn" v-if="status && status.length%20 == 0 && haveMore" @click="loadExploreData(status[status.length - 1].id)">加载更多
+    </div>
+    <Loadding v-if="!status || loading" />
   </main>
 </template>
 
@@ -56,6 +78,7 @@ main {
   border-right: 1px solid rgb(239, 243, 244);
 }
 
+main .loadbtn,
 main ul li {
   display: flex;
   padding: 10px 15px;
@@ -63,8 +86,14 @@ main ul li {
   border-bottom: 1px solid rgb(239, 243, 244);
 }
 
+main .loadbtn:hover,
 main ul li:hover {
   background-color: rgba(0, 0, 0, 0.03);
   cursor: pointer;
+}
+
+main .loadbtn {
+  justify-content: center;
+  align-items: center;
 }
 </style>
