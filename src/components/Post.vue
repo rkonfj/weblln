@@ -1,6 +1,7 @@
 <script setup>
 import MediaIcon from './icons/IconMedia.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
+import CloseIcon from './icons/CloseIcon.vue'
 import { watchEffect, ref, onMounted, inject } from 'vue'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
@@ -11,9 +12,15 @@ const sessionPicture = ref("")
 const activeClass = ref("")
 const session = ref(null)
 const contentRaw = ref("")
-const contentFormatted = ref([])
+const textarea = ref("")
+const images = ref([])
+const mediaMode = ref()
 const loadding = ref(false)
 const avatar = ref("")
+const progressColor = ref("hsla(160, 100%, 37%, 1)")
+const progressC = ref(0)
+
+
 let llnApi = ""
 
 onMounted(() => {
@@ -33,7 +40,7 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-    if (contentRaw.value.length > 0) {
+    if (contentRaw.value.length > 0 || images.value.length > 0) {
         activeClass.value = "active"
     } else {
         activeClass.value = ""
@@ -41,17 +48,25 @@ watchEffect(() => {
 })
 
 async function newStatus() {
-    if (contentRaw.value.length == 0 || loadding.value) {
+    if (contentRaw.value.length == 0 && images.value.length == 0 || loadding.value) {
         return
     }
     loadding.value = true
-    const div = document.createElement('div')
-    div.innerHTML = contentRaw.value
-    contentFormatted.value = []
-    processNode(div)
-    console.log(contentFormatted.value)
+    let content = []
+    if (contentRaw.value.trim().length > 0) {
+        content.push({
+            type: 'text',
+            value: contentRaw.value.trim()
+        })
+    }
+    for (let img of images.value) {
+        content.push({
+            type: 'img',
+            value: img
+        })
+    }
     let postBody = {
-        content: contentFormatted.value,
+        content: content,
     }
     if (props.prevstatus) {
         postBody.prev = props.prevstatus
@@ -65,8 +80,8 @@ async function newStatus() {
     })
     loadding.value = false
     if (resp.status == 200) {
-        document.querySelector('.postarea .content .raw').innerHTML = ''
         contentRaw.value = ''
+        images.value = []
         emit('posted')
     } else if (resp.status == 401) {
         alert("401")
@@ -76,55 +91,38 @@ async function newStatus() {
 }
 
 function updateContentModel(e) {
-    contentRaw.value = e.target.innerHTML
-}
+    const paddingTop = parseInt(getComputedStyle(textarea.value).getPropertyValue(`padding-top`), 10)
+    const paddingBottom = parseInt(getComputedStyle(textarea.value).getPropertyValue(`padding-bottom`), 10)
+    const lineHeight = parseInt(getComputedStyle(textarea.value).getPropertyValue(`line-height`), 10)
 
-function handleDragEnter(e) {
-    console.log(e.dataTransfer.types)
-    console.log(e.dataTransfer.getData('text/plain'))
-}
+    contentRaw.value = contentRaw.value.replace(/\n\n+/g, "\n\n")
 
-function paseText(e) {
-    e.preventDefault()
-    const text = (e.clipboardData).getData('text/plain')
-    addNode(document.createTextNode(text))
-}
+    textarea.value.rows = 2
 
-function addNode(node) {
-    const editable = document.querySelector('.postarea .content .raw')
-    const selection = window.getSelection()
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0)
-        range.deleteContents()
-        range.insertNode(node)
+    const innerHeight = textarea.value.scrollHeight - paddingTop - paddingBottom
+    textarea.value.rows = innerHeight / lineHeight
+
+    progressC.value = contentRaw.value.length / 300 * 2 * Math.PI * 10
+
+    if (contentRaw.value.length >= 300) {
+        progressColor.value = 'red'
     } else {
-        editable.appendChild(node)
+        progressColor.value = 'hsla(160, 100%, 37%, 1)'
     }
 }
 
-function processNode(node) {
-    if (node.nodeName.toUpperCase() === 'IMG') {
-        contentFormatted.value.push({ type: "img", value: node.getAttribute('src') })
-        return
-    }
-    for (const element of node.childNodes) {
-        if (element.nodeType === Node.TEXT_NODE) {
-            const text = element.textContent.trim()
-            if (text !== '') {
-                contentFormatted.value.push({ type: "text", value: text })
-            }
-            continue
-        }
-        if (element.nodeType === Node.ELEMENT_NODE) {
-            processNode(element)
-        }
+function addMedia(e) {
+    if (e.target.value.trim().length > 0) {
+        images.value.push(e.target.value.trim())
+        e.target.value = ''
+        mediaMode.value = !mediaMode
     }
 }
 
-function insertMedia() {
-    const editable = document.querySelector('.postarea .content .raw')
-    editable.innerHTML += '[img][/img]'
+function removeMedia(idx) {
+    images.value.splice(idx, 1)
 }
+
 </script>
 
 <template>
@@ -136,16 +134,84 @@ function insertMedia() {
             </a>
         </div>
         <div class="content">
-            <div class="raw" contenteditable="true" @dragover.prevent @drop="handleDragEnter" @paste="paseText"
-                @input="updateContentModel" :placeholder="placeholder"></div>
+            <textarea class="raw" ref="textarea" rows="2" v-model="contentRaw" @dragover.prevent @drop="handleDragEnter"
+                @paste="paseText" @input="updateContentModel" :placeholder="placeholder"></textarea>
+            <div class="media" v-if="images.length > 0">
+                <div v-if="images.length == 1" class="image">
+                    <div class="close" @click="removeMedia(0)">
+                        <CloseIcon />
+                    </div><img :src="images[0]" alt="Image" />
+                </div>
+                <div v-if="images.length == 2" class="image w50 h100">
+                    <div class="close" @click="removeMedia(0)">
+                        <CloseIcon />
+                    </div><img :src="images[0]" alt="Image" />
+                </div>
+                <div v-if="images.length == 2" class="image w50 h100">
+                    <div class="close" @click="removeMedia(1)">
+                        <CloseIcon />
+                    </div><img :src="images[1]" alt="Image" />
+                </div>
+
+                <div v-if="images.length == 3" class="image w50 h100">
+                    <div class="close" @click="removeMedia(0)">
+                        <CloseIcon />
+                    </div><img :src="images[0]" alt="Image" />
+                </div>
+                <div v-if="images.length == 3" class="fc">
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(1)">
+                            <CloseIcon />
+                        </div><img :src="images[1]" alt="Image" />
+                    </div>
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(2)">
+                            <CloseIcon />
+                        </div><img :src="images[2]" alt="Image" />
+                    </div>
+                </div>
+                <div v-if="images.length >= 4" class="fc">
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(0)">
+                            <CloseIcon />
+                        </div><img :src="images[0]" alt="Image" />
+                    </div>
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(1)">
+                            <CloseIcon />
+                        </div><img :src="images[1]" alt="Image" />
+                    </div>
+                </div>
+                <div v-if="images.length >= 4" class="fc">
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(2)">
+                            <CloseIcon />
+                        </div><img :src="images[2]" alt="Image" />
+                    </div>
+                    <div class="image h50">
+                        <div class="close" @click="removeMedia(3)">
+                            <CloseIcon />
+                        </div><img :src="images[3]" alt="Image" />
+                    </div>
+                </div>
+            </div>
             <div class="operate">
                 <div class="func">
-                    <a title="媒体" @click="insertMedia">
+                    <a title="媒体" @click="mediaMode = !mediaMode">
                         <MediaIcon />
                     </a>
+                    <input class="mediaAddress" type="text" v-if="mediaMode" placeholder="图片地址" @blur="addMedia" />
                 </div>
-                <button :class="activeClass" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''"
-                    @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
+                <div class="postbtn">
+                    <svg class="progress" width="24" height="24" viewBox="0 0 24 24">
+                        <circle class="progress-background" cx="12" cy="12" r="10" stroke="rgb(239, 243, 244)"
+                            stroke-width="3" fill="none" />
+                        <circle class="progress-fill" cx="12" cy="12" r="10" fill="none" :stroke="progressColor"
+                            stroke-width="3" :stroke-dasharray="`${progressC},62.83`" />
+                    </svg>
+                    <button :class="activeClass" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''"
+                        @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -172,6 +238,111 @@ function insertMedia() {
 
 .content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.content .media {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 10px 0;
+}
+
+.content .media .close {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.4s;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.content .media .close:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.content .media .close svg {
+    fill: #fff;
+    width: 18px;
+    height: 18px;
+}
+
+.content .media .fc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    width: 0;
+    margin-right: 5px;
+}
+
+.content .media .fc .h50:first-child {
+    margin-bottom: 5px;
+}
+
+.content .media .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 15px;
+    min-width: min-content;
+    border: 1px solid #bbb;
+    box-sizing: content-box;
+    position: relative;
+}
+
+.content .media .w50 {
+    margin-right: 5px;
+    flex: 1;
+}
+
+.content .media .h50 img {
+    min-height: 40px;
+    max-height: 200px;
+}
+
+.content .media .h50 {
+    width: auto;
+}
+
+.content .media .h100 img {
+    min-height: 80px;
+    max-height: 400px;
+}
+
+
+.content .media img {
+    min-height: 80px;
+    max-height: 566px;
+    max-width: 100%;
+}
+
+@media (max-width: 60rem) {
+    .content .media img {
+        min-height: 60px;
+        max-height: 300px;
+    }
+
+    .content .media .h100 img {
+        min-height: 40px;
+        max-height: 200px;
+    }
+
+    .content .media .h50 img {
+        min-height: 20px;
+        max-height: 97px;
+    }
 }
 
 .content .raw {
@@ -183,6 +354,10 @@ function insertMedia() {
     max-width: 100%;
     font-size: 18px;
     word-break: break-all;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+        Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    resize: none;
 }
 
 .content [contenteditable=true]:empty:before {
@@ -197,12 +372,34 @@ function insertMedia() {
     align-items: center;
 }
 
+.content .operate .postbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content .operate .progress {
+    margin-right: 10px;
+    transform: rotate(-90deg);
+}
+
 .content .operate .func {
     display: flex;
-    justify-content: center;
+    flex: 1;
+    justify-content: left;
     height: 36px;
     align-items: center;
     margin-left: -10px;
+}
+
+.content .operate .func .mediaAddress {
+    flex: 1;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 0 20px 0 5px;
+    background-color: rgb(239, 243, 244);
+    outline: none;
 }
 
 .content .operate .func a {

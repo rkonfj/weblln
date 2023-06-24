@@ -29,6 +29,7 @@ async function loadExploreData() {
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }
+  status.value = []
   status.value = await resp.json()
   if (status.value == null) {
     status.value = []

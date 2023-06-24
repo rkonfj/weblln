@@ -228,6 +228,7 @@ function renderText(text) {
   display: flex;
   align-items: center;
 }
+
 .content .sf .icon {
   width: 18px;
   height: 18px;
