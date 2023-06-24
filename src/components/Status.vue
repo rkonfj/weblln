@@ -17,12 +17,14 @@ const error = ref()
 const imageCount = ref(0)
 const imageErrCount = ref(0)
 const imageLoadCount = ref(0)
+let llnApi = ""
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
+  llnApi = inject('llnApi')
   const image = new Image()
   image.src = props.status.user.picture
   image.onload = () => {
@@ -58,7 +60,7 @@ async function likeStatus() {
     emit('shouldLogin')
     return
   }
-  let resp = await fetch(`${inject('llnApi')}/i/like/status/${props.status.id}`, {
+  let resp = await fetch(`${llnApi}/i/like/status/${props.status.id}`, {
     method: 'post',
     headers: {
       "Authorization": session.value.apiKey,
