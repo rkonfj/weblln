@@ -84,8 +84,8 @@ function renderImages(ctx) {
 
 .mainarea .btn {
     position: absolute;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,10 +134,6 @@ function renderImages(ctx) {
 
     .mainarea .imagepreview img {
         max-height: calc(100vh - 160px);
-    }
-    .mainarea .btn {
-        width: 30px;
-        height: 30px;
     }
     .mainarea .close, .mainarea .prev {
         left: 10px;
