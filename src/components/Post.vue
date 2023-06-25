@@ -82,6 +82,7 @@ async function newStatus() {
     if (resp.status == 200) {
         contentRaw.value = ''
         images.value = []
+        progressC.value = 0
         emit('posted')
     } else if (resp.status == 401) {
         alert("401")

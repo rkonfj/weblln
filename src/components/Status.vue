@@ -88,7 +88,6 @@ function renderText(text) {
   text = he.escape(text)
   text = text.replaceAll('\n', '<br />')
   text = text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
-  console.log(text)
   return text
 }
 </script>

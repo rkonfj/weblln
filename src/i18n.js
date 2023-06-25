@@ -14,7 +14,7 @@ const messages = {
             thread: 'Thread',
             lang: 'Language',
             googleauth: 'Sign in with Google',
-            hello: 'New to Twitter?',
+            hello: 'New to LowLevelNews?',
             welcome: 'Sign in now to get your own personalized timeline!'
         },
         status: {

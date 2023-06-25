@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 
 import Login from './components/Login.vue'
 import Labels from './components/Labels.vue'
@@ -16,9 +16,13 @@ const session = ref()
 const loading = ref()
 const shouldLogin = ref()
 const router = useRouter()
+const tips = ref()
+let llnApi = ""
+
 
 router.beforeEach(() => {
   loading.value = true
+  loadTipMessages()
 })
 
 router.afterEach(() => {
@@ -26,6 +30,7 @@ router.afterEach(() => {
 })
 
 onMounted(() => {
+  llnApi = inject('llnApi')
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
@@ -41,6 +46,29 @@ function shakeLogin() {
   shouldLogin.value = true
   setTimeout(() => shouldLogin.value = false, 1000)
   logout()
+}
+
+async function loadTipMessages() {
+  if (!session.value) {
+    return
+  }
+  let resp = await fetch(`${llnApi}/i/messages/tips`, {
+    headers: {
+      "Authorization": session.value.apiKey,
+    }
+  })
+  if (resp.headers.get("X-Session-Valid") == "false") {
+    session.value = null
+  }
+  let msgs = await resp.json()
+  window.localStorage.setItem('tips', JSON.stringify(msgs))
+  if (msgs == null) {
+    tips.value = null
+  } else if (msgs.length == 100) {
+    tips.value = '99+'
+  } else {
+    tips.value = msgs.length
+  }
 }
 </script>
 
@@ -59,7 +87,8 @@ function shakeLogin() {
           </RouterLink>
         </li>
         <li v-if="session">
-          <RouterLink to="/messages">
+          <RouterLink class="msgLink" to="/messages">
+            <div v-if="tips" class="tips">{{ tips }}</div>
             <MessageIcon /><span>{{ $t('nav.messages') }}</span>
           </RouterLink>
         </li>
@@ -79,16 +108,16 @@ function shakeLogin() {
 
   </div>
   <div class="main-content">
-    <RouterView v-if="!loading" @shouldLogin="shakeLogin" />
+    <RouterView v-if="!loading" @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" />
     <Loadding v-if="loading" />
-    <Login v-if="!session" :class="{'shake' : shouldLogin}" />
+    <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
     <div v-if="session" class="onmobile">
       <SessionUser :session="session" />
     </div>
   </div>
   <div class="right-sidebar">
     <footer>
-      <Login v-if="!session" :class="{'shake' : shouldLogin}"/>
+      <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
       <Labels @session-expired="logout" />
       <div v-if="session" class="foot">
         <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink>
@@ -112,6 +141,26 @@ nav {
 
 nav ul li {
   padding: 5px;
+}
+
+
+nav ul .msgLink {
+  position: relative;
+}
+
+nav ul .msgLink .tips {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d6204b;
+  color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 7px;
+  right: -5px;
 }
 
 nav a.router-link-exact-active span {
@@ -191,11 +240,25 @@ footer .foot a:hover {
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  50% { transform: translateX(10px); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-10px);
+  }
+
+  50% {
+    transform: translateX(10px);
+  }
+
+  75% {
+    transform: translateX(-10px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 60rem) {
@@ -204,10 +267,12 @@ footer .foot a:hover {
   .right-sidebar {
     display: none;
   }
+
   .main-content {
     min-height: 100vh;
     justify-content: space-between;
   }
+
   .main-content .sidelogin {
     display: block;
     position: sticky;
@@ -216,7 +281,7 @@ footer .foot a:hover {
     width: 100%;
   }
 
-  .main-content .onmobile  {
+  .main-content .onmobile {
     display: flex;
     position: sticky;
     bottom: 0;
@@ -278,4 +343,5 @@ footer .foot a:hover {
   .right-sidebar {
     flex: 0 0 38rem;
   }
-}</style>
+}
+</style>
