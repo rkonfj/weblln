@@ -10,6 +10,7 @@ import he from 'he'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline'])
+const urlRegex = /https:\/\/([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?/i
 const session = ref()
 const avatar = ref()
 const images = ref([])
@@ -82,10 +83,13 @@ async function likeStatus() {
     props.status.likeCount++
   }
 }
-const urlRegex = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?$/i
+
 function renderText(text) {
   text = he.escape(text)
-  return text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
+  text = text.replaceAll('\n', '<br />')
+  text = text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
+  console.log(text)
+  return text
 }
 </script>
 <template>
