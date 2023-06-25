@@ -30,9 +30,9 @@ async function loadExploreData(after) {
   }
   let afterQuery = ''
   if (after) {
-    afterQuery = '?after=' + after
+    afterQuery = '&after=' + after
   }
-  let resp = await fetch(`${llnApi}/o/explore${afterQuery}`, opts)
+  let resp = await fetch(`${llnApi}/o/explore?size=12${afterQuery}`, opts)
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }
@@ -66,7 +66,9 @@ async function loadExploreData(after) {
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="status && status.length%20 == 0 && haveMore" @click="loadExploreData(status[status.length - 1].id)">加载更多
+    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore"
+      @click="loadExploreData(status[status.length - 1].id)">
+      加载更多
     </div>
     <Loadding v-if="!status || loading" />
   </main>
@@ -95,5 +97,6 @@ main ul li:hover {
 main .loadbtn {
   justify-content: center;
   align-items: center;
+  color: hsla(160, 100%, 37%, 1);
 }
 </style>

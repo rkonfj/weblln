@@ -10,17 +10,45 @@ import moment from 'moment'
 const route = useRoute()
 const profile = ref()
 const status = ref()
+const loading = ref()
+const haveMore = ref(true)
+let llnApi = ""
+
 
 onMounted(async () => {
-  let llnApi = inject('llnApi')
+  llnApi = inject('llnApi')
   let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`)
   profile.value = await resp.json()
-  resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status`)
-  status.value = await resp.json()
-  if (status.value == null) {
-    status.value = []
-  }
+  loadStatus()
 })
+
+async function loadStatus(after) {
+  loading.value = true
+  let afterQuery = ''
+  if (after) {
+    afterQuery = '&after=' + after
+  }
+  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status?size=12${afterQuery}`)
+  let ss = await resp.json()
+  if (!after) {
+    if (ss == null) {
+      status.value = []
+    } else {
+      status.value = []
+      status.value = ss
+    }
+  } else {
+    if (ss != null) {
+      for (let s of ss) {
+        status.value.push(s)
+      }
+    } else {
+      haveMore.value = false
+    }
+  }
+  loading.value = false
+}
+
 </script>
 <template>
   <main>
@@ -45,7 +73,11 @@ onMounted(async () => {
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <Loadding v-if="!profile || !status" />
+    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore"
+      @click="loadStatus(status[status.length - 1].id)">
+      加载更多
+    </div>
+    <Loadding v-if="!profile || !status || loading" />
   </main>
 </template>
 
@@ -59,6 +91,7 @@ main ul {
   margin-top: 10px;
 }
 
+main .loadbtn,
 main ul li {
   display: flex;
   padding: 10px 15px;
@@ -66,9 +99,16 @@ main ul li {
   border-bottom: 1px solid rgb(239, 243, 244);
 }
 
+main .loadbtn:hover,
 main ul li:hover {
   background-color: rgba(0, 0, 0, 0.03);
   cursor: pointer;
+}
+
+main .loadbtn {
+  justify-content: center;
+  align-items: center;
+  color: hsla(160, 100%, 37%, 1);
 }
 
 .mainarea .bg {
