@@ -328,23 +328,6 @@ function removeMedia(idx) {
     max-width: 100%;
 }
 
-@media (max-width: 60rem) {
-    .content .media img {
-        min-height: 60px;
-        max-height: 300px;
-    }
-
-    .content .media .h100 img {
-        min-height: 40px;
-        max-height: 200px;
-    }
-
-    .content .media .h50 img {
-        min-height: 20px;
-        max-height: 97px;
-    }
-}
-
 .content .raw {
     width: 100%;
     min-height: 4.5rem;
@@ -397,9 +380,10 @@ function removeMedia(idx) {
     border: none;
     border-radius: 15px;
     padding: 5px 10px;
-    margin: 0 20px 0 5px;
+    margin: 0 15px 0 5px;
     background-color: rgb(239, 243, 244);
     outline: none;
+    width: 0;
 }
 
 .content .operate .func a {
@@ -430,5 +414,26 @@ function removeMedia(idx) {
 .content .operate .active {
     background-color: hsla(160, 100%, 37%, 1);
     cursor: pointer;
+}
+
+@media (max-width: 60rem) {
+    .content .media img {
+        min-height: 60px;
+        max-height: 300px;
+    }
+
+    .content .media .h100 img {
+        min-height: 40px;
+        max-height: 200px;
+    }
+
+    .content .media .h50 img {
+        min-height: 20px;
+        max-height: 97px;
+    }
+
+    .content .operate .func .mediaAddress {
+        margin: 0 10px 0 0;
+    }
 }
 </style>
