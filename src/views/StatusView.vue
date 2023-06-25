@@ -117,7 +117,7 @@ function handleImagesReady(ctx) {
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="comments && comments.length > 0 && comments.length % 12 == 0 && haveMore"
+    <div class="loadbtn" v-if="comments && comments.length > 0 && comments.length % 12 == 0 && haveMore && !loading"
       @click="loadComments(comments[comments.length - 1].id)">
       加载更多
     </div>

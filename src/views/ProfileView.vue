@@ -31,10 +31,8 @@ async function loadStatus(after) {
   let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status?size=12${afterQuery}`)
   let ss = await resp.json()
   if (!after) {
-    if (ss == null) {
-      status.value = []
-    } else {
-      status.value = []
+    status.value = []
+    if (ss != null) {
       status.value = ss
     }
   } else {
@@ -73,7 +71,7 @@ async function loadStatus(after) {
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore"
+    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
       @click="loadStatus(status[status.length - 1].id)">
       加载更多
     </div>

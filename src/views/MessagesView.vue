@@ -8,7 +8,7 @@ import Loading from '../components/Loadding.vue'
 const emit = defineEmits(['tipsDeleted'])
 const session = ref()
 const loading = ref()
-const haveMore = ref()
+const haveMore = ref(true)
 const messages = ref()
 let llnApi = ""
 
@@ -45,7 +45,7 @@ async function loadMessages(after) {
       messages.value = msgs
     }
   } else {
-    if (ss != null) {
+    if (msgs != null) {
       for (let s of msgs) {
         messages.value.push(s)
       }
@@ -72,8 +72,8 @@ async function deleteTipMessages(msgs) {
   let tips = JSON.parse(window.localStorage.getItem('tips'))
   if (tips) {
     let shouldDeletes = []
-    for(let m of msgs) {
-      if(tips.includes(m.id)) {
+    for (let m of msgs) {
+      if (tips.includes(m.id)) {
         shouldDeletes.push(m.id)
       }
     }
@@ -90,7 +90,7 @@ async function deleteTipMessages(msgs) {
 
 function tipsMsg(id) {
   let tips = JSON.parse(window.localStorage.getItem('tips'))
-  if(!tips) {
+  if (!tips) {
     return false
   }
   return tips.includes(id)
@@ -100,7 +100,7 @@ function tipsMsg(id) {
   <main>
     <Title :title="$t('nav.messages')" />
     <ul>
-      <li v-for="msg in messages" :class="`${tipsMsg(msg.id)?'active':''}`">
+      <li v-for="msg in messages" :class="`${tipsMsg(msg.id) ? 'active' : ''}`">
         你发布的 <RouterLink :to="`/${session.uniqueName}/status/${msg.targetID}`">
           /status/{{ msg.targetID }}</RouterLink> 收到了来自 <RouterLink :to="`/${msg.from.uniqueName}`">
           {{ msg.from.uniqueName === session.uniqueName ? '自己' : msg.from.name }}</RouterLink>的{{ renderAction(msg.type)
@@ -109,7 +109,7 @@ function tipsMsg(id) {
         }}</span>
       </li>
     </ul>
-    <div class="loadbtn" v-if="messages && messages.length > 0 && messages.length % 12 == 0 && haveMore"
+    <div class="loadbtn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"
       @click="loadMessages(messages[messages.length - 1].id)">
       加载更多
     </div>
@@ -126,14 +126,26 @@ main {
   border-right: 1px solid rgb(239, 243, 244);
 }
 
+main .loadbtn,
 main ul li {
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid rgb(239, 243, 244);
 }
 
+main .loadbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 main ul li a {
   padding: 0 5px;
+}
+
+main .loadbtn:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  cursor: pointer;
 }
 
 main ul .active {

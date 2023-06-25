@@ -38,10 +38,8 @@ async function loadExploreData(after) {
   }
   let ss = await resp.json()
   if (!after) {
-    if (ss == null) {
-      status.value = []
-    } else {
-      status.value = []
+    status.value = []
+    if (ss != null) {
       status.value = ss
     }
   } else {
@@ -66,7 +64,7 @@ async function loadExploreData(after) {
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore"
+    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
       @click="loadExploreData(status[status.length - 1].id)">
       加载更多
     </div>
