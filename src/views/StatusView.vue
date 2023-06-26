@@ -8,6 +8,9 @@ import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
+
+defineProps(['hideMedia'])
+
 const route = useRoute()
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const status = ref([])
@@ -101,7 +104,7 @@ function handleImagesReady(ctx) {
     <ul class="status" v-if="status.length > 0">
       <li v-for="(s, index) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
-          :timeline="index != status.length - 1" />
+          :timeline="index != status.length - 1" :hideMedia="hideMedia" />
       </li>
     </ul>
     <div class="operate" v-if="session && status.length > 0">

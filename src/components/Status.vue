@@ -10,7 +10,7 @@ import he from 'he'
 import { RouterLink } from 'vue-router';
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
-const props = defineProps(['status', 'timeline'])
+const props = defineProps(['status', 'timeline', 'hideMedia'])
 const urlRegex = /https:\/\/([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?/i
 const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
 const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
@@ -125,7 +125,7 @@ function renderText(text) {
         <LoadingIcon class="icon" />
         <span class="tips">{{ imageCount - imageLoadCount - imageErrCount }} 张图片正在加载</span>
       </div>
-      <div class="media" v-if="images.length > 0">
+      <div class="media" v-if="images.length > 0 && !hideMedia">
         <div v-if="images.length == 1" class="image"><img
             @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
             alt="Image" /></div>

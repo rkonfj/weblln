@@ -38,7 +38,7 @@ function renderImages(ctx) {
             </div>
         </div>
         <div class="status">
-            <StatusView @imagesReady="renderImages" />
+            <StatusView @imagesReady="renderImages" hideMedia="true" />
         </div>
     </div>
 </template>
