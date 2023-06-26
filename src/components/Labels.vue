@@ -1,5 +1,5 @@
 <script setup>
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 import { ref, onMounted, inject } from 'vue'
 
 const emit = defineEmits(['sessionExpired'])
@@ -38,7 +38,7 @@ onMounted(async () => {
                 </li>
             </ul>
         </div>
-        <Loadding v-if="!labels" />
+        <Loading v-if="!labels" />
     </div>
 </template>
 <style scoped>

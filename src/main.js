@@ -3,6 +3,7 @@ import './assets/main.css'
 import messages from './i18n'
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
+import { Settings } from 'luxon'
 import App from './App.vue'
 import router from './router'
 import { llnApi } from './config'
@@ -12,6 +13,8 @@ const i18n = createI18n({
     locale: localStorage.getItem('lang') || 'zh',
     messages: messages,
 })
+
+Settings.defaultLocale = localStorage.getItem('lang')
 
 router.beforeEach((to, from, next) => {
     document.title = i18n.global.t(`nav.${to.name}`, document.title)

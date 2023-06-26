@@ -10,7 +10,7 @@ import HomeIcon from './components/icons/IconHome.vue'
 import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
 import SessionUser from './components/SessionUser.vue'
-import Loadding from './components/Loadding.vue'
+import Loading from './components/Loading.vue'
 
 const session = ref()
 const loading = ref()
@@ -109,7 +109,7 @@ async function loadTipMessages() {
   </div>
   <div class="main-content">
     <RouterView v-if="!loading" @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" />
-    <Loadding v-if="loading" />
+    <Loading v-if="loading" />
     <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
     <div v-if="session" class="onmobile">
       <SessionUser :session="session" />

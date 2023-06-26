@@ -1,7 +1,7 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Status from '../components/Status.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 import Post from '../components/Post.vue'
 import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
@@ -121,7 +121,7 @@ function handleImagesReady(ctx) {
       @click="loadComments(comments[comments.length - 1].id)">
       加载更多
     </div>
-    <Loadding v-if="status.length == 0 || !comments || loading" />
+    <Loading v-if="status.length == 0 || !comments || loading" />
   </main>
 </template>
 

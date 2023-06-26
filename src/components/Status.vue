@@ -5,8 +5,9 @@ import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import he from 'he'
+import { RouterLink } from 'vue-router';
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline'])
@@ -105,7 +106,10 @@ function renderText(text) {
     <div class="author">
       <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
       <span>@{{ status.user.uniqueName }}</span>
-      · {{ moment.duration(moment().diff(moment(status.createTime))).humanize() }}
+      · {{ DateTime.fromISO(status.createTime).toRelative() }}
+    </div>
+    <div v-if="status.prev" class="replyflag">
+      {{ $t('status.reply') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{ status.prev.user.uniqueName }}</RouterLink>
     </div>
     <div class="raw">
       <div class="sf" v-for="c in status.content">
@@ -222,6 +226,10 @@ function renderText(text) {
   text-decoration: underline;
   text-decoration-color: #222;
   background: none;
+}
+
+.content .replyflag {
+  color: rgb(83, 100, 113);
 }
 
 .content .raw {

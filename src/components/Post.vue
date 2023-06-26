@@ -15,7 +15,7 @@ const contentRaw = ref("")
 const textarea = ref("")
 const images = ref([])
 const mediaMode = ref()
-const loadding = ref(false)
+const loading = ref(false)
 const avatar = ref("")
 const progressColor = ref("hsla(160, 100%, 37%, 1)")
 const progressC = ref(0)
@@ -48,10 +48,10 @@ watchEffect(() => {
 })
 
 async function newStatus() {
-    if (contentRaw.value.length == 0 && images.value.length == 0 || loadding.value) {
+    if (contentRaw.value.length == 0 && images.value.length == 0 || loading.value) {
         return
     }
-    loadding.value = true
+    loading.value = true
     let content = []
     if (contentRaw.value.trim().length > 0) {
         content.push({
@@ -78,7 +78,7 @@ async function newStatus() {
         },
         body: JSON.stringify(postBody)
     })
-    loadding.value = false
+    loading.value = false
     if (resp.status == 200) {
         contentRaw.value = ''
         images.value = []
@@ -211,7 +211,7 @@ function removeMedia(idx) {
                             stroke-width="3" :stroke-dasharray="`${progressC},62.83`" />
                     </svg>
                     <button :class="activeClass" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''"
-                        @click="newStatus()">{{ loadding ? "···" : btntext }}</button>
+                        @click="newStatus()">{{ loading ? "···" : btntext }}</button>
                 </div>
             </div>
         </div>

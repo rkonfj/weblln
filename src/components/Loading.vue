@@ -22,6 +22,6 @@
   border: 4px solid #f3f3f3;
   border-top: 4px solid hsla(160, 100%, 37%, 1);
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 </style>

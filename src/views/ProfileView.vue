@@ -1,11 +1,12 @@
 <script setup>
 import Title from '../components/Title.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
-import moment from 'moment'
+import { DateTime } from 'luxon'
+
 
 const route = useRoute()
 const profile = ref()
@@ -61,7 +62,7 @@ async function loadStatus(after) {
           <div class="n">{{ profile.name }}</div>
           <div class="un">@{{ profile.uniqueName }}</div>
           <div class="join">
-            <CalendarIcon /><span>{{ moment.duration(moment().diff(moment(profile.createTime))).humanize() }}</span>加入
+            <CalendarIcon /><span>{{ DateTime.fromISO(profile.createTime).toRelative() }}</span>加入
           </div>
         </div>
       </div>
@@ -75,7 +76,7 @@ async function loadStatus(after) {
       @click="loadStatus(status[status.length - 1].id)">
       加载更多
     </div>
-    <Loadding v-if="!profile || !status || loading" />
+    <Loading v-if="!profile || !status || loading" />
   </main>
 </template>
 

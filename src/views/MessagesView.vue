@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref, inject } from 'vue'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import Title from '../components/Title.vue'
 import NoMsgIcon from '../components/icons/IconNoMsg.vue'
-import Loading from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 
 const emit = defineEmits(['tipsDeleted'])
 const session = ref()
@@ -111,8 +111,8 @@ function tipsMsg(id) {
           主题<RouterLink :to="`/${msg.from.uniqueName}/status/${msg.targetID}`">
             /{{ msg.from.uniqueName }}/status/{{ msg.targetID }}</RouterLink>中提到了你
         </span>
-        <span class="time" v-if="msg.createTime"> · {{ moment.duration(moment().diff(moment(msg.createTime))).humanize()
-          }}</span>
+        <span class="time" v-if="msg.createTime"> · {{ DateTime.fromISO(msg.createTime).toRelative()
+        }}</span>
       </li>
     </ul>
     <div class="loadbtn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"

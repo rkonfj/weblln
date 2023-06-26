@@ -1,13 +1,13 @@
 <script setup>
 import Title from '../components/Title.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 window.localStorage.removeItem('session')
 window.location.href = '/'
 </script>
 <template>
   <main>
     <Title :title="$t('nav.logout')" />
-    <Loadding />
+    <Loading />
   </main>
 </template>
 

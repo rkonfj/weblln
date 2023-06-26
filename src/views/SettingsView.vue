@@ -2,13 +2,17 @@
 import Title from '../components/Title.vue'
 import { useI18n } from 'vue-i18n'
 import { watch, onMounted, ref, inject } from 'vue'
+import { Settings } from 'luxon'
 import { useRouter } from 'vue-router';
 
 const session = ref()
 const { locale } = useI18n()
 const router = useRouter()
 let llnApi = ""
-watch(locale, lang => localStorage.setItem('lang', lang))
+watch(locale, lang => {
+  localStorage.setItem('lang', lang)
+  Settings.defaultLocale = lang
+})
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")

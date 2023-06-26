@@ -1,7 +1,7 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Status from '../components/Status.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 
 import NoBookmarkIcon from '../components/icons/IconNoBookmark.vue'
 import { ref, onMounted, inject } from 'vue'
@@ -44,7 +44,7 @@ onMounted(async () => {
     <div v-if="bookmarks && bookmarks.length == 0" class="empty">
       <NoBookmarkIcon />
     </div>
-    <Loadding v-if="!bookmarks" />
+    <Loading v-if="!bookmarks" />
   </main>
 </template>
 

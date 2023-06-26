@@ -1,6 +1,6 @@
 <script setup>
 import Title from '../components/Title.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -26,7 +26,7 @@ onMounted(async () => {
     <main>
         <Title :title="$t('nav.authorize')" />
         <div v-if="message" class="tips">{{ message }}</div>
-        <Loadding v-if="!message" />
+        <Loading v-if="!message" />
     </main>
 </template>
 <style scoped>

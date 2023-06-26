@@ -2,7 +2,7 @@
 import Status from '../components/Status.vue'
 import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
-import Loadding from '../components/Loadding.vue'
+import Loading from '../components/Loading.vue'
 import { ref, onMounted, inject } from 'vue'
 
 const session = ref()
@@ -68,7 +68,7 @@ async function loadExploreData(after) {
       @click="loadExploreData(status[status.length - 1].id)">
       {{ $t('nav.showmore') }}
     </div>
-    <Loadding v-if="!status || loading" />
+    <Loading v-if="!status || loading" />
   </main>
 </template>
 
