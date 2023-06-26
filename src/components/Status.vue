@@ -11,6 +11,7 @@ import he from 'he'
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline'])
 const urlRegex = /https:\/\/([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?/i
+const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
 const session = ref()
 const avatar = ref()
 const images = ref([])
@@ -87,6 +88,7 @@ async function likeStatus() {
 function renderText(text) {
   text = he.escape(text)
   text = text.replaceAll('\n', '<br />')
+  text = text.replace(atRegex, m => `<a href="/${m.substring(1)}">${m}</a>`)
   text = text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
   return text
 }

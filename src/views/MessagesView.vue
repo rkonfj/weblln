@@ -101,12 +101,18 @@ function tipsMsg(id) {
     <Title :title="$t('nav.messages')" />
     <ul>
       <li v-for="msg in messages" :class="`${tipsMsg(msg.id) ? 'active' : ''}`">
-        你发布的 <RouterLink :to="`/${session.uniqueName}/status/${msg.targetID}`">
-          /status/{{ msg.targetID }}</RouterLink> 收到了来自 <RouterLink :to="`/${msg.from.uniqueName}`">
-          {{ msg.from.uniqueName === session.uniqueName ? '自己' : msg.from.name }}</RouterLink>的{{ renderAction(msg.type)
-          }}
+        <span v-if="msg.type != 'at'">
+          你发布的 <RouterLink :to="`/${session.uniqueName}/status/${msg.targetID}`">
+            /status/{{ msg.targetID }}</RouterLink> 收到了来自 <RouterLink :to="`/${msg.from.uniqueName}`">
+            {{ msg.from.uniqueName === session.uniqueName ? '自己' : msg.from.name }}</RouterLink>的{{ renderAction(msg.type)
+            }}
+        </span>
+        <span v-if="msg.type == 'at'">
+          主题<RouterLink :to="`/${msg.from.uniqueName}/status/${msg.targetID}`">
+            /{{ msg.from.uniqueName }}/status/{{ msg.targetID }}</RouterLink>中提到了你
+        </span>
         <span class="time" v-if="msg.createTime"> · {{ moment.duration(moment().diff(moment(msg.createTime))).humanize()
-        }}</span>
+          }}</span>
       </li>
     </ul>
     <div class="loadbtn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"
