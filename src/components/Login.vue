@@ -18,7 +18,7 @@ onMounted(() => {
             </a>
         </div>
         <div class="tips">
-            By signing in, you agree to the <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> and
+            {{ $t('misc.signinagree') }} <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> {{ $t('misc.and') }}
             <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>

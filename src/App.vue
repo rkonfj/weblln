@@ -119,9 +119,12 @@ async function loadTipMessages() {
     <footer>
       <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
       <Labels @session-expired="logout" />
-      <div v-if="session" class="foot">
-        <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink>
-        <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
+      <div class="foot">
+        <span>
+          <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink>
+          <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
+        </span>
+        © {{ new Date().getFullYear() }} <a href="https://github.com/rkonfj/weblln">WebLLN</a>
       </div>
     </footer>
   </div>
@@ -220,7 +223,7 @@ footer {
 }
 
 footer .foot {
-  padding: 15px 15px;
+  padding: 18px 13px;
   font-size: 13px;
 }
 

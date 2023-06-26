@@ -15,13 +15,18 @@ const messages = {
             lang: 'Language',
             googleauth: 'Sign in with Google',
             hello: 'New to LowLevelNews?',
-            welcome: 'Sign in now to get your own personalized timeline!'
+            welcome: 'Sign in now to get your own personalized timeline!',
+            showmore: 'Show More'
         },
         status: {
             prompt: 'What is happening?!',
             replyPrompt: 'Post your reply!',
             reply: 'Reply',
             post: 'Post'
+        },
+        misc: {
+            signinagree: 'By signing in, you agree to the',
+            and: 'and'
         }
     },
     zh: {
@@ -40,13 +45,18 @@ const messages = {
             lang: '语言',
             googleauth: '使用 Google 账号认证',
             hello: '一见如旧，请先登录',
-            welcome: '看来你是新来的。立即认证，获取你自己的个性化时间线！'
+            welcome: '立即认证，获取你自己的个性化时间线！',
+            showmore: '加载更多'
         },
         status: {
             prompt: '有什么新鲜事？',
             replyPrompt: '发布你的回复！',
             reply: '回复',
             post: '推送'
+        },
+        misc: {
+            signinagree: '认证即表示你同意',
+            and: '和'
         }
     },
 }

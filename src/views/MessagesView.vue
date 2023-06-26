@@ -143,6 +143,7 @@ main .loadbtn {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: hsla(160, 100%, 37%, 1);
 }
 
 main ul li a {
