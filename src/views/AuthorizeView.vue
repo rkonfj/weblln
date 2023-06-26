@@ -13,9 +13,9 @@ onMounted(async () => {
     let sessionObj = await resp.json()
     if (sessionObj.apiKey) {
         window.localStorage.setItem('session', JSON.stringify(sessionObj))
-        resp.headers.forEach((value, name) => {
-            console.log(`${name}: ${value}`)
-        })
+        if(!window.localStorage.getItem('lang') && sessionObj.locale) {
+            window.localStorage.setItem('lang', sessionObj.locale.split('-')[0])
+        }
         window.location.href = resp.headers.get("X-Jump")
     } else {
         message.value = sessionObj

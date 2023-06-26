@@ -33,7 +33,7 @@ async function changeName(name,uniqueName) {
     alert(await resp.text())
     return
   }
-  router.push('/explore')
+  router.push('/logout')
 }
 
 </script>
