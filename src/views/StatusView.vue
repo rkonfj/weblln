@@ -102,7 +102,8 @@ function handleImagesReady(ctx) {
   <main>
     <Title :title="$t('nav.thread')" :backbtn="true" />
     <ul class="status" v-if="status.length > 0">
-      <li v-for="(s, index) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+      <li v-for="(s, index) in status"
+        @click="index != status.length - 1 ? $router.push(`/${s.user.uniqueName}/status/${s.id}`) : ''">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
           :timeline="index != status.length - 1" :hideMedia="hideMedia" />
       </li>
@@ -135,6 +136,7 @@ main {
   background-color: #fff;
   z-index: 10000;
 }
+
 main .loadbtn,
 main ul li {
   display: flex;
@@ -142,6 +144,7 @@ main ul li {
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid rgb(239, 243, 244);
 }
+
 main .loadbtn:hover,
 main ul li:hover {
   background-color: rgba(0, 0, 0, 0.03);
@@ -190,5 +193,4 @@ main .loadbtn {
 .status li:last-child {
   background: none;
   cursor: auto;
-}
-</style>
+}</style>

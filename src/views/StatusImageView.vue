@@ -61,7 +61,6 @@ function renderImages(ctx) {
     left: 0;
     right: 0;
     display: flex;
-    user-select: none;
     z-index: 1000000;
 }
 
@@ -123,7 +122,7 @@ function renderImages(ctx) {
 .mainarea .status {
     display: flex;
     flex: 0 0 26rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     transition: 0.4s;
 }
 
