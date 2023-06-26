@@ -23,7 +23,10 @@ const messages = {
             prompt: 'What is happening?!',
             replyPrompt: 'Post your reply!',
             reply: 'Reply',
-            post: 'Post'
+            replying: 'Replying to',
+            post: 'Post',
+            mediaaddr: 'Paste your picture url here'
+
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -54,7 +57,9 @@ const messages = {
             prompt: '有什么新鲜事？',
             replyPrompt: '发布你的回复！',
             reply: '回复',
-            post: '推送'
+            replying: '回复',
+            post: '推送',
+            mediaaddr: '粘贴图片地址到这儿'
         },
         misc: {
             signinagree: '认证即表示你同意',

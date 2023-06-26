@@ -20,7 +20,7 @@ defineProps(['session'])
 .sessionuser {
   display: flex;
   border-radius: 80px;
-  width: 280px;
+  width: 100%;
   cursor: pointer;
   justify-content: space-between;
   align-items: center;
@@ -48,6 +48,7 @@ defineProps(['session'])
   width: 230px;
   color: #000;
   padding: 10px 15px;
+  margin: 5px;
 }
 
 .sessionuser .logout {
@@ -59,6 +60,7 @@ defineProps(['session'])
   width: 36px;
   height: 36px;
   cursor: pointer;
+  margin-right: 20px;
 }
 
 .sessionuser a .n1 {

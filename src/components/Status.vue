@@ -111,7 +111,7 @@ function renderText(text) {
       · {{ DateTime.fromISO(status.createTime).toRelative() }}
     </div>
     <div v-if="status.prev && status.prev.user" class="replyflag">
-      {{ $t('status.reply') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{ status.prev.user.uniqueName }}</RouterLink>
+      {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{ status.prev.user.uniqueName }}</RouterLink>
     </div>
     <div class="raw">
       <div class="sf" v-for="c in status.content">

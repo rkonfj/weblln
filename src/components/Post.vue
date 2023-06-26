@@ -201,7 +201,7 @@ function removeMedia(idx) {
                     <a title="媒体" @click="mediaMode = !mediaMode">
                         <MediaIcon />
                     </a>
-                    <input class="mediaAddress" type="text" v-if="mediaMode" placeholder="粘贴图片地址至此" @blur="addMedia" />
+                    <input class="mediaAddress" type="text" v-if="mediaMode" :placeholder="$t('status.mediaaddr')" @blur="addMedia" />
                 </div>
                 <div class="postbtn">
                     <svg class="progress" width="24" height="24" viewBox="0 0 24 24">

@@ -17,17 +17,40 @@ const loading = ref()
 const shouldLogin = ref()
 const router = useRouter()
 const tips = ref()
+const mobileSidebar = ref()
+const mobileMain = ref()
 let llnApi = ""
 
 
 router.beforeEach(() => {
   loading.value = true
+  closeNav()
   loadTipMessages()
 })
 
 router.afterEach(() => {
   loading.value = false
 })
+
+const vSwipe = {
+  mounted: (el, binding) => {
+    let startX, startY
+
+    el.addEventListener('touchstart', (event) => {
+      startX = event.touches[0].clientX
+      startY = event.touches[0].clientY
+    });
+
+    el.addEventListener('touchmove', (event) => {
+      const deltaX = event.touches[0].clientX - startX
+      const deltaY = event.touches[0].clientY - startY
+
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        binding.value(deltaX)
+      }
+    })
+  }
+}
 
 onMounted(() => {
   llnApi = inject('llnApi')
@@ -70,10 +93,35 @@ async function loadTipMessages() {
     tips.value = msgs.length
   }
 }
+function openNav(v) {
+  if(v < 80) {
+    return
+  }
+  mobileSidebar.value = {
+    display: 'block',
+    flex: 1
+  }
+  mobileMain.value = {
+    display: 'none'
+  }
+}
+function closeNav(v) {
+  if(v > -80) {
+    return
+  }
+  if (mobileSidebar.value) {
+    mobileSidebar.value = {
+      display: 'none',
+    }
+    mobileMain.value = {
+      display: 'block'
+    }
+  }
+}
 </script>
 
 <template>
-  <div class="sidebar">
+  <div class="sidebar" :style="mobileSidebar" v-swipe="closeNav">
     <nav>
       <ul>
         <li>
@@ -107,13 +155,10 @@ async function loadTipMessages() {
     </nav>
 
   </div>
-  <div class="main-content">
+  <div class="main-content" v-swipe="openNav" :style="mobileMain">
     <RouterView v-if="!loading" @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" />
     <Loading v-if="loading" />
     <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
-    <div v-if="session" class="onmobile">
-      <SessionUser :session="session" />
-    </div>
   </div>
   <div class="right-sidebar">
     <footer>
@@ -208,10 +253,6 @@ nav a span {
   display: none;
 }
 
-.main-content .onmobile {
-  display: none;
-}
-
 .right-sidebar {
   display: flex;
   flex: 0 0 38rem;
@@ -265,6 +306,9 @@ footer .foot a:hover {
 }
 
 @media (max-width: 60rem) {
+  nav {
+    width: 100%;
+  }
 
   .sidebar,
   .right-sidebar {
@@ -282,19 +326,6 @@ footer .foot a:hover {
     bottom: 0;
     background-color: #fff;
     width: 100%;
-  }
-
-  .main-content .onmobile {
-    display: flex;
-    position: sticky;
-    bottom: 0;
-    justify-content: center;
-    background-color: #fff;
-  }
-
-  .main-content .onmobile .sessionuser {
-    width: 100%;
-    margin-bottom: 0;
   }
 }
 
