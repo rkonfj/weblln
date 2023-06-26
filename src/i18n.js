@@ -16,7 +16,8 @@ const messages = {
             googleauth: 'Sign in with Google',
             hello: 'New to LowLevelNews?',
             welcome: 'Sign in now to get your own personalized timeline!',
-            showmore: 'Show More'
+            showmore: 'Show More',
+            searchresult: 'Search Result'
         },
         status: {
             prompt: 'What is happening?!',
@@ -46,7 +47,8 @@ const messages = {
             googleauth: '使用 Google 账号认证',
             hello: '一见如旧，请先登录',
             welcome: '立即认证，获取你自己的个性化时间线！',
-            showmore: '加载更多'
+            showmore: '加载更多',
+            searchresult: '搜索结果'
         },
         status: {
             prompt: '有什么新鲜事？',

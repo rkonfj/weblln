@@ -39,6 +39,11 @@ const router = createRouter({
       path: '/logout',
       name: 'logout',
       component: () => import('./views/LogoutView.vue')
+    },
+    {
+      path: '/search/labels/:label',
+      name: 'searchlabel',
+      component: () => import('./views/SearchView.vue')
     },{
       path: '/termsofservice',
       name: 'termsofservice',

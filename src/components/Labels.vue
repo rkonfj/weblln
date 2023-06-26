@@ -32,7 +32,7 @@ onMounted(async () => {
         <div v-if="labels && labels.length > 0">
             <h2>{{ $t('nav.hot') }}</h2>
             <ul>
-                <li v-for="label in labels">
+                <li v-for="label in labels" @click="$router.push(`/search/labels/${label.value}`)" :class="$route.params.label === label.value ? 'active' : ''">
                     <div class="label">#{{ label.value }}</div>
                     <div class="count">{{ label.count }}</div>
                 </li>
@@ -57,6 +57,7 @@ onMounted(async () => {
     justify-content: space-between;
 }
 
+.sidelabels .active,
 .sidelabels li:hover {
     background-color: rgba(0, 0, 0, 0.04);
     cursor: pointer;
