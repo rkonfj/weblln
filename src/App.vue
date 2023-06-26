@@ -39,7 +39,7 @@ const vSwipe = {
     el.addEventListener('touchstart', (event) => {
       startX = event.touches[0].clientX
       startY = event.touches[0].clientY
-    });
+    }, { passive: true });
 
     el.addEventListener('touchmove', (event) => {
       const deltaX = event.touches[0].clientX - startX
@@ -48,7 +48,7 @@ const vSwipe = {
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         binding.value(deltaX)
       }
-    })
+    }, { passive: true })
   }
 }
 
@@ -94,7 +94,7 @@ async function loadTipMessages() {
   }
 }
 function openNav(v) {
-  if(v < 80) {
+  if (v < 80) {
     return
   }
   mobileSidebar.value = {
@@ -106,7 +106,7 @@ function openNav(v) {
   }
 }
 function closeNav(v) {
-  if(v > -80) {
+  if (v > -80) {
     return
   }
   if (mobileSidebar.value) {

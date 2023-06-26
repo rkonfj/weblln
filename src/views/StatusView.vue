@@ -3,11 +3,17 @@ import Title from '../components/Title.vue'
 import Status from '../components/Status.vue'
 import Loading from '../components/Loading.vue'
 import Post from '../components/Post.vue'
+import CommentIcon from '../components/icons/IconComment.vue'
+import LikeIcon from '../components/icons/IconLike.vue'
+import LikedIcon from '../components/icons/LikedIcon.vue'
 import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
+import ShareIcon from '../components/icons/ShareIcon.vue'
+
 
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
+import { DateTime } from 'luxon'
 
 defineProps(['hideMedia'])
 
@@ -18,7 +24,6 @@ const session = ref()
 const comments = ref()
 const loading = ref()
 const haveMore = ref(true)
-const bookmarked = ref()
 let llnApi = ""
 
 onMounted(() => {
@@ -90,7 +95,55 @@ async function bookmark() {
     alert(await resp.text())
     return
   }
-  bookmarked.value = !bookmarked.value
+
+  let thread = status.value[status.value.length - 1]
+  thread.bookmarked = !thread.bookmarked
+  if (!thread.bookmarked) {
+    thread.bookmarks--
+  } else {
+    thread.bookmarks++
+  }
+}
+
+async function like() {
+  if (!session.value) {
+    emit('shouldLogin')
+    return
+  }
+  let thread = status.value[status.value.length - 1]
+
+  let resp = await fetch(`${llnApi}/i/like/status/${thread.id}`, {
+    method: 'post',
+    headers: {
+      "Authorization": session.value.apiKey,
+    }
+  })
+  if (resp.status == 401) {
+    emit('shouldLogin')
+    return
+  }
+  if (resp.status != 200) {
+    alert(await resp.text())
+    return
+  }
+
+  thread.liked = !thread.liked
+  if (!thread.liked) {
+    thread.likeCount--
+  } else {
+    thread.likeCount++
+  }
+}
+
+function comment() {
+  if (!session.value) {
+    emit('shouldLogin')
+    return
+  }
+}
+
+function share() {
+  navigator.clipboard.writeText(window.location.href).then(() => alert('链接已复制'))
 }
 
 function handleImagesReady(ctx) {
@@ -105,13 +158,31 @@ function handleImagesReady(ctx) {
       <li v-for="(s, index) in status"
         @click="index != status.length - 1 ? $router.push(`/${s.user.uniqueName}/status/${s.id}`) : ''">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
-          :timeline="index != status.length - 1" :hideMedia="hideMedia" />
+          :timeline="index != status.length - 1" :simple="index == status.length - 1" :hideMedia="hideMedia" />
       </li>
     </ul>
-    <div class="operate" v-if="session && status.length > 0">
+    <div class="stats" v-if="status.length > 0">
+      <div class="time">{{
+        DateTime.fromISO(status[status.length - 1].createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY) }}</div>
+      <div class="item dot">·</div>
+      <div class="item"><span>{{ status[status.length - 1].comments }}</span><span>Comments</span></div>
+      <div class="item"><span>{{ status[status.length - 1].likeCount }}</span><span>Likes</span></div>
+      <div class="item"><span>{{ status[status.length - 1].bookmarks }}</span><span>Bookmarks</span></div>
+    </div>
+    <div class="operate" v-if="status.length > 0">
+      <a @click="comment" title="评论">
+        <CommentIcon />
+      </a>
+      <a @click="like" title="喜欢">
+        <LikeIcon v-if="!status[status.length - 1].liked" />
+        <LikedIcon v-if="status[status.length - 1].liked" />
+      </a>
       <a @click="bookmark" title="加入书签">
-        <BookmarkIcon v-if="!bookmarked" />
-        <BookmarkedIcon v-if="bookmarked" />
+        <BookmarkIcon v-if="!status[status.length - 1].bookmarked" />
+        <BookmarkedIcon v-if="status[status.length - 1].bookmarked" />
+      </a>
+      <a @click="share" title="分享">
+        <ShareIcon />
       </a>
     </div>
     <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"
@@ -157,14 +228,45 @@ main .loadbtn {
   color: hsla(160, 100%, 37%, 1);
 }
 
+.stats,
 .operate {
   height: 50px;
-  padding: 0 10px;
+  padding: 0;
+  margin: 0 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   border-bottom: 1px solid rgb(239, 243, 244);
 }
+
+.stats {
+  justify-content: left;
+  padding: 14px 5px;
+  display: block;
+  line-height: 22px;
+  height: auto;
+
+}
+
+.stats .item {
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.stats .item span:first-child {
+  font-weight: bold;
+}
+
+.stats .item span:last-child {
+  margin-left: 5px;
+  color: rgb(83, 100, 113);
+}
+
+.stats .time {
+  display: inline-block;
+  color: rgb(83, 100, 113);
+}
+
 
 .operate a {
   display: flex;
@@ -179,12 +281,10 @@ main .loadbtn {
 
 .operate svg {
   height: 22px;
+  width: 22px;
   fill: rgb(83, 100, 113);
 }
 
-.status {
-  border-bottom: 1px solid rgb(239, 243, 244);
-}
 
 .status li {
   border-bottom: none;
@@ -193,4 +293,19 @@ main .loadbtn {
 .status li:last-child {
   background: none;
   cursor: auto;
-}</style>
+}
+@media (max-width: 60rem) {
+  .stats .time {
+    display: block;
+  }
+
+  .stats .dot {
+    display: none;
+  }
+
+  .stats .item:nth-child(3) {
+    margin-left: 0;
+  }
+
+}
+</style>

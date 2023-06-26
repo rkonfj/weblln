@@ -10,7 +10,7 @@ import he from 'he'
 import { RouterLink } from 'vue-router';
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
-const props = defineProps(['status', 'timeline', 'hideMedia'])
+const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
 const urlRegex = /https:\/\/([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?/i
 const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
 const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
@@ -108,7 +108,9 @@ function renderText(text) {
     <div class="author">
       <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
       <span>@{{ status.user.uniqueName }}</span>
-      · {{ DateTime.fromISO(status.createTime).toRelative() }}
+      <span v-if="!simple">
+        · {{ DateTime.fromISO(status.createTime).toRelative() }}
+      </span>
     </div>
     <div v-if="status.prev && status.prev.user" class="replyflag">
       {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{ status.prev.user.uniqueName }}</RouterLink>
@@ -159,7 +161,7 @@ function renderText(text) {
         </div>
       </div>
     </div>
-    <div class="op">
+    <div class="op" v-if="!simple">
       <a>
         <div class="icon">
           <CommentIcon />
