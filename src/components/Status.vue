@@ -1,13 +1,14 @@
 <script setup>
-import { inject, onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { DateTime } from 'luxon'
+import he from 'he'
+
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
-import { DateTime } from 'luxon'
-import he from 'he'
-import { RouterLink } from 'vue-router';
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
