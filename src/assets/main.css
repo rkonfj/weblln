@@ -49,6 +49,7 @@ pre {
   color: rgb(83, 100, 113);
   font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
   line-height: 18px;
+  overflow-x: auto;
 }
 
 .Toastify {

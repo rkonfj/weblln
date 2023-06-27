@@ -210,6 +210,7 @@ async function likeStatus() {
   flex-direction: column;
   padding: 0 10px;
   flex: 1;
+  min-width: 0;
 }
 
 .content .author {

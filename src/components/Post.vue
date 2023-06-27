@@ -283,6 +283,7 @@ function closeCurrentParagraph() {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .content .paragraph {
