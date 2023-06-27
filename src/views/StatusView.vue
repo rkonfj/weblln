@@ -32,7 +32,13 @@ onMounted(() => {
     session.value = JSON.parse(sessionStr)
   }
   llnApi = inject('llnApi')
-  fetch(`${llnApi}/o/status/${route.params.id}`)
+  let opts = {}
+  if (session.value) {
+    opts.headers = {
+      "Authorization": session.value.apiKey,
+    }
+  }
+  fetch(`${llnApi}/o/status/${route.params.id}`, opts)
     .then(async resp => {
       let s = await resp.json()
       let prev = s.prev
@@ -54,7 +60,13 @@ async function loadComments(after) {
   if (after) {
     afterQuery = '&after=' + after
   }
-  let resp = await fetch(`${llnApi}/o/status/${route.params.id}/comments?size=12${afterQuery}`)
+  let opts = {}
+  if (session.value) {
+    opts.headers = {
+      "Authorization": session.value.apiKey,
+    }
+  }
+  let resp = await fetch(`${llnApi}/o/status/${route.params.id}/comments?size=12${afterQuery}`, opts)
   let ss = await resp.json()
   if (!after) {
     if (ss == null) {
@@ -294,6 +306,7 @@ main .loadbtn {
   background: none;
   cursor: auto;
 }
+
 @media (max-width: 60rem) {
   .stats .time {
     display: block;

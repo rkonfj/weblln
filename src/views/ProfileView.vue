@@ -10,6 +10,7 @@ import { DateTime } from 'luxon'
 
 const route = useRoute()
 const profile = ref()
+const session = ref()
 const status = ref()
 const loading = ref()
 const haveMore = ref(true)
@@ -17,6 +18,10 @@ let llnApi = ""
 
 
 onMounted(async () => {
+  let sessionStr = window.localStorage.getItem("session")
+  if (sessionStr) {
+    session.value = JSON.parse(sessionStr)
+  }
   llnApi = inject('llnApi')
   let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`)
   profile.value = await resp.json()
@@ -29,7 +34,13 @@ async function loadStatus(after) {
   if (after) {
     afterQuery = '&after=' + after
   }
-  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status?size=12${afterQuery}`)
+  let opts = {}
+  if (session.value) {
+    opts.headers = {
+      "Authorization": session.value.apiKey,
+    }
+  }
+  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status?size=12${afterQuery}`, opts)
   let ss = await resp.json()
   if (!after) {
     status.value = []

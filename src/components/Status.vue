@@ -8,6 +8,7 @@ import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
+import LikedIcon from './icons/LikedIcon.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
@@ -170,7 +171,8 @@ function renderText(text) {
       </a>
       <a @click.stop="likeStatus">
         <div class="icon">
-          <LikeIcon />
+          <LikeIcon v-if="!status.liked" />
+          <LikedIcon v-if="status.liked" />
         </div><span>{{ status.likeCount }}</span>
       </a>
     </div>
@@ -381,5 +383,10 @@ function renderText(text) {
   height: 30px;
   width: 30px;
   border-radius: 50%;
+}
+
+.content .op a .icon svg {
+  width: 18px;
+  height: 18px;
 }
 </style>
