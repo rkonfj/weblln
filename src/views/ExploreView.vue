@@ -60,9 +60,16 @@ async function loadExploreData(after) {
     <Title :title="session ? $t('nav.home') : $t('nav.explore')" />
     <Post v-if="session" @posted="loadExploreData" :placeholder="$t('status.prompt')" :btntext="$t('status.post')" />
     <ul v-if="status">
-      <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
-      </li>
+      <div v-for="s in status">
+        <li @click="$router.push(`/${s.prev.user.uniqueName}/status/${s.prev.id}`)" v-if="s.prev"
+          style="border-bottom: none;">
+          <Status @shouldLogin="$emit('shouldLogin')" :timeline="true" :status="s.prev" />
+        </li>
+        <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+          <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
+        </li>
+      </div>
+
     </ul>
     <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
       @click="loadExploreData(status[status.length - 1].id)">
