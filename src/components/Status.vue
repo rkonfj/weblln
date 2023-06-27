@@ -170,7 +170,7 @@ async function likeStatus() {
       <a @click.stop="likeStatus">
         <div class="icon">
           <LikeIcon v-if="!status.liked" />
-          <LikedIcon v-if="status.liked" />
+          <LikedIcon class="like" v-if="status.liked" />
         </div><span>{{ status.likeCount }}</span>
       </a>
     </div>
@@ -397,5 +397,9 @@ async function likeStatus() {
 .content .op a .icon svg {
   width: 18px;
   height: 18px;
+}
+
+.content .op a .like {
+  fill: #d6204b;
 }
 </style>

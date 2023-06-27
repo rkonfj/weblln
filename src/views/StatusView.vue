@@ -200,7 +200,7 @@ function handleImagesReady(ctx) {
       </a>
       <a @click="like" title="喜欢">
         <LikeIcon v-if="!status[status.length - 1].liked" />
-        <LikedIcon v-if="status[status.length - 1].liked" />
+        <LikedIcon class="like" v-if="status[status.length - 1].liked" />
       </a>
       <a @click="bookmark" title="加入书签">
         <BookmarkIcon v-if="!status[status.length - 1].bookmarked" />
@@ -310,6 +310,9 @@ main .loadbtn {
   fill: rgb(83, 100, 113);
 }
 
+.operate .like {
+  fill: #d6204b;
+}
 
 .status li {
   border-bottom: none;
