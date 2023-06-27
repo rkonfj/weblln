@@ -26,7 +26,9 @@ const messages = {
             replying: 'Replying to',
             post: 'Post',
             mediaaddr: 'Paste your picture url here',
-            copied: 'Link copied to clipboard'
+            copied: 'Link copied to clipboard',
+            paragraph: 'New paragraph',
+            showmore: 'Show more'
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -61,7 +63,9 @@ const messages = {
             replying: '回复',
             post: '推送',
             mediaaddr: '粘贴图片地址到这儿',
-            copied: '链接已复制'
+            copied: '链接已复制',
+            paragraph: '新段落',
+            showmore: '显示更多'
         },
         misc: {
             signinagree: '认证即表示你同意',

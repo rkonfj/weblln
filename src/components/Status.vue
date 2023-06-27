@@ -116,7 +116,7 @@ async function likeStatus() {
       <div v-if="!simple && paragraphs.length > 0">
         <div>
           <span v-html="lln.renderText(paragraphs[0])"></span>
-          <span v-if="paragraphs.length > 1">...<a class="showMore">显示更多</a></span>
+          <span v-if="paragraphs.length > 1">...<a class="showMore">{{ $t('status.showmore') }}</a></span>
         </div>
       </div>
       <div class="sf" v-if="imageErrCount > 0">
@@ -245,6 +245,7 @@ async function likeStatus() {
 .content .raw .paragraph {
   margin-bottom: 15px;
   word-break: break-all;
+  width: 100%;
 }
 
 .content .sf {

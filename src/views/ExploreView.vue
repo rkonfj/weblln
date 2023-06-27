@@ -3,7 +3,7 @@ import Status from '../components/Status.vue'
 import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, nextTick } from 'vue'
 
 const session = ref()
 const status = ref()
@@ -40,7 +40,7 @@ async function loadExploreData(after) {
   if (!after) {
     status.value = []
     if (ss != null) {
-      status.value = ss
+      nextTick(() => status.value = ss)
     }
   } else {
     if (ss != null) {

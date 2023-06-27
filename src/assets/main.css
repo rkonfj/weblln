@@ -18,11 +18,37 @@ ul {
   padding: 0;
   margin: 0;
 }
-li {list-style: none;}
+
+li {
+  list-style: none;
+}
 
 main {
   min-height: 100vh;
   flex: 1;
+}
+
+code {
+  background-color: rgb(239, 243, 244);
+  padding: 2px;
+  margin: 0 2px;
+  border-radius: 3px;
+  font-size: 13px;
+  color: rgb(83, 100, 113);
+  font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
+}
+
+pre {
+  background-color: rgb(239, 243, 244);
+  display: block;
+  width: 100%;
+  margin: 5px 0px;
+  padding: 2px 3px;
+  border-radius: 3px;
+  font-size: 13px;
+  color: rgb(83, 100, 113);
+  font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
+  line-height: 18px;
 }
 
 .Toastify {
@@ -30,9 +56,18 @@ main {
   --toastify-toast-min-height: 34px;
 }
 
+@media (max-width: 60rem) {
+  pre {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  code {
+    font-size: 12px;
+  }
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
-

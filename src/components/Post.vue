@@ -5,9 +5,11 @@ import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 import lln from '../lln'
 import { watchEffect, ref, onMounted, inject, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
+const { t } = useI18n()
 
 const sessionUniqueName = ref("")
 const sessionPicture = ref("")
@@ -90,6 +92,7 @@ async function newStatus() {
     loading.value = false
     if (resp.status == 200) {
         contentRaw.value = ''
+        paragraphs.value = []
         images.value = []
         progressC.value = 0
         emit('posted')
@@ -137,7 +140,8 @@ function addParagraph() {
     paragraphs.value.push(contentRaw.value)
     contentRaw.value = ''
     textarea.value.focus()
-    textarea.value.placeholder = '新段落'
+    textarea.value.placeholder = t('status.paragraph')
+    nextTick(updateContentModel)
 }
 
 function closeCurrentParagraph() {
