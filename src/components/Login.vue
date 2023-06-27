@@ -31,7 +31,7 @@ onMounted(() => {
     border-radius: 16px;
     padding: 5px 15px;
     margin-top: 20px;
-    z-index: 100000;
+    z-index: 9998;
 }
 
 .sidelogin .loginbtn {

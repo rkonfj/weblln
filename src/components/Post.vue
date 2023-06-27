@@ -1,8 +1,10 @@
 <script setup>
 import MediaIcon from './icons/IconMedia.vue'
+import ParagraphIcon from './icons/ParagraphIcon.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
-import { watchEffect, ref, onMounted, inject } from 'vue'
+import lln from '../lln'
+import { watchEffect, ref, onMounted, inject, nextTick } from 'vue'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
@@ -12,6 +14,7 @@ const sessionPicture = ref("")
 const activeClass = ref("")
 const session = ref(null)
 const contentRaw = ref("")
+const paragraphs = ref([])
 const textarea = ref("")
 const images = ref([])
 const mediaMode = ref()
@@ -40,7 +43,7 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-    if (contentRaw.value.length > 0 || images.value.length > 0) {
+    if (contentRaw.value.length > 0 || images.value.length > 0 || paragraphs.value.length > 0) {
         activeClass.value = "active"
     } else {
         activeClass.value = ""
@@ -48,11 +51,17 @@ watchEffect(() => {
 })
 
 async function newStatus() {
-    if (contentRaw.value.length == 0 && images.value.length == 0 || loading.value) {
+    if (contentRaw.value.length == 0 && images.value.length == 0 && paragraphs.value.length == 0 || loading.value) {
         return
     }
     loading.value = true
     let content = []
+    for (let p of paragraphs.value) {
+        content.push({
+            type: 'text',
+            value: p.trim()
+        })
+    }
     if (contentRaw.value.trim().length > 0) {
         content.push({
             type: 'text',
@@ -91,7 +100,7 @@ async function newStatus() {
     }
 }
 
-function updateContentModel(e) {
+function updateContentModel() {
     const paddingTop = parseInt(getComputedStyle(textarea.value).getPropertyValue(`padding-top`), 10)
     const paddingBottom = parseInt(getComputedStyle(textarea.value).getPropertyValue(`padding-bottom`), 10)
     const lineHeight = parseInt(getComputedStyle(textarea.value).getPropertyValue(`line-height`), 10)
@@ -124,6 +133,22 @@ function removeMedia(idx) {
     images.value.splice(idx, 1)
 }
 
+function addParagraph() {
+    paragraphs.value.push(contentRaw.value)
+    contentRaw.value = ''
+    textarea.value.focus()
+    textarea.value.placeholder = '新段落'
+}
+
+function closeCurrentParagraph() {
+    contentRaw.value = paragraphs.value.pop()
+    textarea.value.focus()
+    if (paragraphs.value.length == 0) {
+        textarea.value.placeholder = props.placeholder
+    }
+    nextTick(updateContentModel)
+}
+
 </script>
 
 <template>
@@ -135,8 +160,15 @@ function removeMedia(idx) {
             </a>
         </div>
         <div class="content">
-            <textarea class="raw" ref="textarea" rows="2" v-model="contentRaw" @dragover.prevent @drop="handleDragEnter"
-                @paste="paseText" @input="updateContentModel" :placeholder="placeholder"></textarea>
+            <p class="paragraph" v-for="p in paragraphs" v-html="lln.renderText(p)"></p>
+            <div class="editarea">
+                <div class="close" @click="closeCurrentParagraph" v-if="paragraphs.length > 0">
+                    <CloseIcon />
+                </div>
+                <textarea class="raw" ref="textarea" rows="2" v-model="contentRaw" @dragover.prevent @drop="handleDragEnter"
+                    @paste="paseText" @input="updateContentModel" :placeholder="placeholder">
+                </textarea>
+            </div>
             <div class="media" v-if="images.length > 0">
                 <div v-if="images.length == 1" class="image">
                     <div class="close" @click="removeMedia(0)">
@@ -201,15 +233,21 @@ function removeMedia(idx) {
                     <a title="媒体" @click="mediaMode = !mediaMode">
                         <MediaIcon />
                     </a>
-                    <input class="mediaAddress" type="text" v-if="mediaMode" :placeholder="$t('status.mediaaddr')" @blur="addMedia" />
+                    <input class="mediaAddress" type="text" v-if="mediaMode" :placeholder="$t('status.mediaaddr')"
+                        @blur="addMedia" />
                 </div>
                 <div class="postbtn">
-                    <svg class="progress" width="24" height="24" viewBox="0 0 24 24">
+                    <svg class="progress" width="24" height="24" viewBox="0 0 24 24"
+                        v-if="contentRaw && contentRaw.length > 0">
                         <circle class="progress-background" cx="12" cy="12" r="10" stroke="rgb(239, 243, 244)"
                             stroke-width="3" fill="none" />
                         <circle class="progress-fill" cx="12" cy="12" r="10" fill="none" :stroke="progressColor"
                             stroke-width="3" :stroke-dasharray="`${progressC},62.83`" />
                     </svg>
+                    <div class="line" v-if="contentRaw && contentRaw.length > 0"></div>
+                    <div class="newp" title="新段落" @click="addParagraph" v-if="contentRaw && contentRaw.length > 0">
+                        <ParagraphIcon />
+                    </div>
                     <button :class="activeClass" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''"
                         @click="newStatus()">{{ loading ? "···" : btntext }}</button>
                 </div>
@@ -243,6 +281,37 @@ function removeMedia(idx) {
     flex-direction: column;
 }
 
+.content .paragraph {
+    margin-bottom: 10px;
+}
+
+.content .editarea {
+    position: relative;
+}
+
+.content .editarea .close {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.content .editarea .close:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.content .editarea .close svg {
+    width: 16px;
+    height: 16px;
+    fill: hsla(160, 100%, 37%, 1);
+}
 
 .content .media {
     display: flex;
@@ -354,6 +423,7 @@ function removeMedia(idx) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 36px;
 }
 
 .content .operate .postbtn {
@@ -397,6 +467,39 @@ function removeMedia(idx) {
     cursor: pointer;
 }
 
+.content .operate .func a svg {
+    width: 18px;
+    height: 18px;
+}
+
+.content .operate .postbtn .newp {
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid rgb(207, 217, 222);
+    border-radius: 50%;
+}
+
+.content .operate .postbtn .newp:hover {
+    background-color: rgb(239, 243, 244);
+    transition: 0.4s;
+}
+
+.content .operate .postbtn .line {
+    height: 32px;
+    width: 1px;
+    background-color: rgb(207, 217, 222);
+}
+
+.content .operate .postbtn .newp svg {
+    width: 18px;
+    height: 18px;
+    fill: hsla(160, 100%, 37%, 1);
+}
 
 .content .operate button {
     user-select: none;

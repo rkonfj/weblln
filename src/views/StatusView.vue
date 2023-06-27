@@ -10,14 +10,19 @@ import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
+import { useI18n } from 'vue-i18n'
+
 
 defineProps(['hideMedia'])
 
 const route = useRoute()
+const { t } = useI18n()
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const status = ref([])
 const session = ref()
@@ -150,12 +155,20 @@ async function like() {
 function comment() {
   if (!session.value) {
     emit('shouldLogin')
-    return
   }
 }
 
 function share() {
-  navigator.clipboard.writeText(window.location.href).then(() => alert('链接已复制'))
+  let opts = {
+    position: 'bottom-center',
+    autoClose: 1000,
+    hideProgressBar: true,
+    closeButton: false,
+    transition: 'slide'
+  }
+  navigator.clipboard.writeText(window.location.href)
+    .then(() => toast(t('status.copied'), opts))
+    .catch(() => toast(t('misc.badop'), opts))
 }
 
 function handleImagesReady(ctx) {
@@ -217,7 +230,7 @@ main {
   border-left: 1px solid rgb(239, 243, 244);
   border-right: 1px solid rgb(239, 243, 244);
   background-color: #fff;
-  z-index: 10000;
+  z-index: 1000;
 }
 
 main .loadbtn,

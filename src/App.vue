@@ -98,7 +98,7 @@ function openNav(v) {
     return
   }
   mobileSidebar.value = {
-    display: 'block',
+    display: 'flex',
     flex: 1
   }
   mobileMain.value = {
@@ -114,7 +114,7 @@ function closeNav(v) {
       display: 'none',
     }
     mobileMain.value = {
-      display: 'block'
+      display: 'flex'
     }
   }
 }

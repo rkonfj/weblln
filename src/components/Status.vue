@@ -2,7 +2,7 @@
 import { inject, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
-import he from 'he'
+import lln from '../lln'
 
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
@@ -13,12 +13,10 @@ import LoadingIcon from './icons/LoadingIcon.vue'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
-const urlRegex = /https:\/\/([\w.-]+)\.([a-z]{2,6}\.?)(\/[\w.-]*)*\/?/i
-const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
-const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
 const session = ref()
 const avatar = ref()
 const images = ref([])
+const paragraphs = ref([])
 const error = ref()
 const imageCount = ref(0)
 const imageErrCount = ref(0)
@@ -57,6 +55,8 @@ onMounted(() => {
         }
       })(imageCount.value)
       imageCount.value++
+    } else {
+      paragraphs.value.push(c.value)
     }
   }
 })
@@ -88,15 +88,6 @@ async function likeStatus() {
     props.status.likeCount++
   }
 }
-
-function renderText(text) {
-  text = he.escape(text)
-  text = text.replaceAll('\n', '<br />')
-  text = text.replace(atRegex, m => `<a href="/${m.substring(1)}">${m}</a>`)
-  text = text.replace(labelRegex, m => `<a href="/search/labels/${m.substring(1)}">${m}</a>`)
-  text = text.replace(urlRegex, m => `<a href="${m}">${m}</a>`)
-  return text
-}
 </script>
 <template>
   <div class="avatararea">
@@ -115,11 +106,18 @@ function renderText(text) {
       </span>
     </div>
     <div v-if="status.prev && status.prev.user" class="replyflag">
-      {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{ status.prev.user.uniqueName }}</RouterLink>
+      {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{
+        status.prev.user.uniqueName }}</RouterLink>
     </div>
     <div class="raw">
-      <div class="sf" v-for="c in status.content">
-        <p v-if="c.type === 'text'" v-html="renderText(c.value)"></p>
+      <div class="sf" v-if="simple" v-for="c in paragraphs">
+        <p class="paragraph" v-html="lln.renderText(c)"></p>
+      </div>
+      <div v-if="!simple && paragraphs.length > 0">
+        <div>
+          <span v-html="lln.renderText(paragraphs[0])"></span>
+          <span v-if="paragraphs.length > 1">...<a class="showMore">显示更多</a></span>
+        </div>
       </div>
       <div class="sf" v-if="imageErrCount > 0">
         <ErrorIcon class="icon" />
@@ -244,9 +242,18 @@ function renderText(text) {
   flex-direction: column;
 }
 
+.content .raw .paragraph {
+  margin-bottom: 15px;
+  word-break: break-all;
+}
+
 .content .sf {
   display: flex;
   align-items: center;
+}
+
+.content .showMore {
+  margin-left: 2px;
 }
 
 .content .sf .icon {

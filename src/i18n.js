@@ -25,12 +25,13 @@ const messages = {
             reply: 'Reply',
             replying: 'Replying to',
             post: 'Post',
-            mediaaddr: 'Paste your picture url here'
-
+            mediaaddr: 'Paste your picture url here',
+            copied: 'Link copied to clipboard'
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
-            and: 'and'
+            and: 'and',
+            badop: 'The current browser does not support this operation'
         }
     },
     zh: {
@@ -59,11 +60,13 @@ const messages = {
             reply: '回复',
             replying: '回复',
             post: '推送',
-            mediaaddr: '粘贴图片地址到这儿'
+            mediaaddr: '粘贴图片地址到这儿',
+            copied: '链接已复制'
         },
         misc: {
             signinagree: '认证即表示你同意',
-            and: '和'
+            and: '和',
+            badop: '当前浏览器不支持该操作'
         }
     },
 }
