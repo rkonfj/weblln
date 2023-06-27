@@ -1,12 +1,11 @@
 import './assets/main.css'
-
+import router from './router'
 import messages from './i18n'
+import { llnApi, siteName } from './config'
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { Settings } from 'luxon'
 import App from './App.vue'
-import router from './router'
-import { llnApi } from './config'
 
 const i18n = createI18n({
     legacy: false,
@@ -14,10 +13,15 @@ const i18n = createI18n({
     messages: messages,
 })
 
-Settings.defaultLocale = localStorage.getItem('lang')
+Settings.defaultLocale = localStorage.getItem('lang') || 'zh'
 
-router.beforeEach((to, from, next) => {
-    document.title = i18n.global.t(`nav.${to.name}`, document.title)
+router.beforeEach((to, _, next) => {
+    document.title = i18n.global.t(`nav.${to.name}`, 'nil')
+    if (document.title == 'nil') {
+        document.title = siteName
+    } else {
+        document.title = `${document.title} / ${siteName}`
+    }
     next()
 })
 

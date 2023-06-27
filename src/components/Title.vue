@@ -1,5 +1,5 @@
 <template>
-    <h2><a v-if="backbtn"><IconBack @click="$router.go(-1)" /></a><span>{{ title }}</span></h2>
+    <h2><a v-if="backbtn" @click="$router.go(-1)"><IconBack /></a><span>{{ title }}</span></h2>
 </template>
 
 <script setup>
