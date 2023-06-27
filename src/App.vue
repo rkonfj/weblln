@@ -125,7 +125,8 @@ function closeNav(v) {
     <nav>
       <ul>
         <li>
-          <RouterLink to="/">
+          <RouterLink class="home" to="/">
+            <div class="version">beta</div>
             <HomeIcon />
           </RouterLink>
         </li>
@@ -192,6 +193,7 @@ nav ul li {
 }
 
 
+nav ul .home,
 nav ul .msgLink {
   position: relative;
 }
@@ -209,6 +211,14 @@ nav ul .msgLink .tips {
   position: absolute;
   top: 7px;
   right: -5px;
+}
+
+nav ul .home .version {
+  position: absolute;
+  font-size: 14px;
+  color: rgb(83, 100, 113);
+  top: 2px;
+  right: -25px;
 }
 
 nav a.router-link-exact-active span {

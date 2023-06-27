@@ -218,7 +218,7 @@ function renderText(text) {
 }
 
 .content .author span {
-  color: #666;
+  color: rgb(83, 100, 113);
   margin-left: 10px;
 }
 
