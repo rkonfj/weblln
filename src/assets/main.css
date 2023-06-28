@@ -52,6 +52,16 @@ pre {
   overflow-x: auto;
 }
 
+pre::-webkit-scrollbar {
+  height: 8px; 
+  transition: 0.4s;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: rgb(83, 100, 113, 0.6);
+  border-radius: 3px;
+}
+
 .Toastify {
   --toastify-toast-width: auto;
   --toastify-toast-min-height: 34px;

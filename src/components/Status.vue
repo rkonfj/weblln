@@ -2,25 +2,17 @@
 import { inject, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
-import lln from '../lln'
 
+import Content from './Content.vue'
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
-import ErrorIcon from './icons/ErrorIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LikedIcon from './icons/LikedIcon.vue'
-import LoadingIcon from './icons/LoadingIcon.vue'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
 const session = ref()
 const avatar = ref()
-const images = ref([])
-const paragraphs = ref([])
-const error = ref()
-const imageCount = ref(0)
-const imageErrCount = ref(0)
-const imageLoadCount = ref(0)
 let llnApi = ""
 
 onMounted(() => {
@@ -33,31 +25,6 @@ onMounted(() => {
   image.src = props.status.user.picture
   image.onload = () => {
     avatar.value = image.src
-  }
-  for (let c of props.status.content) {
-    if (c.type == 'img') {
-      (function (idx) {
-        let img = new Image()
-        img.src = c.value
-        img.onload = () => {
-          images.value[idx] = c.value
-          emit('imagesReady', {
-            imgs: images.value,
-            imgCount: imageCount.value,
-            imgLoadCount: imageLoadCount.value,
-            imgErrCount: imageErrCount.value
-          })
-          imageLoadCount.value++
-        }
-        img.onerror = () => {
-          error.value = true
-          imageErrCount.value++
-        }
-      })(imageCount.value)
-      imageCount.value++
-    } else {
-      paragraphs.value.push(c.value)
-    }
   }
 })
 
@@ -88,95 +55,65 @@ async function likeStatus() {
     props.status.likeCount++
   }
 }
+
+function sendImagesReady(data) {
+  emit('imagesReady', data)
+}
 </script>
 <template>
-  <div class="avatararea">
-    <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar">
-      <img v-if="avatar" class="avatarimg" :src="status.user.picture" alt="avatar" />
-      <DefaultAvatarIcon class="avatarimg" v-else />
-    </RouterLink>
-    <div v-if="timeline" class="timeline"></div>
+  <div class="status">
+    <div class="avatararea">
+      <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar">
+        <img v-if="avatar" class="avatarimg" :src="status.user.picture" alt="avatar" />
+        <DefaultAvatarIcon class="avatarimg" v-else />
+      </RouterLink>
+      <div v-if="timeline" class="timeline"></div>
+    </div>
+    <div class="content">
+      <div class="author" v-if="!simple">
+          <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+          <span>@{{ status.user.uniqueName }}</span>
+          <span class="w">·</span>
+          <span class="w">{{ DateTime.fromISO(status.createTime).toRelative() }}</span>
+      </div>
+      <div class="author simpleauthor" v-if="simple">
+          <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+          <span>@{{ status.user.uniqueName }}</span>
+      </div>
+      <div v-if="status.prev && status.prev.user" class="replyflag">
+        {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{
+          status.prev.user.uniqueName }}</RouterLink>
+      </div>
+      <Content v-if="!simple" :status="status" :simple="simple" @imagesReady="sendImagesReady" />
+      <div class="op" v-if="!simple">
+        <a>
+          <div class="icon">
+            <CommentIcon />
+          </div><span>{{ status.comments }}</span>
+        </a>
+        <a @click.stop="likeStatus">
+          <div class="icon">
+            <LikeIcon v-if="!status.liked" />
+            <LikedIcon class="like" v-if="status.liked" />
+          </div><span>{{ status.likeCount }}</span>
+        </a>
+      </div>
+    </div>
   </div>
-  <div class="content">
-    <div class="author">
-      <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
-      <span>@{{ status.user.uniqueName }}</span>
-      <span v-if="!simple">
-        · {{ DateTime.fromISO(status.createTime).toRelative() }}
-      </span>
-    </div>
-    <div v-if="status.prev && status.prev.user" class="replyflag">
-      {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{
-        status.prev.user.uniqueName }}</RouterLink>
-    </div>
-    <div class="raw">
-      <div class="sf" v-if="simple" v-for="c in paragraphs">
-        <p class="paragraph" v-html="lln.renderText(c)"></p>
-      </div>
-      <div v-if="!simple && paragraphs.length > 0">
-        <div>
-          <span v-html="lln.renderText(paragraphs[0])"></span>
-          <span v-if="paragraphs.length > 1">...<a class="showMore">{{ $t('status.showmore') }}</a></span>
-        </div>
-      </div>
-      <div class="sf" v-if="imageErrCount > 0">
-        <ErrorIcon class="icon" />
-        <span class="error">{{ imageErrCount }} 张图片没有加载成功</span>
-      </div>
-      <div class="sf" v-if="imageCount > 0 && imageLoadCount + imageErrCount < imageCount">
-        <LoadingIcon class="icon" />
-        <span class="tips">{{ imageCount - imageLoadCount - imageErrCount }} 张图片正在加载</span>
-      </div>
-      <div class="media" v-if="images.length > 0 && !hideMedia">
-        <div v-if="images.length == 1" class="image"><img
-            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
-            alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img
-            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
-            alt="Image" /></div>
-        <div v-if="images.length == 2" class="image w50 h100"><img
-            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]"
-            alt="Image" /></div>
-
-        <div v-if="images.length == 3" class="image w50 h100"><img
-            @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
-            alt="Image" /></div>
-        <div v-if="images.length == 3" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-              :src="images[1]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-              :src="images[2]" alt="Image" /></div>
-        </div>
-        <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
-              :src="images[0]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-              :src="images[1]" alt="Image" /></div>
-        </div>
-        <div v-if="images.length == 4" class="fc">
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-              :src="images[2]" alt="Image" /></div>
-          <div class="image h50"><img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)"
-              :src="images[3]" alt="Image" /></div>
-        </div>
-      </div>
-    </div>
-    <div class="op" v-if="!simple">
-      <a>
-        <div class="icon">
-          <CommentIcon />
-        </div><span>{{ status.comments }}</span>
-      </a>
-      <a @click.stop="likeStatus">
-        <div class="icon">
-          <LikeIcon v-if="!status.liked" />
-          <LikedIcon class="like" v-if="status.liked" />
-        </div><span>{{ status.likeCount }}</span>
-      </a>
-    </div>
+  <div v-if="simple" class="simplestatus">
+    <Content :status="status" :simple="simple" @imagesReady="sendImagesReady" />
   </div>
 </template>
 <style scoped>
+.status {
+  display: flex;
+  width: 100%;
+}
+
+.simplestatus {
+  margin-top: 5px;
+}
+
 .avatararea {
   display: flex;
   flex-direction: column;
@@ -222,6 +159,9 @@ async function likeStatus() {
   color: rgb(83, 100, 113);
   margin-left: 10px;
 }
+.content .author .w {
+  margin-left: 5px;
+}
 
 .content .author a {
   color: #222;
@@ -232,6 +172,17 @@ async function likeStatus() {
   text-decoration: underline;
   text-decoration-color: #222;
   background: none;
+}
+
+.content .simpleauthor {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+  justify-content: center;
+}
+
+.content .simpleauthor span {
+  margin-left: 0;
 }
 
 .content .replyflag {

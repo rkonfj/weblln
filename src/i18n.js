@@ -28,7 +28,10 @@ const messages = {
             mediaaddr: 'Paste your picture url here',
             copied: 'Link copied to clipboard',
             paragraph: 'New paragraph',
-            showmore: 'Show more'
+            showmore: 'Show more',
+            comments: 'Comments',
+            likes: 'Likes',
+            bookmarks: 'Bookmarks'
         },
         user: {
             name: 'Name',
@@ -73,7 +76,10 @@ const messages = {
             mediaaddr: '粘贴图片地址到这儿',
             copied: '链接已复制',
             paragraph: '新段落',
-            showmore: '显示更多'
+            showmore: '显示更多',
+            comments: '评论',
+            likes: '喜欢',
+            bookmarks: '书签'
         },
         user: {
             name: '显示名',

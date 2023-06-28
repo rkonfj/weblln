@@ -189,10 +189,15 @@ function handleImagesReady(ctx) {
     <div class="stats" v-if="status.length > 0">
       <div class="time">{{
         DateTime.fromISO(status[status.length - 1].createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY) }}</div>
-      <div class="item dot">·</div>
-      <div class="item"><span>{{ status[status.length - 1].comments }}</span><span>Comments</span></div>
-      <div class="item"><span>{{ status[status.length - 1].likeCount }}</span><span>Likes</span></div>
-      <div class="item"><span>{{ status[status.length - 1].bookmarks }}</span><span>Bookmarks</span></div>
+      <div class="item dot"
+        v-if="status[status.length - 1].comments + status[status.length - 1].likeCount + status[status.length - 1].bookmarks > 0">
+        ·</div>
+      <div class="item" v-if="status[status.length - 1].comments > 0"><span>{{ status[status.length - 1].comments
+      }}</span><span>{{ $t('status.comments') }}</span></div>
+      <div class="item" v-if="status[status.length - 1].likeCount > 0"><span>{{ status[status.length - 1].likeCount
+      }}</span><span>{{ $t('status.likes') }}</span></div>
+      <div class="item" v-if="status[status.length - 1].bookmarks > 0"><span>{{ status[status.length - 1].bookmarks
+      }}</span><span>{{ $t('status.bookmarks') }}</span></div>
     </div>
     <div class="operate" v-if="status.length > 0">
       <a @click="comment" title="评论">
@@ -235,10 +240,10 @@ main {
 
 main .loadbtn,
 main ul li {
-  display: flex;
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid rgb(239, 243, 244);
+  background-color: var(--color-background);
 }
 
 main .loadbtn:hover,
@@ -270,7 +275,6 @@ main .loadbtn {
   display: block;
   line-height: 22px;
   height: auto;
-
 }
 
 .stats .item {
@@ -285,6 +289,10 @@ main .loadbtn {
 .stats .item span:last-child {
   margin-left: 5px;
   color: rgb(83, 100, 113);
+}
+
+.stats .dot {
+  margin-right: 0px;
 }
 
 .stats .time {
@@ -336,5 +344,4 @@ main .loadbtn {
     margin-left: 0;
   }
 
-}
-</style>
+}</style>

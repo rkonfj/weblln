@@ -91,6 +91,7 @@ function renderImages(ctx) {
     cursor: pointer;
     border-radius: 50%;
     transition: 0.4s;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .mainarea .btn:hover {
