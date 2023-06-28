@@ -30,6 +30,14 @@ const messages = {
             paragraph: 'New paragraph',
             showmore: 'Show more'
         },
+        user: {
+            name: 'Name',
+            idname: 'ID Name',
+            exittips: 'After clicking save, the current login will be logged out immediately'
+        },
+        btn: {
+            save: 'Save'
+        },
         misc: {
             signinagree: 'By signing in, you agree to the',
             and: 'and',
@@ -66,6 +74,14 @@ const messages = {
             copied: '链接已复制',
             paragraph: '新段落',
             showmore: '显示更多'
+        },
+        user: {
+            name: '显示名',
+            idname: '用户名',
+            exittips: '点击保存后，会立即退出当前登录'
+        },
+        btn: {
+            save: '保存'
         },
         misc: {
             signinagree: '认证即表示你同意',

@@ -32,7 +32,7 @@ async function loadExploreData(after) {
   if (after) {
     afterQuery = '&after=' + after
   }
-  let resp = await fetch(`${llnApi}/o/explore?size=12${afterQuery}`, opts)
+  let resp = await fetch(`${llnApi}/o/explore?size=15${afterQuery}`, opts)
   if (resp.headers.get("X-Session-Valid") == "false") {
     session.value = null
   }
