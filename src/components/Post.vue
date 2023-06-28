@@ -42,14 +42,7 @@ onMounted(() => {
         avatar.value = image.src
     }
     llnApi = inject('llnApi')
-})
-
-watchEffect(() => {
-    if (contentRaw.value.length > 0 || images.value.length > 0 || paragraphs.value.length > 0) {
-        activeClass.value = "active"
-    } else {
-        activeClass.value = ""
-    }
+    restoreFromLocal()
 })
 
 async function newStatus() {
@@ -95,6 +88,7 @@ async function newStatus() {
         paragraphs.value = []
         images.value = []
         progressC.value = 0
+        resetLocal()
         emit('posted')
     } else if (resp.status == 401) {
         alert("401")
@@ -121,6 +115,12 @@ function updateContentModel() {
         progressColor.value = 'red'
     } else {
         progressColor.value = 'hsla(160, 100%, 37%, 1)'
+    }
+    saveToLocal()
+    if (contentRaw.value.length > 0 || images.value.length > 0 || paragraphs.value.length > 0) {
+        activeClass.value = "active"
+    } else {
+        activeClass.value = ""
     }
 }
 
@@ -151,6 +151,56 @@ function closeCurrentParagraph() {
         textarea.value.placeholder = props.placeholder
     }
     nextTick(updateContentModel)
+}
+
+function saveToLocal() {
+    let inputKey = `input/${window.location.pathname}`
+    let paragraphsKey = `paragraphs/${window.location.pathname}`
+    let imagesKey = `images/${window.location.pathname}`
+    if (!contentRaw.value || contentRaw.value.length == 0) {
+        window.localStorage.removeItem(inputKey)
+    } else {
+        window.localStorage.setItem(inputKey, contentRaw.value)
+    }
+    if (paragraphs.value.length == 0) {
+        window.localStorage.removeItem(paragraphsKey)
+    } else {
+        window.localStorage.setItem(paragraphsKey, JSON.stringify(paragraphs.value))
+    }
+    if (images.value.length == 0) {
+        window.localStorage.removeItem(imagesKey)
+    } else {
+        window.localStorage.setItem(imagesKey, JSON.stringify(images.value))
+    }
+}
+
+function restoreFromLocal() {
+    let inputKey = `input/${window.location.pathname}`
+    let paragraphsKey = `paragraphs/${window.location.pathname}`
+    let imagesKey = `images/${window.location.pathname}`
+    let cur = window.localStorage.getItem(inputKey)
+    if (cur) {
+        contentRaw.value = cur
+    }
+
+    let p = window.localStorage.getItem(paragraphsKey)
+    if (p) {
+        paragraphs.value = JSON.parse(p)
+    }
+
+    let imgs = window.localStorage.getItem(imagesKey)
+    if (imgs) {
+        images.value = JSON.parse(imgs)
+    }
+}
+
+function resetLocal() {
+    let inputKey = `input/${window.location.pathname}`
+    let paragraphsKey = `paragraphs/${window.location.pathname}`
+    let imagesKey = `images/${window.location.pathname}`
+    window.localStorage.removeItem(inputKey)
+    window.localStorage.removeItem(paragraphsKey)
+    window.localStorage.removeItem(imagesKey)
 }
 
 </script>
@@ -288,6 +338,7 @@ function closeCurrentParagraph() {
 
 .content .paragraph {
     margin-bottom: 10px;
+    word-break: break-word;
 }
 
 .content .editarea {

@@ -30,7 +30,7 @@ main {
 
 code {
   background-color: rgb(239, 243, 244);
-  padding: 2px;
+  padding: 2px 5px;
   margin: 0 2px;
   border-radius: 3px;
   font-size: 13px;
@@ -43,7 +43,7 @@ pre {
   display: block;
   width: 100%;
   margin: 5px 0px;
-  padding: 2px 3px;
+  padding: 2px 6px;
   border-radius: 3px;
   font-size: 13px;
   color: rgb(83, 100, 113);
