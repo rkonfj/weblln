@@ -86,9 +86,9 @@ main {
 
 .line {
   display: flex;
-  height: 36px;
-  line-height: 36px;
-  justify-content: right;
+  height: 38px;
+  line-height: 38px;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -105,12 +105,13 @@ main {
 
 select,
 .user .value input {
-  padding: 6px 10px;
+  padding: 5px 10px;
+  line-height: 22px;
   width: 100%;
   border: 1px solid rgb(207, 217, 222);
   outline-color: hsla(160, 100%, 37%, 1);
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 16px;
 }
 
 .user button {
@@ -120,7 +121,7 @@ select,
   background-color: #222;
   font-size: 15px;
   font-weight: bold;
-  padding: 0.4rem 1rem 0.4rem 1.2rem;
+  padding: 0.5rem 0.9rem 0.5rem 1rem;
   color: #fff;
   border-radius: 22px;
   letter-spacing: 0.2rem;
@@ -149,8 +150,7 @@ option {
 }
 
 .tips {
-  margin: 0 10px;
   font-size: 14px;
-  color: #666;
+  color: rgb(113, 119, 121);
 }
 </style>

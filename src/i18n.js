@@ -31,7 +31,8 @@ const messages = {
             showmore: 'Show more',
             comments: 'Comments',
             likes: 'Likes',
-            bookmarks: 'Bookmarks'
+            bookmarks: 'Bookmarks',
+            expandtimeline: 'Expand timeline'
         },
         user: {
             name: 'Name',
@@ -79,7 +80,8 @@ const messages = {
             showmore: '显示更多',
             comments: '评论',
             likes: '喜欢',
-            bookmarks: '书签'
+            bookmarks: '书签',
+            expandtimeline: '展开时间线'
         },
         user: {
             name: '显示名',

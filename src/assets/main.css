@@ -58,7 +58,7 @@ pre::-webkit-scrollbar {
 }
 
 pre::-webkit-scrollbar-thumb {
-  background-color: rgb(83, 100, 113, 0.6);
+  background-color: rgb(83, 100, 113, 0.3);
   border-radius: 3px;
 }
 
@@ -74,6 +74,9 @@ pre::-webkit-scrollbar-thumb {
   }
   code {
     font-size: 12px;
+  }
+  pre::-webkit-scrollbar {
+    height: 3px; 
   }
 }
 

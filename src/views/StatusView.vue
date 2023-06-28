@@ -25,6 +25,7 @@ const route = useRoute()
 const { t } = useI18n()
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const status = ref([])
+const showTimeline = ref()
 const session = ref()
 const comments = ref()
 const loading = ref()
@@ -179,7 +180,38 @@ function handleImagesReady(ctx) {
 <template>
   <main>
     <Title :title="$t('nav.thread')" :backbtn="true" />
-    <ul class="status" v-if="status.length > 0">
+    <ul class="status" v-if="status.length > 2 && !showTimeline">
+      <li @click="$router.push(`/${status[0].user.uniqueName}/status/${status[0].id}`)">
+        <Status :status="status[0]" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady" timeline="true"
+          :hideMedia="hideMedia" />
+      </li>
+      <li class="expandArea" v-if="status.length > 3" @click="showTimeline = !showTimeline">
+        <div class="lineArea">
+          <div v-for="a in [0, 0, 0]" class="timeline"></div>
+          <div class="timeline last"></div>
+        </div>
+        <div class="btn">{{ $t('status.expandtimeline') }}</div>
+      </li>
+      <li @click="$router.push(`/${status[status.length - 2].user.uniqueName}/status/${status[status.length - 2].id}`)">
+        <Status :status="status[status.length - 2]" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
+          timeline="true" :hideMedia="hideMedia" />
+      </li>
+      <li>
+        <Status :status="status[status.length - 1]" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
+          simple="true" :hideMedia="hideMedia" />
+      </li>
+    </ul>
+    <ul class="status" v-if="status.length == 2">
+      <li @click="$router.push(`/${status[0].user.uniqueName}/status/${status[0].id}`)">
+        <Status :status="status[0]" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady" timeline="true"
+          :hideMedia="hideMedia" />
+      </li>
+      <li>
+        <Status :status="status[status.length - 1]" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
+          simple="true" :hideMedia="hideMedia" />
+      </li>
+    </ul>
+    <ul class="status" v-if="status.length != 2 && showTimeline || status.length == 1">
       <li v-for="(s, index) in status"
         @click="index != status.length - 1 ? $router.push(`/${s.user.uniqueName}/status/${s.id}`) : ''">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" @imagesReady="handleImagesReady"
@@ -244,6 +276,40 @@ main ul li {
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid rgb(239, 243, 244);
   background-color: var(--color-background);
+}
+
+main ul .expandArea {
+  display: flex;
+}
+
+main ul .expandArea .lineArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+}
+
+main ul .expandArea .lineArea .last {
+  min-height: 15px;
+  margin-bottom: -18px;
+}
+
+main ul .expandArea .btn {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  color: hsla(160, 100%, 37%, 1);
+  cursor: pointer;
+  height: 30px;
+}
+
+main ul li .timeline {
+  display: flex;
+  width: 2px;
+  height: 5px;
+  flex-grow: 1;
+  background-color: rgb(207, 217, 222);
+  margin-bottom: 5px;
 }
 
 main .loadbtn:hover,
@@ -344,4 +410,5 @@ main .loadbtn {
     margin-left: 0;
   }
 
-}</style>
+}
+</style>
