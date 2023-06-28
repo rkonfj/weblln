@@ -71,20 +71,20 @@ function sendImagesReady(data) {
     </div>
     <div class="content">
       <div class="author" v-if="!simple">
-          <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
-          <span>@{{ status.user.uniqueName }}</span>
-          <span class="w">·</span>
-          <span class="w">{{ DateTime.fromISO(status.createTime).toRelative() }}</span>
+        <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+        <span>@{{ status.user.uniqueName }}</span>
+        <span class="w">·</span>
+        <span class="w">{{ DateTime.fromISO(status.createTime).toRelative() }}</span>
       </div>
       <div class="author simpleauthor" v-if="simple">
-          <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
-          <span>@{{ status.user.uniqueName }}</span>
+        <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+        <span>@{{ status.user.uniqueName }}</span>
       </div>
       <div v-if="status.prev && status.prev.user" class="replyflag">
         {{ $t('status.replying') }} <RouterLink @click.stop :to="`/${status.prev.user.uniqueName}`">@{{
           status.prev.user.uniqueName }}</RouterLink>
       </div>
-      <Content v-if="!simple" :status="status" :simple="simple" @imagesReady="sendImagesReady" />
+      <Content v-if="!simple" :status="status" :simple="simple" :hideMedia="hideMedia" @imagesReady="sendImagesReady" />
       <div class="op" v-if="!simple">
         <a>
           <div class="icon">
@@ -101,7 +101,7 @@ function sendImagesReady(data) {
     </div>
   </div>
   <div v-if="simple" class="simplestatus">
-    <Content :status="status" :simple="simple" @imagesReady="sendImagesReady" />
+    <Content :status="status" :simple="simple" :hideMedia="hideMedia" @imagesReady="sendImagesReady" />
   </div>
 </template>
 <style scoped>
@@ -159,6 +159,7 @@ function sendImagesReady(data) {
   color: rgb(83, 100, 113);
   margin-left: 10px;
 }
+
 .content .author .w {
   margin-left: 5px;
 }
