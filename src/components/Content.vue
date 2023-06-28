@@ -107,6 +107,7 @@ onMounted(() => {
 .raw {
     display: flex;
     flex-direction: column;
+    word-break: break-word;
 }
 
 .raw .paragraph {
