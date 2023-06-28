@@ -4,8 +4,11 @@ import ParagraphIcon from './icons/ParagraphIcon.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 import lln from '../lln'
-import { watchEffect, ref, onMounted, inject, nextTick } from 'vue'
+import { ref, onMounted, inject, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
@@ -83,6 +86,14 @@ async function newStatus() {
         body: JSON.stringify(postBody)
     })
     loading.value = false
+    let opts = {
+        position: 'bottom-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeButton: false,
+        transition: 'slide',
+        type: 'error'
+    }
     if (resp.status == 200) {
         contentRaw.value = ''
         paragraphs.value = []
@@ -91,9 +102,10 @@ async function newStatus() {
         resetLocal()
         emit('posted')
     } else if (resp.status == 401) {
-        alert("401")
+        toast('Api Key expired, please log in again', opts)
+        setTimeout(() => window.location.reload(), 1000)
     } else {
-        alert(await resp.text())
+        toast(await resp.text(), opts)
     }
 }
 

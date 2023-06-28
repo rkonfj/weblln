@@ -71,7 +71,7 @@ async function loadComments(after) {
       "Authorization": session.value.apiKey,
     }
   }
-  let resp = await fetch(`${llnApi}/o/status/${route.params.id}/comments?size=12${afterQuery}`, opts)
+  let resp = await fetch(`${llnApi}/o/status/${route.params.id}/comments?order=asc&size=12${afterQuery}`, opts)
   let ss = await resp.json()
   if (!after) {
     if (ss == null) {
