@@ -71,7 +71,7 @@ async function loadExploreData(after) {
       </div>
 
     </ul>
-    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
+    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 15 == 0 && haveMore && !loading"
       @click="loadExploreData(status[status.length - 1].id)">
       {{ $t('nav.showmore') }}
     </div>
