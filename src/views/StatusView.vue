@@ -11,7 +11,6 @@ import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 
 import { toast } from 'vue3-toastify'
-import 'vue3-toastify/dist/index.css'
 
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
@@ -160,16 +159,9 @@ function comment() {
 }
 
 function share() {
-  let opts = {
-    position: 'bottom-center',
-    autoClose: 1000,
-    hideProgressBar: true,
-    closeButton: false,
-    transition: 'slide'
-  }
   navigator.clipboard.writeText(window.location.href)
-    .then(() => toast(t('status.copied'), opts))
-    .catch(() => toast(t('misc.badop'), opts))
+    .then(() => toast(t('status.copied')))
+    .catch(() => toast(t('misc.badop')))
 }
 
 function handleImagesReady(ctx) {

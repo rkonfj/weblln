@@ -8,7 +8,6 @@ import { ref, onMounted, inject, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { toast } from 'vue3-toastify'
-import 'vue3-toastify/dist/index.css'
 
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
@@ -86,14 +85,6 @@ async function newStatus() {
         body: JSON.stringify(postBody)
     })
     loading.value = false
-    let opts = {
-        position: 'bottom-center',
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeButton: false,
-        transition: 'slide',
-        type: 'error'
-    }
     if (resp.status == 200) {
         contentRaw.value = ''
         paragraphs.value = []
@@ -102,10 +93,10 @@ async function newStatus() {
         resetLocal()
         emit('posted')
     } else if (resp.status == 401) {
-        toast('Api Key expired, please log in again', opts)
+        toast('Api Key expired, please log in again', {type: 'error'})
         setTimeout(() => window.location.reload(), 1000)
     } else {
-        toast(await resp.text(), opts)
+        toast(await resp.text(), {type: 'error'})
     }
 }
 

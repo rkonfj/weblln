@@ -3,7 +3,8 @@ import Title from '../components/Title.vue'
 import { useI18n } from 'vue-i18n'
 import { watch, onMounted, ref, inject } from 'vue'
 import { Settings } from 'luxon'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const session = ref()
 const { locale } = useI18n()
@@ -41,9 +42,8 @@ async function changeName(name, uniqueName) {
   <main>
     <Title :title="$t('nav.settings')" />
     <div class="user" v-if="session">
-      <div class="line">
-        <div class="key">ID</div>
-        <div class="value">{{ session.id }}</div>
+      <div class="avatar" @click="toast('暂不支持修改头像', {type: 'warning'})">
+        <img :src="session.picture" />
       </div>
       <div class="line">
         <div class="key">{{ $t('user.name') }}</div>
@@ -135,6 +135,15 @@ select,
 
 .user button:hover {
   background-color: rgb(0, 0, 0, 0.7);
+}
+.user .avatar {
+  margin-bottom: 20px;
+}
+
+.user .avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
 
 option {
