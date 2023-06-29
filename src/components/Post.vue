@@ -296,7 +296,7 @@ function resetLocal() {
                 <div class="postbtn">
                     <svg class="progress" width="24" height="24" viewBox="0 0 24 24"
                         v-if="contentRaw && contentRaw.length > 0">
-                        <circle class="progress-background" cx="12" cy="12" r="10" stroke="rgb(239, 243, 244)"
+                        <circle class="progress-background" cx="12" cy="12" r="10" stroke="var(--lln-color-border)"
                             stroke-width="3" fill="none" />
                         <circle class="progress-fill" cx="12" cy="12" r="10" fill="none" :stroke="progressColor"
                             stroke-width="3" :stroke-dasharray="`${progressC},62.83`" />
@@ -325,7 +325,7 @@ function resetLocal() {
 .postarea {
     display: flex;
     padding: 10px 15px;
-    border-bottom: .5px solid rgb(239, 243, 244);
+    border-bottom: .5px solid var(--lln-color-border);
 }
 
 .avatararea {
@@ -469,6 +469,8 @@ function resetLocal() {
     font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
         Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
+    background-color: var(--color-background);
+    color: var(--lln-color-text);
     resize: none;
 }
 
@@ -511,7 +513,7 @@ function resetLocal() {
     border-radius: 15px;
     padding: 5px 10px;
     margin: 0 15px 0 5px;
-    background-color: rgb(239, 243, 244);
+    background-color: var(--lln-color-border);
     outline: none;
     width: 0;
 }
@@ -539,19 +541,19 @@ function resetLocal() {
     display: flex;
     cursor: pointer;
     margin: 10px;
-    border: 1px solid rgb(207, 217, 222);
+    border: 1px solid var(--lln-color-timeline);
     border-radius: 50%;
 }
 
 .content .operate .postbtn .newp:hover {
-    background-color: rgb(239, 243, 244);
+    background-color: var(--lln-color-border);
     transition: 0.4s;
 }
 
 .content .operate .postbtn .line {
     height: 32px;
     width: 1px;
-    background-color: rgb(207, 217, 222);
+    background-color: var(--lln-color-timeline);
 }
 
 .content .operate .postbtn .newp svg {

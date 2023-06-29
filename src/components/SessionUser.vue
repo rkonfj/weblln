@@ -46,7 +46,7 @@ defineProps(['session'])
   cursor: pointer;
   border-radius: 68px;
   width: 230px;
-  color: #000;
+  color: var(--lln-color-text);
   padding: 10px 15px;
   margin: 5px;
 }

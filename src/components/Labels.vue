@@ -44,10 +44,10 @@ onMounted(async () => {
 <style scoped>
 .sidelabels {
     width: 320px;
-    border: 1px solid rgb(239, 243, 244);
+    border: 1px solid var(--lln-color-border);
     border-radius: 16px;
     padding: 0 0 16px 0;
-    background-color: rgb(247, 249, 249);
+    background-color: var(--lln-color-side-bg);
     margin-top: 20px;
 }
 
@@ -59,7 +59,7 @@ onMounted(async () => {
 
 .sidelabels .active,
 .sidelabels li:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: var(--lln-color-bg-hover);
     cursor: pointer;
     transition: 0.4s;
 }
@@ -79,5 +79,12 @@ h2 {
     font-size: 20px;
     font-weight: bold;
     color: #000;
+    color: var(--lln-color-text);
+}
+
+@media (prefers-color-scheme: dark) {
+    .sidelabels {
+        border: none;
+    }
 }
 </style>

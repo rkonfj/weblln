@@ -108,12 +108,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     word-break: break-word;
+    color: var(--lln-color-text);
 }
 
 .raw .paragraph {
     margin-bottom: 15px;
     word-break: break-all;
     width: 100%;
+    color: var(--lln-color-text);
 }
 
 .raw .sf {

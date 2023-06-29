@@ -29,7 +29,7 @@ main {
 }
 
 code {
-  background-color: rgb(239, 243, 244);
+  background-color: var(--lln-color-border);
   padding: 2px 5px;
   margin: 0 2px;
   border-radius: 3px;
@@ -39,7 +39,7 @@ code {
 }
 
 pre {
-  background-color: rgb(239, 243, 244);
+  background-color: var(--lln-color-border);
   display: block;
   width: 100%;
   margin: 5px 0px;

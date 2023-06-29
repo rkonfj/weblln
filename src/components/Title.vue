@@ -14,9 +14,10 @@ h2 {
   align-items: center;
   width: 100%;
   height: 3.2rem;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--lln-color-title-bg);
   position: sticky;
   top: 0;
+  color: var(--color-text);
   backdrop-filter: blur(10px);
   z-index: 10000;
 }
@@ -24,7 +25,7 @@ h2 {
 h2 span {
   font-size: 20px;
   font-weight: bold;
-  color: #000;
+  color: var(--lln-color-text);
 }
 
 h2 a {

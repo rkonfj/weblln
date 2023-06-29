@@ -32,11 +32,18 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --lln-color-border: rgb(239, 243, 244);
+  --lln-color-title-bg: rgba(255, 255, 255, 0.5);
+  --lln-color-text: #000;
+  --lln-color-bg-hover: rgba(0, 0, 0, 0.03);
+  --lln-color-timeline: rgb(207, 217, 222);
+  --lln-color-side-bg: rgb(247, 249, 249);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--vt-c-black);
+    --color-background: var(--vt-c-indigo);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
 
@@ -45,6 +52,23 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+
+    --lln-color-border: rgb(47, 51, 54);
+    --lln-color-title-bg: rgba(0, 0, 0, 0.65);
+    --lln-color-text: #e7e9ea;
+    --lln-color-bg-hover: rgba(255, 255, 255, 0.03);
+    --lln-color-timeline: rgb(51, 54, 57);
+    --lln-color-side-bg: rgb(22, 24, 28);
+    --lln-color-nav-hover: rgba(231, 233, 234, 0.1);
+  }
+
+  .Toastify {
+    --toastify-color-light: var(--lln-color-side-bg);
+    --toastify-text-color-light: #e7e9ea;
+  }
+
+  img:not([src*=".svg"]) {
+    filter: brightness(80%);
   }
 }
 

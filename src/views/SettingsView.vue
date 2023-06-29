@@ -75,13 +75,13 @@ async function changeName(name, uniqueName) {
 
 <style scoped>
 main {
-  border-left: 1px solid rgb(239, 243, 244);
-  border-right: 1px solid rgb(239, 243, 244);
+  border-left: 1px solid var(--lln-color-border);
+  border-right: 1px solid var(--lln-color-border);
 }
 
 .user {
   padding: 10px 15px;
-  border-bottom: 1px solid rgb(239, 243, 244);
+  border-bottom: 1px solid var(--lln-color-border);
 }
 
 .line {
@@ -97,6 +97,7 @@ main {
   display: inline-block;
   font-weight: bold;
   padding: 0 10px 0 0;
+  color: var(--lln-color-text);
 }
 
 .value {
@@ -108,17 +109,19 @@ select,
   padding: 5px 10px;
   line-height: 22px;
   width: 100%;
-  border: 1px solid rgb(207, 217, 222);
+  border: 1px solid var(--lln-color-timeline);
   outline-color: hsla(160, 100%, 37%, 1);
   font-size: 16px;
   border-radius: 16px;
+  background-color: var(--color-background);
+  color: var(--lln-color-text);
 }
 
 .user button {
   user-select: none;
   display: inline-block;
   border: none;
-  background-color: #222;
+  background-color: var(--lln-color-side-bg);
   font-size: 15px;
   font-weight: bold;
   padding: 0.5rem 0.9rem 0.5rem 1rem;

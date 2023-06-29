@@ -128,15 +128,15 @@ function tipsMsg(id) {
 
 <style scoped>
 main {
-  border-left: 1px solid rgb(239, 243, 244);
-  border-right: 1px solid rgb(239, 243, 244);
+  border-left: 1px solid var(--lln-color-border);
+  border-right: 1px solid var(--lln-color-border);
 }
 
 main .loadbtn,
 main ul li {
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
-  border-bottom: 1px solid rgb(239, 243, 244);
+  border-bottom: 1px solid var(--lln-color-border);
 }
 
 main .loadbtn {
@@ -151,7 +151,7 @@ main ul li a {
 }
 
 main .loadbtn:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: var(--lln-color-bg-hover);
   cursor: pointer;
 }
 

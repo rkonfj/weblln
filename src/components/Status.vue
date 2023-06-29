@@ -123,7 +123,7 @@ function sendImagesReady(data) {
 .avatararea .timeline {
   display: flex;
   width: 2px;
-  background-color: rgb(207, 217, 222);
+  background-color: var(--lln-color-timeline);
   flex-grow: 1;
   min-height: calc(100% - 26px);
   margin-top: 3px;
@@ -153,6 +153,7 @@ function sendImagesReady(data) {
 .content .author {
   line-height: 16px;
   margin-bottom: 5px;
+  color: var(--lln-color-text);
 }
 
 .content .author span {
@@ -165,13 +166,13 @@ function sendImagesReady(data) {
 }
 
 .content .author a {
-  color: #222;
+  color: var(--lln-color-text);
   font-weight: bold;
 }
 
 .content .author a:hover {
   text-decoration: underline;
-  text-decoration-color: #222;
+  text-decoration-color: var(--lln-color-text);
   background: none;
 }
 

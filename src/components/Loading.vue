@@ -19,7 +19,7 @@
 .loading {
   width: 30px;
   height: 30px;
-  border: 4px solid #f3f3f3;
+  border: 4px solid var(--lln-color-border);
   border-top: 4px solid hsla(160, 100%, 37%, 1);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

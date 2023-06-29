@@ -13,7 +13,7 @@ window.location.href = '/'
 
 <style scoped>
 main {
-  border-left: 1px solid rgb(239, 243, 244);
-  border-right: 1px solid rgb(239, 243, 244);
+  border-left: 1px solid var(--lln-color-border);
+  border-right: 1px solid var(--lln-color-border);
 }
 </style>

@@ -221,8 +221,19 @@ nav ul .home .version {
   right: -25px;
 }
 
+nav ul .home svg {
+  width: 38px;
+  height: 38px;
+  fill: var(--lln-color-text);
+}
+
+nav ul .home svg path {
+  fill: #fff;
+}
+
 nav a.router-link-exact-active span {
   font-weight: bold;
+  color: var(--lln-color-text);
 }
 
 nav a {
@@ -232,6 +243,10 @@ nav a {
   width: fit-content;
   border-radius: 30px;
   color: var(--color-text);
+}
+
+nav a svg {
+  fill: var(--color-text);
 }
 
 nav ul li:first-child a {

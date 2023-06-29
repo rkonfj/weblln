@@ -27,7 +27,7 @@ onMounted(() => {
 <style scoped>
 .sidelogin {
     width: 320px;
-    border: 1px solid rgb(239, 243, 244);
+    border: 1px solid var(--lln-color-border);
     border-radius: 16px;
     padding: 5px 15px;
     margin-top: 20px;
@@ -35,19 +35,19 @@ onMounted(() => {
 }
 
 .sidelogin .loginbtn {
-    border: 1px solid rgb(207, 217, 222);
+    border: 1px solid var(--lln-color-timeline);
     padding: 5px 10px;
     border-radius: 20px;
     width: 100%;
     display: flex;
     align-items: center;
     font-size: 16px;
-    justify-content: center
+    justify-content: center;
 }
 
 .sidelogin .loginbtn span {
     margin-left: 6px;
-    color: #222;
+    color: var(--lln-color-text);
     font-weight: bolder;
 }
 
@@ -67,5 +67,6 @@ h2 {
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
+    color: var(--lln-color-text);
 }
 </style>
