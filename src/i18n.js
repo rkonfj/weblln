@@ -42,6 +42,9 @@ const messages = {
         btn: {
             save: 'Save'
         },
+        tips: {
+            success: 'Done'
+        },
         misc: {
             signinagree: 'By signing in, you agree to the',
             and: 'and',
@@ -90,6 +93,9 @@ const messages = {
         },
         btn: {
             save: '保存'
+        },
+        tips: {
+            success: '操作成功'
         },
         misc: {
             signinagree: '认证即表示你同意',

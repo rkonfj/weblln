@@ -7,9 +7,10 @@ import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 
 const session = ref()
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 let llnApi = ""
+
 watch(locale, lang => {
   localStorage.setItem('lang', lang)
   Settings.defaultLocale = lang
@@ -23,18 +24,23 @@ onMounted(() => {
   llnApi = inject('llnApi')
 })
 
-async function changeName(name, uniqueName) {
-  let resp = await fetch(`${llnApi}/i/name?name=${name}&uniqueName=${uniqueName}`, {
+async function modifyProfile() {
+  let resp = await fetch(`${llnApi}/i/profile`, {
     method: 'PUT',
     headers: {
       "Authorization": session.value.apiKey,
-    }
+    },
+    body: JSON.stringify({
+      name: session.value.name,
+      uniqueName: session.value.uniqueName
+    })
   })
   if (resp.status != 200) {
-    alert(await resp.text())
+    toast(await resp.text(), { type: 'error' })
     return
   }
-  router.push('/logout')
+  toast(t('tips.success'), { type: 'success' })
+  setTimeout(() => router.push('/logout'), 1000)
 }
 
 </script>
@@ -42,8 +48,8 @@ async function changeName(name, uniqueName) {
   <main>
     <Title :title="$t('nav.settings')" />
     <div class="user" v-if="session">
-      <div class="avatar" @click="toast('暂不支持修改头像', {type: 'warning'})">
-        <img :src="session.picture" />
+      <div class="avatar" @click="toast('暂不支持修改头像', { type: 'warning' })">
+        <img :src="session.picture" alt="avatar" />
       </div>
       <div class="line">
         <div class="key">{{ $t('user.name') }}</div>
@@ -55,8 +61,8 @@ async function changeName(name, uniqueName) {
       </div>
       <div class="line saveProfile">
         <span class="tips">{{ $t('user.exittips') }}</span>
-        <button @click="changeName(session.name, session.uniqueName)"
-          :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''">{{ $t('btn.save') }}</button>
+        <button @click="modifyProfile" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''">{{ $t('btn.save')
+        }}</button>
       </div>
     </div>
     <div class="language">
@@ -121,7 +127,7 @@ select,
   user-select: none;
   display: inline-block;
   border: none;
-  background-color: var(--lln-color-side-bg);
+  background-color: rgb(0, 0, 0, 0.9);
   font-size: 15px;
   font-weight: bold;
   padding: 0.5rem 0.9rem 0.5rem 1rem;
@@ -137,10 +143,13 @@ select,
 }
 
 .user button:hover {
-  background-color: rgb(0, 0, 0, 0.7);
+  background-color: rgb(0, 0, 0, 0.6);
 }
+
 .user .avatar {
   margin-bottom: 20px;
+  width: 80px;
+  height: 80px;
 }
 
 .user .avatar img {
@@ -164,5 +173,11 @@ option {
 .tips {
   font-size: 14px;
   color: rgb(113, 119, 121);
+}
+
+@media (prefers-color-scheme: dark) {
+  .user button {
+    background-color: var(--lln-color-side-bg);
+  }
 }
 </style>
