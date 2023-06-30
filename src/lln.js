@@ -10,6 +10,10 @@ renderer.text = (text) => {
     return text
 }
 
+renderer.image = (herf) => {
+    return `<a href="${herf}">${herf}</a>`
+}
+
 marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })
 
 function renderText(text) {
