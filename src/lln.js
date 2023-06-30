@@ -1,5 +1,3 @@
-import he from 'he'
-
 import { marked } from 'marked'
 
 const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g

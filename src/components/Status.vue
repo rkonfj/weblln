@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onMounted, ref } from 'vue'
+import { inject, onMounted, ref, nextTick, getCurrentInstance } from 'vue'
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
 
@@ -11,6 +11,7 @@ import LikedIcon from './icons/LikedIcon.vue'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
+const { proxy } = getCurrentInstance()
 const session = ref()
 const avatar = ref()
 let llnApi = ""
@@ -26,6 +27,15 @@ onMounted(() => {
   image.onload = () => {
     avatar.value = image.src
   }
+  nextTick(() => {
+    document.querySelectorAll('pre').forEach(pre => {
+      let copy = document.createElement('div')
+      copy.classList.add('copy')
+      copy.addEventListener('click', copyCode)
+      copy.innerHTML = proxy.$t('btn.copy')
+      pre.appendChild(copy)
+    })
+  })
 })
 
 async function likeStatus() {
@@ -58,6 +68,14 @@ async function likeStatus() {
 
 function sendImagesReady(data) {
   emit('imagesReady', data)
+}
+
+function copyCode(e) {
+  e.stopPropagation()
+  navigator.clipboard.writeText(e.target.parentElement.querySelector('code').innerText)
+    .then(() => e.target.innerText = proxy.$t('tips.copied')
+    )
+    .catch(() => proxy.$toast(proxy.$t('misc.badop')))
 }
 </script>
 <template>

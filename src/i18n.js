@@ -43,11 +43,13 @@ const messages = {
         },
         btn: {
             save: 'Save',
-            follow: 'Follow'
+            follow: 'Follow',
+            copy: 'Copy'
         },
         tips: {
             success: 'Done',
             failed: 'Failed',
+            copied: 'Copied to clipboard',
             sessionExpired: 'Api key expired, redirect to login'
         },
         misc: {
@@ -100,11 +102,13 @@ const messages = {
         },
         btn: {
             save: '保存',
-            follow: '关注'
+            follow: '关注',
+            copy: '复制'
         },
         tips: {
             success: '操作成功',
             failed: '操作失败',
+            copied: '已复制到剪贴板',
             sessionExpired: 'Api key 失效，请重新登录'
         },
         misc: {

@@ -9,6 +9,7 @@ code {
 }
 
 pre {
+    position: relative;
     background-color: var(--lln-color-border);
     display: block;
     width: 100%;
@@ -25,6 +26,16 @@ pre {
 pre code {
     margin: 0;
     padding: 0;
+}
+
+pre .copy {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-size: 12px;
+    background-color: var(--lln-color-timeline);
 }
 
 pre::-webkit-scrollbar {
