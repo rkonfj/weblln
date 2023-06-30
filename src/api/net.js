@@ -1,0 +1,67 @@
+import { llnApi } from "../config"
+
+async function post(url, opts) {
+    opts.method = 'POST'
+    return await request(url, opts)
+}
+
+async function get(url, opts) {
+    opts.method = 'GET'
+    return await request(url, opts)
+}
+
+async function put(url, opts) {
+    opts.method = 'PUT'
+    return await request(url, opts)
+}
+
+async function del(url, opts) {
+    opts.method = 'DELETE'
+    return await request(url, opts)
+}
+
+async function request(url, opts) {
+    let options = { method: 'GET' }
+    if (opts.method) {
+        options.method = opts.method
+    }
+    if (opts.headers) {
+        options.headers = opts.headers
+    }
+    if (opts.body) {
+        options.body = JSON.stringify(opts.body)
+    }
+    if (opts.session) {
+        if (!options.headers) {
+            options.headers = {}
+        }
+        options.headers["Authorization"] = opts.session.apiKey
+    }
+    let resp = await fetch(`${llnApi}${url}`, options)
+    await checkResp(resp)
+    try {
+        return await resp.json()
+    }catch(_){}
+}
+
+async function checkResp(resp) {
+    if (resp.status == 401) {
+        let err = new Error('Unauthorized')
+        err.code = resp.status
+        throw err
+    }
+    if (resp.status != 200) {
+        let err = new Error(await resp.text())
+        err.code = resp.status
+        throw err
+    }
+}
+
+const http = {
+    get: get,
+    post: post,
+    put: put,
+    delete: del,
+    request: request
+}
+export default http

@@ -3,20 +3,30 @@ import 'vue3-toastify/dist/index.css'
 
 import router from './router'
 import messages from './i18n'
+import lln from './api/api'
 import { llnApi, siteName } from './config'
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { Settings } from 'luxon'
-import toastify from 'vue3-toastify'
+import toastify, { toast } from 'vue3-toastify'
+
 import App from './App.vue'
 
-const i18n = createI18n({
+Settings.defaultLocale = localStorage.getItem('lang') || 'zh'
+
+const i18nOpts = {
     legacy: false,
     locale: localStorage.getItem('lang') || 'zh',
     messages: messages,
-})
+}
 
-Settings.defaultLocale = localStorage.getItem('lang') || 'zh'
+const toastOpts = {
+    position: 'bottom-center',
+    autoClose: 1000,
+    hideProgressBar: true,
+    closeButton: false,
+    transition: 'slide'
+}
 
 router.beforeEach((to, _, next) => {
     document.title = i18n.global.t(`nav.${to.name}`, 'nil')
@@ -28,18 +38,17 @@ router.beforeEach((to, _, next) => {
     next()
 })
 
+const i18n = createI18n(i18nOpts)
+
 const app = createApp(App)
 
 app.provide('llnApi', llnApi)
 
 app.use(router)
 app.use(i18n)
-app.use(toastify, {
-    position: 'bottom-center',
-    autoClose: 1000,
-    hideProgressBar: true,
-    closeButton: false,
-    transition: 'slide'
-})
+app.use(toastify, toastOpts)
+
+app.config.globalProperties.$toast = toast
+app.config.globalProperties.$lln = lln
 
 app.mount('#app')

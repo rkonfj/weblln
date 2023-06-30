@@ -10,84 +10,68 @@ import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 
-import { toast } from 'vue3-toastify'
-
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
-import { useI18n } from 'vue-i18n'
-
+import lln from '../lln'
 
 defineProps(['hideMedia'])
 
 const route = useRoute()
-const { t } = useI18n()
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
+const { proxy } = getCurrentInstance()
 const status = ref([])
 const showTimeline = ref()
 const session = ref()
 const comments = ref()
 const loading = ref()
 const haveMore = ref(true)
-let llnApi = ""
 
-onMounted(() => {
-  let sessionStr = window.localStorage.getItem("session")
-  if (sessionStr) {
-    session.value = JSON.parse(sessionStr)
-  }
-  llnApi = inject('llnApi')
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
-    }
-  }
-  fetch(`${llnApi}/o/status/${route.params.id}`, opts)
-    .then(async resp => {
-      let s = await resp.json()
-      let prev = s.prev
+onMounted(async () => {
+  session.value = lln.loadSession()
+  try {
+    let s = await proxy.$lln.status.getStatus(route.params.id, session.value)
+    let prev = s.prev
+    s.prev = null
+    status.value.unshift(s)
+    while (prev != null) {
+      let s = prev
+      prev = prev.prev
       s.prev = null
       status.value.unshift(s)
-      while (prev != null) {
-        let s = prev
-        prev = prev.prev
-        s.prev = null
-        status.value.unshift(s)
-      }
-    })
-  loadComments()
+    }
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  await loadComments()
 })
 
 async function loadComments(after) {
   loading.value = true
-  let afterQuery = ''
-  if (after) {
-    afterQuery = '&after=' + after
-  }
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
+  try {
+    let opts = {
+      statusID: route.params.id,
+      size: 12,
+      after: after,
+      session: session.value
     }
-  }
-  let resp = await fetch(`${llnApi}/o/status/${route.params.id}/comments?order=asc&size=12${afterQuery}`, opts)
-  let ss = await resp.json()
-  if (!after) {
-    if (ss == null) {
+    let ss = await proxy.$lln.status.listComments(opts)
+    if (!after) {
       comments.value = []
-    } else {
-      comments.value = []
-      comments.value = ss
-    }
-  } else {
-    if (ss != null) {
-      for (let s of ss) {
-        comments.value.push(s)
+      if (ss != null) {
+        comments.value = ss
       }
     } else {
-      haveMore.value = false
+      if (ss != null) {
+        for (let s of ss) {
+          comments.value.push(s)
+        }
+      } else {
+        haveMore.value = false
+      }
     }
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
   }
   loading.value = false
 }
@@ -97,28 +81,22 @@ async function bookmark() {
     emit('shouldLogin')
     return
   }
-  let resp = await fetch(`${llnApi}/i/bookmark/status/${route.params.id}`, {
-    method: 'post',
-    headers: {
-      "Authorization": session.value.apiKey,
+  try {
+    await proxy.$lln.status.bookmark(route.params.id, session.value)
+    let thread = status.value[status.value.length - 1]
+    thread.bookmarked = !thread.bookmarked
+    if (!thread.bookmarked) {
+      thread.bookmarks--
+    } else {
+      thread.bookmarks++
     }
-  })
-  if (resp.status == 401) {
-    session.value = null
-    emit('shouldLogin')
-    return
-  }
-  if (resp.status != 200) {
-    alert(await resp.text())
-    return
-  }
-
-  let thread = status.value[status.value.length - 1]
-  thread.bookmarked = !thread.bookmarked
-  if (!thread.bookmarked) {
-    thread.bookmarks--
-  } else {
-    thread.bookmarks++
+  } catch (e) {
+    if (e.code == 401) {
+      session.value = null
+      emit('shouldLogin')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
   }
 }
 
@@ -127,28 +105,22 @@ async function like() {
     emit('shouldLogin')
     return
   }
-  let thread = status.value[status.value.length - 1]
 
-  let resp = await fetch(`${llnApi}/i/like/status/${thread.id}`, {
-    method: 'post',
-    headers: {
-      "Authorization": session.value.apiKey,
+  try {
+    let thread = status.value[status.value.length - 1]
+    await proxy.$lln.status.like(thread.id, session.value)
+    thread.liked = !thread.liked
+    if (!thread.liked) {
+      thread.likeCount--
+    } else {
+      thread.likeCount++
     }
-  })
-  if (resp.status == 401) {
-    emit('shouldLogin')
-    return
-  }
-  if (resp.status != 200) {
-    alert(await resp.text())
-    return
-  }
-
-  thread.liked = !thread.liked
-  if (!thread.liked) {
-    thread.likeCount--
-  } else {
-    thread.likeCount++
+  } catch (e) {
+    if (e.code == 401) {
+      emit('shouldLogin')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
   }
 }
 
@@ -160,8 +132,8 @@ function comment() {
 
 function share() {
   navigator.clipboard.writeText(window.location.href)
-    .then(() => toast(t('status.copied')))
-    .catch(() => toast(t('misc.badop')))
+    .then(() => proxy.$toast(proxy.$t('status.copied')))
+    .catch(() => proxy.$toast(proxy.$t('misc.badop')))
 }
 
 function handleImagesReady(ctx) {
