@@ -174,6 +174,7 @@ function closeNav(v) {
       </div>
     </footer>
   </div>
+  <div style="position: fixed"></div>
 </template>
 
 <style scoped>
@@ -191,7 +192,6 @@ nav {
 nav ul li {
   padding: 5px;
 }
-
 
 nav ul .home,
 nav ul .msgLink {
