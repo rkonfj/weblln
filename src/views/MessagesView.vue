@@ -1,57 +1,50 @@
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref, getCurrentInstance } from 'vue'
 import { DateTime } from 'luxon'
+import lln from '../lln'
+
 import Title from '../components/Title.vue'
 import NoMsgIcon from '../components/icons/IconNoMsg.vue'
 import Loading from '../components/Loading.vue'
 
 const emit = defineEmits(['tipsDeleted'])
+const { proxy } = getCurrentInstance()
 const session = ref()
 const loading = ref()
 const haveMore = ref(true)
 const messages = ref()
-let llnApi = ""
 
 onMounted(async () => {
-  llnApi = inject('llnApi')
-  let sessionStr = window.localStorage.getItem("session")
-  if (sessionStr) {
-    session.value = JSON.parse(sessionStr)
-  }
+  session.value = lln.loadSession()
   loadMessages()
 })
 
 async function loadMessages(after) {
   loading.value = true
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
-    }
-  }
-  let afterQuery = ''
-  if (after) {
-    afterQuery = '&after=' + after
-  }
-  let resp = await fetch(`${llnApi}/i/messages?size=20${afterQuery}`, opts)
-  if (resp.headers.get("X-Session-Valid") == "false") {
-    session.value = null
-  }
-  let msgs = await resp.json()
-  deleteTipMessages(msgs)
-  if (!after) {
-    messages.value = []
-    if (msgs != null) {
-      messages.value = msgs
-    }
-  } else {
-    if (msgs != null) {
-      for (let s of msgs) {
-        messages.value.push(s)
+  try {
+    let msgs = await proxy.$lln.message.listMessages(after, 20, session.value)
+    deleteTipMessages(msgs)
+    if (!after) {
+      messages.value = []
+      if (msgs != null) {
+        messages.value = msgs
       }
     } else {
-      haveMore.value = false
+      if (msgs != null) {
+        for (let s of msgs) {
+          messages.value.push(s)
+        }
+      } else {
+        haveMore.value = false
+      }
     }
+  } catch (e) {
+    if (e.code == 401) {
+      proxy.$toast(proxy.$t('tips.sessionExpired', { type: 'error' }))
+      setTimeout(proxy.$router.push('/logout'), 1000)
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
   }
   loading.value = false
 }
@@ -77,14 +70,23 @@ async function deleteTipMessages(msgs) {
         shouldDeletes.push(m.id)
       }
     }
-    await fetch(`${llnApi}/i/messages/tips`, {
-      method: 'delete',
-      headers: {
-        "Authorization": session.value.apiKey,
-      },
-      body: JSON.stringify(shouldDeletes)
-    })
+    await proxy.$lln.message.deleteTipMessages(shouldDeletes, session.value)
     emit('tipsDeleted')
+  }
+}
+
+async function deleteMessages() {
+  let msgs = []
+  for (let msg of messages.value) {
+    msgs.push(msg.id)
+  }
+  try {
+    await proxy.$lln.message.deleteMessages(msgs, session.value)
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+    messages.value = []
+    loadMessages()
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
   }
 }
 
@@ -119,9 +121,14 @@ function tipsMsg(id) {
         }}</span>
       </li>
     </ul>
-    <div class="loadbtn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"
-      @click="loadMessages(messages[messages.length - 1].id)">
-      加载更多
+    <div class="op">
+      <div class="btn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"
+        @click="loadMessages(messages[messages.length - 1].id)">
+        加载更多
+      </div>
+      <div class="btn del" v-if="messages && messages.length > 0" @click="deleteMessages">
+        删除已加载
+      </div>
     </div>
     <Loading v-if="!messages || loading" />
     <div v-if="messages && messages.length == 0" class="empty">
@@ -136,27 +143,15 @@ main {
   border-right: 1px solid var(--lln-color-border);
 }
 
-main .loadbtn,
+main .op .btn,
 main ul li {
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid var(--lln-color-border);
 }
 
-main .loadbtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: hsla(160, 100%, 37%, 1);
-}
-
 main ul li a {
   padding: 0 5px;
-}
-
-main .loadbtn:hover {
-  background-color: var(--lln-color-bg-hover);
-  cursor: pointer;
 }
 
 main ul .active {
@@ -165,6 +160,27 @@ main ul .active {
 
 main ul li .time {
   padding: 0 5px;
+}
+
+main .op {
+  display: flex;
+}
+
+main .op .btn {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  color: hsla(160, 100%, 37%, 1);
+}
+
+main .op .btn:hover {
+  background-color: var(--lln-color-bg-hover);
+  cursor: pointer;
+}
+
+main .op .del {
+  color: red;
 }
 
 .empty {

@@ -46,7 +46,9 @@ const messages = {
             follow: 'Follow'
         },
         tips: {
-            success: 'Done'
+            success: 'Done',
+            failed: 'Failed',
+            sessionExpired: 'Api key expired, redirect to login'
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -101,7 +103,9 @@ const messages = {
             follow: '关注'
         },
         tips: {
-            success: '操作成功'
+            success: '操作成功',
+            failed: '操作失败',
+            sessionExpired: 'Api key 失效，请重新登录'
         },
         misc: {
             signinagree: '认证即表示你同意',
