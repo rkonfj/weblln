@@ -101,7 +101,7 @@ function tipsMsg(id) {
     <Title :title="$t('nav.messages')" />
     <ul>
       <li v-for="msg in messages" :class="`${tipsMsg(msg.id) ? 'active' : ''}`">
-        <span v-if="msg.type != 'at'">
+        <span v-if="!['at', 'follow'].includes(msg.type)">
           你发布的 <RouterLink :to="`/${session.uniqueName}/status/${msg.targetID}`">
             /status/{{ msg.targetID }}</RouterLink> 收到了来自 <RouterLink :to="`/${msg.from.uniqueName}`">
             {{ msg.from.uniqueName === session.uniqueName ? '自己' : msg.from.name }}</RouterLink>的{{ renderAction(msg.type)
@@ -110,6 +110,10 @@ function tipsMsg(id) {
         <span v-if="msg.type == 'at'">
           主题<RouterLink :to="`/${msg.from.uniqueName}/status/${msg.targetID}`">
             /{{ msg.from.uniqueName }}/status/{{ msg.targetID }}</RouterLink>中提到了你
+        </span>
+        <span v-if="msg.type == 'follow'">
+          新粉丝！<RouterLink :to="`/${msg.from.uniqueName}`">
+            {{ msg.from.uniqueName === session.uniqueName ? '自己' : msg.from.name }}</RouterLink>关注了你
         </span>
         <span class="time" v-if="msg.createTime"> · {{ DateTime.fromISO(msg.createTime).toRelative()
         }}</span>

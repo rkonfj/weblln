@@ -37,10 +37,13 @@ const messages = {
         user: {
             name: 'Name',
             idname: 'ID Name',
-            exittips: 'After clicking save, the current login will be logged out immediately'
+            exittips: 'After clicking save, the current login will be logged out immediately',
+            followers: 'Followers',
+            following: 'Following'
         },
         btn: {
-            save: 'Save'
+            save: 'Save',
+            follow: 'Follow'
         },
         tips: {
             success: 'Done'
@@ -89,10 +92,13 @@ const messages = {
         user: {
             name: '显示名',
             idname: '用户名',
-            exittips: '点击保存后，会立即退出当前登录'
+            exittips: '点击保存后，会立即退出当前登录',
+            followers: '粉丝',
+            following: '正在关注'
         },
         btn: {
-            save: '保存'
+            save: '保存',
+            follow: '关注'
         },
         tips: {
             success: '操作成功'

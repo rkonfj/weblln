@@ -1,5 +1,7 @@
 <script setup>
 import Title from '../components/Title.vue'
+import Button from '../components/Button.vue'
+
 import { useI18n } from 'vue-i18n'
 import { watch, onMounted, ref, inject } from 'vue'
 import { Settings } from 'luxon'
@@ -61,8 +63,7 @@ async function modifyProfile() {
       </div>
       <div class="line saveProfile">
         <span class="tips">{{ $t('user.exittips') }}</span>
-        <button @click="modifyProfile" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''">{{ $t('btn.save')
-        }}</button>
+        <Button class="save" @click="modifyProfile" :btn="$t('btn.save')" />
       </div>
     </div>
     <div class="language">
@@ -123,23 +124,12 @@ select,
   color: var(--lln-color-text);
 }
 
-.user button {
-  user-select: none;
-  display: inline-block;
-  border: none;
-  background-color: rgb(0, 0, 0, 0.9);
-  font-size: 15px;
-  font-weight: bold;
-  padding: 0.5rem 0.9rem 0.5rem 1rem;
-  color: #fff;
-  border-radius: 22px;
-  letter-spacing: 0.2rem;
-  transition: 0.4s;
-  cursor: pointer;
-}
-
 .user .saveProfile {
   margin: 10px 0 20px 0;
+}
+
+.user .saveProfile .save {
+  line-height: 24px;
 }
 
 .user button:hover {

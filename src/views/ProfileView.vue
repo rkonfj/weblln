@@ -2,11 +2,14 @@
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
+import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
 import { ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
+import { toast } from 'vue3-toastify'
 
+const emit = defineEmits(['shouldLogin'])
 
 const route = useRoute()
 const profile = ref()
@@ -23,7 +26,13 @@ onMounted(async () => {
     session.value = JSON.parse(sessionStr)
   }
   llnApi = inject('llnApi')
-  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`)
+  let opts = {}
+  if (session.value) {
+    opts.headers = {
+      "Authorization": session.value.apiKey,
+    }
+  }
+  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`, opts)
   profile.value = await resp.json()
   loadStatus()
 })
@@ -59,6 +68,29 @@ async function loadStatus(after) {
   loading.value = false
 }
 
+async function follow() {
+  if (!session.value) {
+    emit('shouldLogin')
+    return
+  }
+
+  let resp = await fetch(`${llnApi}/i/follow/user/${profile.value.uniqueName}`, {
+    method: 'POST',
+    headers: {
+      "Authorization": session.value.apiKey,
+    }
+  })
+  if (resp.status == 401) {
+    toast('401')
+    return
+  }
+  if (resp.status != 200) {
+    toast(await resp.text())
+    return
+  }
+  profile.value.following = !profile.value.following
+  profile.value.following ? profile.value.followers++ : profile.value.followers--
+}
 </script>
 <template>
   <main>
@@ -70,10 +102,22 @@ async function loadStatus(after) {
           <img class="avatar" :src="profile.picture" alt="avatar" />
         </div>
         <div class="info">
+          <Button class="follow" v-if="!session || session.id != profile.id" @click="follow"
+            :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
           <div class="n">{{ profile.name }}</div>
           <div class="un">@{{ profile.uniqueName }}</div>
           <div class="join">
             <CalendarIcon /><span>{{ DateTime.fromISO(profile.createTime).toRelative() }}</span>加入
+          </div>
+        </div>
+        <div class="info">
+          <div class="item">
+            <a class="" @click="toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followings }}</span> {{
+              $t('user.following') }}</a>
+          </div>
+          <div class="item">
+            <a class="" @click="toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followers }}</span> {{
+              $t('user.followers') }}</a>
           </div>
         </div>
       </div>
@@ -137,7 +181,39 @@ main .loadbtn {
 }
 
 .mainarea .info {
-  padding: 8px 15px;
+  padding: 3px 15px;
+  position: relative;
+}
+
+.mainarea .info:last-child {
+  margin-bottom: 15px;
+}
+
+.mainarea .info .item {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.mainarea .info .item a {
+  color: rgb(83, 100, 113);
+}
+
+.mainarea .info .item a span {
+  color: var(--lln-color-text);
+  font-weight: bold;
+}
+
+.mainarea .info .item a:hover {
+  background: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mainarea .follow {
+  display: inline-block;
+  position: absolute;
+  top: -45px;
+  right: 20px;
 }
 
 .mainarea .profile .n {
