@@ -1,0 +1,57 @@
+code {
+    background-color: var(--lln-color-border);
+    padding: 2px 5px;
+    margin: 0 2px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--lln-color-code);
+    font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
+}
+
+pre {
+    background-color: var(--lln-color-border);
+    display: block;
+    width: 100%;
+    margin: 5px 0px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--lln-color-code);
+    font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
+    line-height: 18px;
+    overflow-x: auto;
+}
+
+pre code {
+    margin: 0;
+    padding: 0;
+}
+
+pre::-webkit-scrollbar {
+    height: 8px;
+    transition: 0.4s;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: rgb(83, 100, 113, 0.3);
+    border-radius: 3px;
+}
+
+.raw ol,
+.paragraph ol {
+    padding: 0;
+    margin: 0;
+}
+
+.raw ol li,
+.paragraph ol li {
+    list-style: decimal;
+    margin-left: 20px;
+}
+
+.raw h2,
+.paragraph h2 {
+    border-bottom: 1px solid var(--lln-color-border);
+    margin-bottom: 5px;
+    font-size: 18px;
+}

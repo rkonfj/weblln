@@ -114,7 +114,7 @@ function updateContentModel() {
 
     progressC.value = contentRaw.value.length / 300 * 2 * Math.PI * 10
 
-    if (contentRaw.value.length >= 300) {
+    if (contentRaw.value.length > 380) {
         progressColor.value = 'red'
     } else {
         progressColor.value = 'hsla(160, 100%, 37%, 1)'
