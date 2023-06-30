@@ -74,7 +74,8 @@ function sendImagesReady(data) {
         <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
         <span>@{{ status.user.uniqueName }}</span>
         <span class="w">·</span>
-        <span class="w">{{ DateTime.fromISO(status.createTime).toRelative() }}</span>
+        <span class="w" :title="DateTime.fromISO(status.createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)">{{
+          DateTime.fromISO(status.createTime).toRelative() }}</span>
       </div>
       <div class="author simpleauthor" v-if="simple">
         <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
