@@ -28,16 +28,6 @@ pre code {
     padding: 0;
 }
 
-pre .copy {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 2px 5px;
-    cursor: pointer;
-    font-size: 12px;
-    background-color: var(--lln-color-timeline);
-}
-
 pre::-webkit-scrollbar {
     height: 8px;
     transition: 0.4s;
@@ -46,6 +36,11 @@ pre::-webkit-scrollbar {
 pre::-webkit-scrollbar-thumb {
     background-color: rgb(83, 100, 113, 0.3);
     border-radius: 3px;
+}
+
+.raw,
+.paragraph {
+    position: relative;
 }
 
 .raw ol,
@@ -65,4 +60,18 @@ pre::-webkit-scrollbar-thumb {
     border-bottom: 1px solid var(--lln-color-border);
     margin-bottom: 5px;
     font-size: 18px;
+}
+
+.raw .copy,
+.paragraph .copy {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-size: 11px;
+    height: 20px;
+    background-color: var(--lln-color-timeline);
+    color: var(--lln-color-text);
+    z-index: 10;
 }

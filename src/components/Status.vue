@@ -28,12 +28,9 @@ onMounted(() => {
     avatar.value = image.src
   }
   nextTick(() => {
-    document.querySelectorAll('pre').forEach(pre => {
-      let copy = document.createElement('div')
-      copy.classList.add('copy')
-      copy.addEventListener('click', copyCode)
+    document.querySelectorAll('.copy').forEach(copy => {
+      copy.onclick = copyCode
       copy.innerHTML = proxy.$t('btn.copy')
-      pre.appendChild(copy)
     })
   })
 })
@@ -72,7 +69,7 @@ function sendImagesReady(data) {
 
 function copyCode(e) {
   e.stopPropagation()
-  navigator.clipboard.writeText(e.target.parentElement.querySelector('code').innerText)
+  navigator.clipboard.writeText(e.target.parentElement.querySelector('pre code').innerText)
     .then(() => e.target.innerText = proxy.$t('tips.copied')
     )
     .catch(() => proxy.$toast(proxy.$t('misc.badop')))

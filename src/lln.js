@@ -14,6 +14,10 @@ renderer.image = (herf) => {
     return `<a href="${herf}">${herf}</a>`
 }
 
+renderer.code = (code) => {
+    return `<div class="copy">Copy</div><pre><code>${code}</code></pre>`
+}
+
 marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })
 
 function renderText(text) {

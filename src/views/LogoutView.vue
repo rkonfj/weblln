@@ -1,8 +1,17 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
-window.localStorage.removeItem('session')
-window.location.href = '/'
+import { getCurrentInstance, onMounted } from 'vue'
+
+import lln from '../lln'
+
+const { proxy } = getCurrentInstance()
+
+onMounted(async () => {
+  await proxy.$lln.user.logout(lln.loadSession())
+  window.localStorage.removeItem('session')
+  window.location.href = '/'
+})
 </script>
 <template>
   <main>
