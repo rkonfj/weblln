@@ -23,9 +23,9 @@ const { proxy } = getCurrentInstance()
 const status = ref([])
 const showTimeline = ref()
 const session = ref()
-const comments = ref()
-const loading = ref()
-const haveMore = ref(true)
+const comments = ref([])
+const loading = ref(true)
+const haveMore = ref()
 
 onMounted(async () => {
   session.value = lln.loadSession()
@@ -60,19 +60,11 @@ async function loadComments(after) {
       after: after,
       session: session.value
     }
-    let ss = await proxy.$lln.status.listComments(opts)
-    if (!after) {
-      comments.value = []
-      if (ss != null) {
-        comments.value = ss
-      }
-    } else {
-      if (ss != null) {
-        for (let s of ss) {
-          comments.value.push(s)
-        }
-      } else {
-        haveMore.value = false
+    let resp = await proxy.$lln.status.listComments(opts)
+    haveMore.value = resp.more
+    if (resp.v != null) {
+      for (let s of resp.v) {
+        comments.value.push(s)
       }
     }
   } catch (e) {
@@ -217,16 +209,16 @@ function handleImagesReady(ctx) {
     </div>
     <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"
       :btntext="$t('status.reply')" :prevstatus="status[status.length - 1].id" />
-    <ul v-if="comments">
+    <ul>
       <li v-for="(s, i) in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="comments.splice(i, 1)" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="comments && comments.length > 0 && comments.length % 12 == 0 && haveMore && !loading"
+    <div class="loadbtn" v-if="haveMore && !loading"
       @click="loadComments(comments[comments.length - 1].id)">
       加载更多
     </div>
-    <Loading v-if="status.length == 0 || !comments || loading" />
+    <Loading v-if="status.length == 0 || loading" />
   </main>
 </template>
 

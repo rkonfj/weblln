@@ -4,19 +4,19 @@ import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
 import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
-import { ref, onMounted, inject, nextTick } from 'vue'
+import { ref, onMounted, inject, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import { toast } from 'vue3-toastify'
 
 const emit = defineEmits(['shouldLogin'])
-
+const { proxy } = getCurrentInstance()
 const route = useRoute()
 const profile = ref()
 const session = ref()
-const status = ref()
-const loading = ref()
-const haveMore = ref(true)
+const status = ref([])
+const loading = ref(true)
+const haveMore = ref()
 let llnApi = ""
 
 
@@ -39,31 +39,16 @@ onMounted(async () => {
 
 async function loadStatus(after) {
   loading.value = true
-  let afterQuery = ''
-  if (after) {
-    afterQuery = '&after=' + after
-  }
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
-    }
-  }
-  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}/status?size=12${afterQuery}`, opts)
-  let ss = await resp.json()
-  if (!after) {
-    status.value = []
-    if (ss != null) {
-      status.value = ss
-    }
-  } else {
-    if (ss != null) {
-      for (let s of ss) {
+  try {
+    let resp = await proxy.$lln.user.status(route.params.uniqueName, after, 12, session.value)
+    haveMore.value = resp.more
+    if (resp.v) {
+      for (let s of resp.v) {
         status.value.push(s)
       }
-    } else {
-      haveMore.value = false
     }
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
   }
   loading.value = false
 }
@@ -122,16 +107,16 @@ async function follow() {
         </div>
       </div>
     </div>
-    <ul v-if="status">
+    <ul>
       <li v-for="(s, i) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
+    <div class="loadbtn" v-if="haveMore && !loading"
       @click="loadStatus(status[status.length - 1].id)">
       加载更多
     </div>
-    <Loading v-if="!profile || !status || loading" />
+    <Loading v-if="!profile || loading" />
   </main>
 </template>
 

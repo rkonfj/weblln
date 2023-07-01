@@ -22,6 +22,13 @@ const status = {
     },
     delete: async (statusID, session) => {
         return await http.delete(`/i/status/${statusID}`, { session: session })
+    },
+    explore: async (after, size, session) => {
+        let afterQuery = ''
+        if (after) {
+            afterQuery = '&after=' + after
+        }
+        return await http.get(`/o/explore?size=${size}${afterQuery}`, { session: session })
     }
 }
 

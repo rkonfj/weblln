@@ -4,9 +4,13 @@ import Status from '../components/Status.vue'
 import Loading from '../components/Loading.vue'
 
 import NoBookmarkIcon from '../components/icons/IconNoBookmark.vue'
-import { ref, onMounted, inject, nextTick } from 'vue'
-const bookmarks = ref()
+import { ref, onMounted, getCurrentInstance } from 'vue'
+
+const { proxy } = getCurrentInstance()
+const bookmarks = ref([])
 const session = ref()
+const loading = ref(true)
+const haveMore = ref()
 
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
@@ -14,37 +18,49 @@ onMounted(async () => {
     session.value = JSON.parse(sessionStr)
   }
   if (!session.value) {
-    $router.push('/')
+    proxy.$router.push('/')
     return
   }
-  let resp = await fetch(`${inject('llnApi')}/i/bookmarks`, {
-    headers: {
-      "Authorization": session.value.apiKey,
-    }
-  })
-  if (resp.headers.get("X-Session-Valid") == "false") {
-    session.value = null
-    $emit('shouldLogin')
-    return
-  }
-  bookmarks.value = await resp.json()
-  if (bookmarks.value == null) {
-    bookmarks.value = []
-  }
+  loadBookmarks()
 })
+
+async function loadBookmarks(after) {
+  loading.value = true
+  try {
+    let resp = await proxy.$lln.user.bookmarks(after, 12, session.value)
+    haveMore.value = resp.more
+    let ss = resp.v
+    if (ss != null) {
+      for (let s of ss) {
+        bookmarks.value.push(s)
+      }
+    }
+  } catch (e) {
+    if (e.code == 401) {
+      proxy.$router.push('/')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  loading.value = false
+}
 </script>
 <template>
   <main>
     <Title :title="$t('nav.bookmarks')" />
-    <ul v-if="bookmarks">
+    <ul>
       <li v-for="(s, i) in bookmarks" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="bookmarks.splice(i, 1)" :status="s" />
       </li>
     </ul>
-    <div v-if="bookmarks && bookmarks.length == 0" class="empty">
+    <div v-if="!loading && bookmarks.length == 0" class="empty">
       <NoBookmarkIcon />
     </div>
-    <Loading v-if="!bookmarks" />
+    <div class="loadbtn" v-if="bookmarks.length > 0 && haveMore && !loading"
+      @click="loadBookmarks(bookmarks[bookmarks.length - 1].id)">
+      加载更多
+    </div>
+    <Loading v-if="loading" />
   </main>
 </template>
 

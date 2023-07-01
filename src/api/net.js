@@ -40,8 +40,10 @@ async function request(url, opts) {
     let resp = await fetch(`${llnApi}${url}`, options)
     await checkResp(resp)
     try {
-        return await resp.json()
-    }catch(_){}
+        let r = await resp.json()
+        r.headers = resp.headers
+        return r
+    } catch (_) { }
 }
 
 async function checkResp(resp) {
