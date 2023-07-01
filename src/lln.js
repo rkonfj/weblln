@@ -15,7 +15,7 @@ renderer.image = (herf) => {
 }
 
 renderer.code = (code) => {
-    return `<div class="copy">Copy</div><pre><code>${code}</code></pre>`
+    return `<div class="codeblock"><div class="copy">Copy</div><pre><code>${code}</code></pre></div>`
 }
 
 marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })

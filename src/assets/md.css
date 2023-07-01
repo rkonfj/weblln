@@ -38,11 +38,6 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 3px;
 }
 
-.raw,
-.paragraph {
-    position: relative;
-}
-
 .raw ol,
 .paragraph ol {
     padding: 0;
@@ -62,15 +57,19 @@ pre::-webkit-scrollbar-thumb {
     font-size: 18px;
 }
 
-.raw .copy,
-.paragraph .copy {
+.codeblock {
+    position: relative;
+}
+
+.codeblock .copy {
     position: absolute;
-    top: 5px;
+    top: 0;
     right: 0;
     padding: 2px 5px;
     cursor: pointer;
     font-size: 11px;
-    height: 20px;
+    height: 22px;
+    line-height: 22px;
     background-color: var(--lln-color-timeline);
     color: var(--lln-color-text);
     z-index: 10;
