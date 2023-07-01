@@ -26,7 +26,6 @@ const messages = {
             replying: 'Replying to',
             post: 'Post',
             mediaaddr: 'Paste your picture url here',
-            copied: 'Link copied to clipboard',
             paragraph: 'New paragraph',
             showmore: 'Show more',
             comments: 'Comments',
@@ -44,7 +43,11 @@ const messages = {
         btn: {
             save: 'Save',
             follow: 'Follow',
-            copy: 'Copy'
+            copy: 'Copy',
+            like: 'Like',
+            comment: 'Comment',
+            bookmark: 'Bookmark',
+            share: 'Share'
         },
         tips: {
             success: 'Done',
@@ -85,11 +88,10 @@ const messages = {
             replying: '回复',
             post: '推送',
             mediaaddr: '粘贴图片地址到这儿',
-            copied: '链接已复制',
             paragraph: '新段落',
             showmore: '显示更多',
             comments: '评论',
-            likes: '喜欢',
+            likes: '喜欢次数',
             bookmarks: '书签',
             expandtimeline: '展开时间线'
         },
@@ -103,7 +105,11 @@ const messages = {
         btn: {
             save: '保存',
             follow: '关注',
-            copy: '复制'
+            copy: '复制',
+            like: '喜欢',
+            comment: '评论',
+            bookmark: '加入书签',
+            share: '分享'
         },
         tips: {
             success: '操作成功',

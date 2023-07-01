@@ -132,7 +132,7 @@ function comment() {
 
 function share() {
   navigator.clipboard.writeText(window.location.href)
-    .then(() => proxy.$toast(proxy.$t('status.copied')))
+    .then(() => proxy.$toast(proxy.$t('tips.copied')))
     .catch(() => proxy.$toast(proxy.$t('misc.badop')))
 }
 
@@ -196,19 +196,19 @@ function handleImagesReady(ctx) {
       }}</span><span>{{ $t('status.bookmarks') }}</span></div>
     </div>
     <div class="operate" v-if="status.length > 0">
-      <a @click="comment" title="评论">
-        <CommentIcon />
+      <a @click="comment" :title="$t('btn.comment')">
+        <CommentIcon :title="$t('btn.comment')"/>
       </a>
-      <a @click="like" title="喜欢">
-        <LikeIcon v-if="!status[status.length - 1].liked" />
+      <a @click="like" :title="$t('btn.like')">
+        <LikeIcon v-if="!status[status.length - 1].liked" :title="$t('btn.like')"/>
         <LikedIcon class="like" v-if="status[status.length - 1].liked" />
       </a>
-      <a @click="bookmark" title="加入书签">
-        <BookmarkIcon v-if="!status[status.length - 1].bookmarked" />
+      <a @click="bookmark" :title="$t('btn.bookmark')">
+        <BookmarkIcon v-if="!status[status.length - 1].bookmarked" :title="$t('btn.bookmark')"/>
         <BookmarkedIcon v-if="status[status.length - 1].bookmarked" />
       </a>
-      <a @click="share" title="分享">
-        <ShareIcon />
+      <a @click="share" :title="$t('btn.share')">
+        <ShareIcon :title="$t('btn.share')"/>
       </a>
     </div>
     <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"

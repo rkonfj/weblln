@@ -8,6 +8,8 @@ import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LikedIcon from './icons/LikedIcon.vue'
+import ShareIcon from '../components/icons/ShareIcon.vue'
+
 
 const emit = defineEmits(['shouldLogin', 'imagesReady'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
@@ -74,6 +76,12 @@ function copyCode(e) {
     )
     .catch(() => proxy.$toast(proxy.$t('misc.badop')))
 }
+
+function share() {
+  navigator.clipboard.writeText(`${window.location.origin}/${props.status.user.uniqueName}/status/${props.status.id}`)
+    .then(() => proxy.$toast(proxy.$t('tips.copied')))
+    .catch(() => proxy.$toast(proxy.$t('misc.badop')))
+}
 </script>
 <template>
   <div class="status">
@@ -102,16 +110,21 @@ function copyCode(e) {
       </div>
       <Content v-if="!simple" :status="status" :simple="simple" :hideMedia="hideMedia" @imagesReady="sendImagesReady" />
       <div class="op" v-if="!simple">
-        <a>
+        <a :title="$t('btn.comment')">
           <div class="icon">
-            <CommentIcon />
+            <CommentIcon :title="$t('btn.comment')"/>
           </div><span>{{ status.comments }}</span>
         </a>
-        <a @click.stop="likeStatus">
+        <a @click.stop="likeStatus" :title="$t('btn.like')">
           <div class="icon">
-            <LikeIcon v-if="!status.liked" />
+            <LikeIcon v-if="!status.liked" :title="$t('btn.like')"/>
             <LikedIcon class="like" v-if="status.liked" />
           </div><span>{{ status.likeCount }}</span>
+        </a>
+        <a @click.stop="share" :title="$t('btn.share')">
+          <div class="icon">
+            <ShareIcon :title="$t('btn.share')"/>
+          </div>
         </a>
       </div>
     </div>
@@ -366,6 +379,7 @@ function copyCode(e) {
 .content .op a .icon svg {
   width: 18px;
   height: 18px;
+  fill: rgb(83, 100, 113);
 }
 
 .content .op a .like {
