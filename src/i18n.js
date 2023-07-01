@@ -47,13 +47,18 @@ const messages = {
             like: 'Like',
             comment: 'Comment',
             bookmark: 'Bookmark',
-            share: 'Share'
+            share: 'Share',
+            delete: 'Delete',
+            unfollow: 'Unfollow',
+            embedtweet: 'Embed Tweet'
         },
         tips: {
             success: 'Done',
             failed: 'Failed',
             copied: 'Copied to clipboard',
-            sessionExpired: 'Api key expired, redirect to login'
+            sessionExpired: 'Api key expired, redirect to login',
+            confirmunfollow: 'Confirm unfollow',
+            confirmdelete: 'Confirm delete'
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -109,13 +114,18 @@ const messages = {
             like: '喜欢',
             comment: '评论',
             bookmark: '加入书签',
-            share: '分享'
+            share: '分享',
+            delete: '删除',
+            unfollow: '取消关注',
+            embedtweet: '嵌入推文'
         },
         tips: {
             success: '操作成功',
             failed: '操作失败',
             copied: '已复制到剪贴板',
-            sessionExpired: 'Api key 失效，请重新登录'
+            sessionExpired: 'Api key 失效，请重新登录',
+            confirmunfollow: '确认取消关注',
+            confirmdelete: '确认删除'
         },
         misc: {
             signinagree: '认证即表示你同意',

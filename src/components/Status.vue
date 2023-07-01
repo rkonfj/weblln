@@ -27,6 +27,7 @@ const confirmed = ref()
 
 function closeMenu() {
   menuOpened.value = false
+  confirmed.value = false
 }
 
 onMounted(() => {
@@ -97,6 +98,10 @@ function share() {
 }
 
 async function follow() {
+  if (props.status.followed && !confirmed.value) {
+    confirmed.value = true
+    return
+  }
   try {
     await proxy.$lln.user.follow(props.status.user.uniqueName, session.value)
     props.status.followed = !props.status.followed
@@ -108,6 +113,7 @@ async function follow() {
     }
     proxy.$toast(e.message, { type: 'error' })
   }
+  confirmed.value = false
 }
 
 async function deleteStatus() {
@@ -139,17 +145,22 @@ async function deleteStatus() {
         <ul v-if="menuOpened" @blur="closeMenu">
           <li v-for="item in menu" @click="item.action(status)">{{ item.title }}</li>
           <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id">
-            <DeleteIcon class="delete" /><span v-if="confirmed" class="delete">确认删除</span>
-            <span v-if="!confirmed" class="delete">删除</span>
+            <DeleteIcon class="delete" />
+            <span v-if="confirmed" class="delete"> {{ $t('tips.confirmdelete') }}</span>
+            <span v-if="!confirmed" class="delete">{{ $t('btn.delete') }}</span>
           </li>
           <li @click.stop="follow" v-if="session && status.followed">
-            <UnfollowIcon /><span>取消关注@{{ status.user.uniqueName }}</span>
+            <UnfollowIcon />
+            <span v-if="confirmed">
+              {{ $t('tips.confirmunfollow') }} @{{ status.user.uniqueName }}
+            </span>
+            <span v-if="!confirmed">{{ $t('btn.unfollow') }} @{{ status.user.uniqueName }}</span>
           </li>
           <li @click.stop="follow" v-if="session && status.user.id != session.id && !status.followed">
-            <FollowIcon /><span>关注@{{ status.user.uniqueName }}</span>
+            <FollowIcon /><span>{{ $t('btn.follow') }} @{{ status.user.uniqueName }}</span>
           </li>
           <li @click.stop="$toast('暂不支持')">
-            <CodeIcon /><span>嵌入推文</span>
+            <CodeIcon /><span>{{ $t('btn.embedtweet') }}</span>
           </li>
         </ul>
       </transition>
