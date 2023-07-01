@@ -68,8 +68,7 @@ pre::-webkit-scrollbar-thumb {
     padding: 2px 5px;
     cursor: pointer;
     font-size: 11px;
-    height: 22px;
-    line-height: 22px;
+    height: 20px;
     background-color: var(--lln-color-timeline);
     color: var(--lln-color-text);
     z-index: 10;

@@ -374,5 +374,8 @@ main .loadbtn {
     margin-left: 0;
   }
 
+  main ul li .timeline {
+    width: 1.5px;
+  }
 }
 </style>

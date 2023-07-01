@@ -330,6 +330,9 @@ function share() {
     min-height: 20px;
     max-height: 97px;
   }
+  .avatararea .timeline {
+    width: 1.5px;
+  }
 }
 
 .content .op {

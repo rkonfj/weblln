@@ -5,8 +5,8 @@ const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
 const renderer = new marked.Renderer()
 
 renderer.text = (text) => {
-    text = text.replaceAll(atRegex, m => `<a href="/${m.substring(1)}">${m}</a>`)
-    text = text.replaceAll(labelRegex, m => `<a href="/search/labels/${m.substring(1)}">${m}</a>`)
+    text = text.replaceAll(atRegex, m => `<a class="at" href="/${m.substring(1)}">${m}</a>`)
+    text = text.replaceAll(labelRegex, m => `<a class="label" href="/search/labels/${m.substring(1)}">${m}</a>`)
     return text
 }
 
