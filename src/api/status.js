@@ -19,6 +19,9 @@ const status = {
     },
     like: async (statusID, session) => {
         return await http.post(`/i/like/status/${statusID}`, { session: session })
+    },
+    delete: async (statusID, session) => {
+        return await http.delete(`/i/status/${statusID}`, { session: session })
     }
 }
 

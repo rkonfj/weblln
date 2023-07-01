@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onMounted, ref, nextTick, getCurrentInstance } from 'vue'
+import { onMounted, ref, nextTick, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
 
@@ -9,21 +9,31 @@ import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LikedIcon from './icons/LikedIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
+import MenuIcon from '../components/icons/MenuIcon.vue'
+import DeleteIcon from '../components/icons/DeleteIcon.vue'
+import FollowIcon from '../components/icons/FollowIcon.vue'
+import UnfollowIcon from '../components/icons/UnfollowIcon.vue'
+import CodeIcon from '../components/icons/CodeIcon.vue'
 
 
-const emit = defineEmits(['shouldLogin', 'imagesReady'])
-const props = defineProps(['status', 'timeline', 'hideMedia', 'simple'])
+
+const emit = defineEmits(['shouldLogin', 'imagesReady', 'deleted'])
+const props = defineProps(['status', 'timeline', 'hideMedia', 'simple', 'menu'])
 const { proxy } = getCurrentInstance()
 const session = ref()
 const avatar = ref()
-let llnApi = ""
+const menuOpened = ref()
+const confirmed = ref()
+
+function closeMenu() {
+  menuOpened.value = false
+}
 
 onMounted(() => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  llnApi = inject('llnApi')
   const image = new Image()
   image.src = props.status.user.picture
   image.onload = () => {
@@ -35,6 +45,13 @@ onMounted(() => {
       copy.innerHTML = proxy.$t('btn.copy')
     })
   })
+  document.addEventListener('click', closeMenu)
+  window.addEventListener('touchmove', closeMenu)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', closeMenu)
+  window.removeEventListener('touchmove', closeMenu)
 })
 
 async function likeStatus() {
@@ -42,18 +59,14 @@ async function likeStatus() {
     emit('shouldLogin')
     return
   }
-  let resp = await fetch(`${llnApi}/i/like/status/${props.status.id}`, {
-    method: 'post',
-    headers: {
-      "Authorization": session.value.apiKey,
+  try {
+    await proxy.$lln.status.like(props.status.id, session.value)
+  } catch (e) {
+    if (resp.status == 401) {
+      emit('shouldLogin')
+      return
     }
-  })
-  if (resp.status == 401) {
-    emit('shouldLogin')
-    return
-  }
-  if (resp.status != 200) {
-    alert(await resp.text())
+    proxy.$toast(e.message, { type: 'error' })
     return
   }
 
@@ -82,9 +95,65 @@ function share() {
     .then(() => proxy.$toast(proxy.$t('tips.copied')))
     .catch(() => proxy.$toast(proxy.$t('misc.badop')))
 }
+
+async function follow() {
+  try {
+    await proxy.$lln.user.follow(props.status.user.uniqueName, session.value)
+    props.status.followed = !props.status.followed
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+  } catch (e) {
+    if (e.code == 401) {
+      emit('shouldLogin')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+}
+
+async function deleteStatus() {
+  if (!confirmed.value) {
+    confirmed.value = true
+    return
+  }
+  try {
+    await proxy.$lln.status.delete(props.status.id, session.value)
+    emit('deleted')
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+  } catch (e) {
+    if (e.code == 401) {
+      emit('shouldLogin')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  confirmed.value = false
+}
 </script>
 <template>
   <div class="status">
+    <div class="menu">
+      <a class="icon" v-if="!menuOpened" @click.stop="menuOpened = !menuOpened">
+        <MenuIcon @click.stop="menuOpened = !menuOpened" />
+      </a>
+      <transition name="slide-down">
+        <ul v-if="menuOpened" @blur="closeMenu">
+          <li v-for="item in menu" @click="item.action(status)">{{ item.title }}</li>
+          <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id">
+            <DeleteIcon class="delete" /><span v-if="confirmed" class="delete">确认删除</span>
+            <span v-if="!confirmed" class="delete">删除</span>
+          </li>
+          <li @click.stop="follow" v-if="session && status.followed">
+            <UnfollowIcon /><span>取消关注@{{ status.user.uniqueName }}</span>
+          </li>
+          <li @click.stop="follow" v-if="session && status.user.id != session.id && !status.followed">
+            <FollowIcon /><span>关注@{{ status.user.uniqueName }}</span>
+          </li>
+          <li @click.stop="$toast('暂不支持')">
+            <CodeIcon /><span>嵌入推文</span>
+          </li>
+        </ul>
+      </transition>
+    </div>
     <div class="avatararea">
       <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar">
         <img v-if="avatar" class="avatarimg" :src="status.user.picture" alt="avatar" />
@@ -112,18 +181,18 @@ function share() {
       <div class="op" v-if="!simple">
         <a :title="$t('btn.comment')">
           <div class="icon">
-            <CommentIcon :title="$t('btn.comment')"/>
+            <CommentIcon :title="$t('btn.comment')" />
           </div><span>{{ status.comments }}</span>
         </a>
         <a @click.stop="likeStatus" :title="$t('btn.like')">
           <div class="icon">
-            <LikeIcon v-if="!status.liked" :title="$t('btn.like')"/>
+            <LikeIcon v-if="!status.liked" :title="$t('btn.like')" />
             <LikedIcon class="like" v-if="status.liked" />
           </div><span>{{ status.likeCount }}</span>
         </a>
         <a @click.stop="share" :title="$t('btn.share')">
           <div class="icon">
-            <ShareIcon :title="$t('btn.share')"/>
+            <ShareIcon :title="$t('btn.share')" />
           </div>
         </a>
       </div>
@@ -137,6 +206,67 @@ function share() {
 .status {
   display: flex;
   width: 100%;
+  position: relative;
+}
+
+.status .menu {
+  position: absolute;
+  top: -6px;
+  right: -5px;
+}
+
+.status .menu ul {
+  background-color: var(--color-background);
+  border: 1px solid var(--lln-color-border);
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--lln-color-border);
+  padding: 0;
+}
+
+.status .menu ul li {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 42px;
+  line-height: 42px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.status .menu ul li:hover {
+  background-color: var(--lln-color-bg-hover);
+}
+
+.status .menu ul li svg {
+  width: 18px;
+  height: 18px;
+}
+
+.status .menu ul li .delete {
+  color: red;
+  fill: red;
+}
+
+.status .menu ul li span {
+  margin-left: 10px;
+}
+
+.status .menu .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+.status .menu .icon svg {
+  width: 20px;
+  height: 20px;
+  fill: rgb(83, 100, 113);
 }
 
 .simplestatus {
@@ -177,6 +307,7 @@ function share() {
   padding: 0 10px;
   flex: 1;
   min-width: 0;
+  margin-top: 5px;
 }
 
 .content .author {
@@ -330,6 +461,7 @@ function share() {
     min-height: 20px;
     max-height: 97px;
   }
+
   .avatararea .timeline {
     width: 1.5px;
   }

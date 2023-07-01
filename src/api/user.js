@@ -5,6 +5,9 @@ const user = {
         return http.delete('/i/authorize', {
             session: session
         })
+    },
+    follow: async function(uniqueName, session) {
+        return http.post(`/i/follow/user/${uniqueName}`, {session: session})
     }
 }
 

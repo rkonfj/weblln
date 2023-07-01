@@ -4,7 +4,7 @@ import Status from '../components/Status.vue'
 import Loading from '../components/Loading.vue'
 
 import NoBookmarkIcon from '../components/icons/IconNoBookmark.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, nextTick } from 'vue'
 const bookmarks = ref()
 const session = ref()
 
@@ -37,8 +37,8 @@ onMounted(async () => {
   <main>
     <Title :title="$t('nav.bookmarks')" />
     <ul v-if="bookmarks">
-      <li v-for="s in bookmarks" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
+      <li v-for="(s, i) in bookmarks" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+        <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="bookmarks.splice(i, 1)" :status="s" />
       </li>
     </ul>
     <div v-if="bookmarks && bookmarks.length == 0" class="empty">

@@ -10,7 +10,7 @@ import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 
-import { ref, onMounted, getCurrentInstance } from 'vue'
+import { ref, onMounted, getCurrentInstance, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import lln from '../lln'
@@ -41,6 +41,11 @@ onMounted(async () => {
       status.value.unshift(s)
     }
   } catch (e) {
+    if (e.code == 404) {
+      proxy.$toast('Not Found', { type: 'error' })
+      setTimeout(() => proxy.$router.push('/'), 1000)
+      return
+    }
     proxy.$toast(e.message, { type: 'error' })
   }
   await loadComments()
@@ -139,7 +144,6 @@ function share() {
 function handleImagesReady(ctx) {
   emit('imagesReady', ctx)
 }
-
 </script>
 <template>
   <main>
@@ -197,25 +201,25 @@ function handleImagesReady(ctx) {
     </div>
     <div class="operate" v-if="status.length > 0">
       <a @click="comment" :title="$t('btn.comment')">
-        <CommentIcon :title="$t('btn.comment')"/>
+        <CommentIcon :title="$t('btn.comment')" />
       </a>
       <a @click="like" :title="$t('btn.like')">
-        <LikeIcon v-if="!status[status.length - 1].liked" :title="$t('btn.like')"/>
+        <LikeIcon v-if="!status[status.length - 1].liked" :title="$t('btn.like')" />
         <LikedIcon class="like" v-if="status[status.length - 1].liked" />
       </a>
       <a @click="bookmark" :title="$t('btn.bookmark')">
-        <BookmarkIcon v-if="!status[status.length - 1].bookmarked" :title="$t('btn.bookmark')"/>
+        <BookmarkIcon v-if="!status[status.length - 1].bookmarked" :title="$t('btn.bookmark')" />
         <BookmarkedIcon v-if="status[status.length - 1].bookmarked" />
       </a>
       <a @click="share" :title="$t('btn.share')">
-        <ShareIcon :title="$t('btn.share')"/>
+        <ShareIcon :title="$t('btn.share')" />
       </a>
     </div>
     <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"
       :btntext="$t('status.reply')" :prevstatus="status[status.length - 1].id" />
     <ul v-if="comments">
-      <li v-for="s in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status :status="s" @shouldLogin="$emit('shouldLogin')" />
+      <li v-for="(s, i) in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+        <Status :status="s" @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="comments.splice(i, 1)" />
       </li>
     </ul>
     <div class="loadbtn" v-if="comments && comments.length > 0 && comments.length % 12 == 0 && haveMore && !loading"

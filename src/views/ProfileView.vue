@@ -4,7 +4,7 @@ import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
 import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import { toast } from 'vue3-toastify'
@@ -123,8 +123,8 @@ async function follow() {
       </div>
     </div>
     <ul v-if="status">
-      <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
+      <li v-for="(s, i) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
+        <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
       </li>
     </ul>
     <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
