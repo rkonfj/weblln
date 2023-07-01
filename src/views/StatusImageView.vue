@@ -32,9 +32,7 @@ function renderImages(ctx) {
                 <div class="next btn" v-if="curImage != images.length - 1" @click="curImage++">
                     <NextIcon />
                 </div>
-                <transition name="fade">
-                    <img :src="images[curImage]" alt="Image" />
-                </transition>
+                <img :src="images[curImage]" alt="Image" />
             </div>
         </div>
         <div class="status">
@@ -118,6 +116,9 @@ function renderImages(ctx) {
 .mainarea .imagepreview img {
     max-height: calc(100vh - 120px);
     max-width: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    min-width: 100px;
+    min-height: 100px;
 }
 
 .mainarea .status {
@@ -135,11 +136,14 @@ function renderImages(ctx) {
     .mainarea .imagepreview img {
         max-height: calc(100vh - 160px);
     }
-    .mainarea .close, .mainarea .prev {
+
+    .mainarea .close,
+    .mainarea .prev {
         left: 10px;
     }
 
     .mainarea .next {
         right: 10px;
     }
-}</style>
+}
+</style>
