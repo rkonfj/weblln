@@ -8,7 +8,9 @@ import lln from '../lln'
 const { proxy } = getCurrentInstance()
 
 onMounted(async () => {
-  await proxy.$lln.user.logout(lln.loadSession())
+  try {
+    await proxy.$lln.user.logout(lln.loadSession())
+  } catch (_) { }
   window.localStorage.removeItem('session')
   window.location.href = '/'
 })

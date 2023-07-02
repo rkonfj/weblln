@@ -239,7 +239,6 @@ main ul li {
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid var(--lln-color-border);
   background-color: var(--color-background);
-  overflow: hidden;
 }
 
 main ul .expandArea {

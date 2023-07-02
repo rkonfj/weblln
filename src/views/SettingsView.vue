@@ -34,7 +34,8 @@ async function modifyProfile() {
     },
     body: JSON.stringify({
       name: session.value.name,
-      uniqueName: session.value.uniqueName
+      uniqueName: session.value.uniqueName,
+      bio: session.value.bio
     })
   })
   if (resp.status != 200) {
@@ -60,6 +61,12 @@ async function modifyProfile() {
       <div class="line">
         <div class="key">{{ $t('user.idname') }}</div>
         <div class="value"><input type="text" v-model="session.uniqueName" /></div>
+      </div>
+      <div class="line">
+        <div class="key">{{ $t('user.bio') }}</div>
+        <div class="value">
+          <textarea class="bio" rows="2" v-model="session.bio"></textarea>
+        </div>
       </div>
       <div class="line saveProfile">
         <span class="tips">{{ $t('user.exittips') }}</span>
@@ -93,10 +100,11 @@ main {
 
 .line {
   display: flex;
-  height: 38px;
   line-height: 38px;
   justify-content: space-between;
   align-items: center;
+  margin: 5px 0;
+  min-width: 0;
 }
 
 .key {
@@ -109,8 +117,10 @@ main {
 
 .value {
   flex: 1;
+  min-width: 0;
 }
 
+textarea,
 select,
 .user .value input {
   padding: 5px 10px;
@@ -122,6 +132,13 @@ select,
   border-radius: 16px;
   background-color: var(--color-background);
   color: var(--lln-color-text);
+}
+
+.bio {
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 120px;
+  min-height: 120px;
 }
 
 .user .saveProfile {

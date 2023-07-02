@@ -91,6 +91,7 @@ async function follow() {
             :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
           <div class="n">{{ profile.name }}</div>
           <div class="un">@{{ profile.uniqueName }}</div>
+          <div class="bio" v-if="profile.bio && profile.bio.length > 0">{{ profile.bio }}</div>
           <div class="join">
             <CalendarIcon /><span>{{ DateTime.fromISO(profile.createTime).toRelative() }}</span>加入
           </div>
@@ -112,8 +113,7 @@ async function follow() {
         <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="haveMore && !loading"
-      @click="loadStatus(status[status.length - 1].id)">
+    <div class="loadbtn" v-if="haveMore && !loading" @click="loadStatus(status[status.length - 1].id)">
       加载更多
     </div>
     <Loading v-if="!profile || loading" />
@@ -181,6 +181,7 @@ main .loadbtn {
 
 .mainarea .info .item a {
   color: rgb(83, 100, 113);
+  font-size: 14px;
 }
 
 .mainarea .info .item a span {
@@ -199,6 +200,10 @@ main .loadbtn {
   position: absolute;
   top: -45px;
   right: 20px;
+}
+
+.mainarea .profile .bio {
+  margin-top: 10px;
 }
 
 .mainarea .profile .n {

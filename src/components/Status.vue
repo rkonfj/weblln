@@ -319,6 +319,7 @@ async function deleteStatus() {
   flex: 1;
   min-width: 0;
   margin-top: 5px;
+  overflow: hidden;
 }
 
 .content .author {

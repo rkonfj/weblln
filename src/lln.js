@@ -15,6 +15,9 @@ renderer.image = (herf) => {
 }
 
 renderer.code = (code) => {
+    if (!code || code.length == 0) {
+        return ''
+    }
     return `<div class="codeblock"><div class="copy">Copy</div><pre><code>${code}</code></pre></div>`
 }
 

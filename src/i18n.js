@@ -38,7 +38,8 @@ const messages = {
             idname: 'ID Name',
             exittips: 'After clicking save, the current login will be logged out immediately',
             followers: 'Followers',
-            following: 'Following'
+            following: 'Following',
+            bio: 'Bio'
         },
         btn: {
             save: 'Save',
@@ -105,7 +106,8 @@ const messages = {
             idname: '用户名',
             exittips: '点击保存后，会立即退出当前登录',
             followers: '粉丝',
-            following: '正在关注'
+            following: '正在关注',
+            bio: '个人简介'
         },
         btn: {
             save: '保存',

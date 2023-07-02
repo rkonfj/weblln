@@ -76,7 +76,6 @@ main ul li {
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid var(--lln-color-border);
-  overflow: hidden;
 }
 
 main .loadbtn:hover,
