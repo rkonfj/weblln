@@ -28,8 +28,12 @@ async function loadExploreData(after) {
     }
     haveMore.value = resp.more
     if (resp.v) {
-      for (let s of resp.v) {
-        status.value.push(s)
+      if (!after) {
+        status.value = resp.v
+      } else {
+        for (let s of resp.v) {
+          status.value.push(s)
+        }
       }
     }
   } catch (e) {
@@ -53,8 +57,7 @@ async function loadExploreData(after) {
         </li>
       </div>
     </ul>
-    <div class="loadbtn" v-if="haveMore && !loading"
-      @click="loadExploreData(status[status.length - 1].id)">
+    <div class="loadbtn" v-if="haveMore && !loading" @click="loadExploreData(status[status.length - 1].id)">
       {{ $t('nav.showmore') }}
     </div>
     <Loading v-if="loading" />
@@ -73,6 +76,7 @@ main ul li {
   padding: 10px 15px;
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid var(--lln-color-border);
+  overflow: hidden;
 }
 
 main .loadbtn:hover,
@@ -85,5 +89,11 @@ main .loadbtn {
   justify-content: center;
   align-items: center;
   color: hsla(160, 100%, 37%, 1);
+}
+
+@media (max-width: 60rem) {
+  main ul li:hover {
+    background-color: unset;
+  }
 }
 </style>

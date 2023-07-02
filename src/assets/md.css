@@ -73,3 +73,18 @@ pre::-webkit-scrollbar-thumb {
     color: var(--lln-color-text);
     z-index: 10;
 }
+
+@media (max-width: 60rem) {
+    pre {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    code {
+        font-size: 12px;
+    }
+
+    pre::-webkit-scrollbar {
+        height: 3px;
+    }
+}

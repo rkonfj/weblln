@@ -325,6 +325,7 @@ async function deleteStatus() {
   line-height: 16px;
   margin-bottom: 5px;
   color: var(--lln-color-text);
+  display: flex;
 }
 
 .content .author span {
@@ -457,27 +458,6 @@ async function deleteStatus() {
   max-width: 100%;
 }
 
-@media (max-width: 60rem) {
-  .content .media img {
-    min-height: 60px;
-    max-height: 300px;
-  }
-
-  .content .media .h100 img {
-    min-height: 40px;
-    max-height: 200px;
-  }
-
-  .content .media .h50 img {
-    min-height: 20px;
-    max-height: 97px;
-  }
-
-  .avatararea .timeline {
-    width: 1.5px;
-  }
-}
-
 .content .op {
   display: flex;
   margin: 5px 0 0 -6px;
@@ -530,5 +510,40 @@ async function deleteStatus() {
 
 .content .op a .like {
   fill: #d6204b;
+}
+
+@media (max-width: 60rem) {
+  .status .menu {
+    top: -12px
+  }
+
+  .status .menu ul {
+    margin-top: 2px;
+  }
+
+  .content {
+    margin-top: 0;
+  }
+  .content .author span {
+    font-size: 13px;
+  }
+  .content .media img {
+    min-height: 60px;
+    max-height: 300px;
+  }
+
+  .content .media .h100 img {
+    min-height: 40px;
+    max-height: 200px;
+  }
+
+  .content .media .h50 img {
+    min-height: 20px;
+    max-height: 97px;
+  }
+
+  .avatararea .timeline {
+    width: 1.5px;
+  }
 }
 </style>

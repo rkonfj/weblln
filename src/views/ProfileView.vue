@@ -221,4 +221,10 @@ main .loadbtn {
 .mainarea .profile .join span {
   margin: 0 10px 0 5px;
 }
+
+@media (max-width: 60rem) {
+  main ul li:hover {
+    background-color: unset;
+  }
+}
 </style>

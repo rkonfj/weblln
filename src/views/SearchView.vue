@@ -2,73 +2,64 @@
 import Status from '../components/Status.vue'
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
+const { proxy } = getCurrentInstance()
 const session = ref()
-const status = ref()
-const loading = ref()
-const haveMore = ref(true)
-let llnApi = ""
+const status = ref([])
+const loading = ref(true)
+const haveMore = ref()
 
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  llnApi = inject('llnApi')
   let route = useRoute()
   loadSearchData(route.params.label)
 })
 
 async function loadSearchData(label, after) {
   loading.value = true
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
+  try {
+    let resp = await proxy.$lln.status.search({
+      type: 'label',
+      value: label,
+      after: after,
+      size: 12,
+      session: session.value
+    })
+    if (resp.headers.get("X-Session-Valid") == "false") {
+      session.value = null
     }
-  }
-  let afterQuery = ''
-  if (after) {
-    afterQuery = '&after=' + after
-  }
-  let resp = await fetch(`${llnApi}/o/search?type=label&value=${label}&size=12${afterQuery}`, opts)
-  if (resp.headers.get("X-Session-Valid") == "false") {
-    session.value = null
-  }
-  let ss = await resp.json()
-  if (!after) {
-    status.value = []
-    if (ss != null) {
-      status.value = ss
-    }
-  } else {
-    if (ss != null) {
-      for (let s of ss) {
+    haveMore.value = resp.more
+    if (resp.v) {
+      for (let s of resp.v) {
         status.value.push(s)
       }
-    } else {
-      haveMore.value = false
     }
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
   }
+
   loading.value = false
 }
 
 </script>
 <template>
   <main>
-    <Title :title="$t('nav.searchresult')"  backbtn="true" />
+    <Title :title="$t('nav.searchresult')" backbtn="true" />
     <ul v-if="status">
       <li v-for="s in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
         <Status @shouldLogin="$emit('shouldLogin')" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="status && status.length > 0 && status.length % 12 == 0 && haveMore && !loading"
+    <div class="loadbtn" v-if="haveMore && !loading"
       @click="loadSearchData($route.params.label, status[status.length - 1].id)">
       {{ $t('nav.showmore') }}
     </div>
-    <Loading v-if="!status || loading" />
+    <Loading v-if="loading" />
   </main>
 </template>
 
@@ -96,5 +87,11 @@ main .loadbtn {
   justify-content: center;
   align-items: center;
   color: hsla(160, 100%, 37%, 1);
+}
+
+@media (max-width: 60rem) {
+  main ul li:hover {
+    background-color: unset;
+  }
 }
 </style>

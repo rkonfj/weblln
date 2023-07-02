@@ -29,6 +29,14 @@ const status = {
             afterQuery = '&after=' + after
         }
         return await http.get(`/o/explore?size=${size}${afterQuery}`, { session: session })
+    },
+    search: async (opts) => {
+        let afterQuery = ''
+        if (opts.after) {
+            afterQuery = '&after=' + opts.after
+        }
+        return await http.get(`/o/search?type=${opts.type}&value=${opts.value}&size=${opts.size}${afterQuery}`,
+            { session: opts.session })
     }
 }
 

@@ -1,10 +1,12 @@
 <template>
-    <h2><a v-if="backbtn" @click="$router.go(-1)"><IconBack /></a><span>{{ title }}</span></h2>
+  <h2><a v-if="backbtn" @click="$router.go(-1)">
+      <IconBack />
+    </a><span>{{ title }}</span></h2>
 </template>
 
 <script setup>
 import IconBack from './icons/IconBack.vue'
-defineProps(['title','backbtn'])
+defineProps(['title', 'backbtn'])
 </script>
 
 <style scoped>
@@ -34,12 +36,22 @@ h2 a {
   height: 36px;
   justify-content: center;
   align-items: center;
-  margin:0 22px 0 -9px;
+  margin: 0 22px 0 -9px;
   cursor: pointer;
   border-radius: 50%;
 }
 
 h2 a:hover {
   background-color: rgba(15, 20, 25, 0.1);
+}
+
+@media (max-width: 60rem) {
+  h2 a svg {
+    width: 20px;
+    height: 20px;
+  }
+  h2 span {
+    font-size: 16px;
+  }
 }
 </style>

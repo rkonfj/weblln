@@ -63,8 +63,12 @@ async function loadComments(after) {
     let resp = await proxy.$lln.status.listComments(opts)
     haveMore.value = resp.more
     if (resp.v != null) {
-      for (let s of resp.v) {
-        comments.value.push(s)
+      if (!after) {
+        comments.value = resp.v
+      } else {
+        for (let s of resp.v) {
+          comments.value.push(s)
+        }
       }
     }
   } catch (e) {
@@ -214,8 +218,7 @@ function handleImagesReady(ctx) {
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="comments.splice(i, 1)" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="haveMore && !loading"
-      @click="loadComments(comments[comments.length - 1].id)">
+    <div class="loadbtn" v-if="haveMore && !loading" @click="loadComments(comments[comments.length - 1].id)">
       加载更多
     </div>
     <Loading v-if="status.length == 0 || loading" />
@@ -236,6 +239,7 @@ main ul li {
   transition: .5s, disply 0.5s;
   border-bottom: 1px solid var(--lln-color-border);
   background-color: var(--color-background);
+  overflow: hidden;
 }
 
 main ul .expandArea {
@@ -266,7 +270,7 @@ main ul .expandArea .btn {
 main ul li .timeline {
   display: flex;
   width: 2px;
-  height: 5px;
+  height: 2px;
   flex-grow: 1;
   background-color: var(--lln-color-timeline);
   margin-bottom: 5px;
@@ -360,6 +364,13 @@ main .loadbtn {
 @media (max-width: 60rem) {
   .stats .time {
     display: block;
+    font-size: 13px;
+    height: 16px;
+  }
+
+  .stats .item {
+    font-size: 13px;
+    height: 16px;
   }
 
   .stats .dot {
@@ -370,8 +381,19 @@ main .loadbtn {
     margin-left: 0;
   }
 
+  main ul li:hover {
+    background-color: unset;
+  }
+
+  main ul .expandArea {
+    padding: 5px 15px;
+  }
+
   main ul li .timeline {
     width: 1.5px;
+    height: 3px;
+    flex-grow: 0;
+    margin-bottom: 6px;
   }
 }
 </style>

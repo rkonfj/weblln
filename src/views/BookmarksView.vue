@@ -88,4 +88,10 @@ main ul li:hover {
   justify-content: center;
   height: 20rem;
 }
+
+@media (max-width: 60rem) {
+  main ul li:hover {
+    background-color: unset;
+  }
+}
 </style>

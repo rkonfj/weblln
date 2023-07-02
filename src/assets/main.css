@@ -34,19 +34,6 @@ main {
   --toastify-toast-min-height: 34px;
 }
 
-@media (max-width: 60rem) {
-  pre {
-    font-size: 12px;
-    line-height: 16px;
-  }
-  code {
-    font-size: 12px;
-  }
-  pre::-webkit-scrollbar {
-    height: 3px; 
-  }
-}
-
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
