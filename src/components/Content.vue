@@ -83,7 +83,7 @@ onMounted(() => {
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
                         :src="images[2]" alt="Image" /></div>
             </div>
-            <div v-if="images.length == 4" class="fc">
+            <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
                         :src="images[0]" alt="Image" /></div>
@@ -91,7 +91,7 @@ onMounted(() => {
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
                         :src="images[1]" alt="Image" /></div>
             </div>
-            <div v-if="images.length == 4" class="fc">
+            <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
                         :src="images[2]" alt="Image" /></div>
@@ -176,6 +176,7 @@ onMounted(() => {
     min-width: min-content;
     border: 1px solid #bbb;
     box-sizing: content-box;
+    flex: 1;
 }
 
 .raw .media .w50 {

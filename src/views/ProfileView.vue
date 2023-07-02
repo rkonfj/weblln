@@ -79,7 +79,8 @@ async function follow() {
 </script>
 <template>
   <main>
-    <Title :title="profile ? profile.name : ''" backbtn="true" />
+    <Title :title="profile ? profile.name : ''" backbtn="true"
+      :tips="`${profile ? profile.tweets : 0} ${$t('tips.tweets')}`" />
     <div v-if="profile" class="mainarea">
       <div class="bg"></div>
       <div class="profile">

@@ -2,7 +2,7 @@
 defineProps(['btn'])
 </script>
 <template>
-    <div class="commop" :style="$i18n.locale === 'en' ? 'letter-spacing: normal' : ''">{{ btn }}</div>
+    <div class="commop">{{ btn }}</div>
 </template>
 
 <style scoped>
@@ -16,7 +16,6 @@ defineProps(['btn'])
     padding: 0.4rem 1rem 0.4rem 1.2rem;
     color: #fff;
     border-radius: 20px;
-    letter-spacing: 0.2rem;
     transition: 0.4s;
     cursor: pointer;
 }

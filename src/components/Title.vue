@@ -1,12 +1,20 @@
 <template>
-  <h2><a v-if="backbtn" @click="$router.go(-1)">
+  <h2>
+    <a v-if="backbtn" @click="$router.go(-1)">
       <IconBack />
-    </a><span>{{ title }}</span></h2>
+    </a>
+    <div class="block">
+      <div v-if="tips" class="title tipstitle">{{ title }}</div>
+      <div v-if="!tips" class="title">{{ title }}</div>
+      <div v-if="tips" class="tips">{{ tips }}</div>
+    </div>
+  </h2>
 </template>
 
 <script setup>
 import IconBack from './icons/IconBack.vue'
-defineProps(['title', 'backbtn'])
+import { ref } from 'vue'
+defineProps(['title', 'backbtn', 'tips'])
 </script>
 
 <style scoped>
@@ -24,10 +32,28 @@ h2 {
   z-index: 10000;
 }
 
-h2 span {
+h2 .block {
+  display: block;
+}
+
+h2 .title {
   font-size: 20px;
   font-weight: bold;
+  width: 100%;
   color: var(--lln-color-text);
+}
+
+
+h2 .tipstitle {
+  font-size: 20px;
+  line-height: 18px;
+  margin-top: 9px;
+}
+
+h2 .tips {
+  width: 100%;
+  font-size: 13px;
+  color: #666;
 }
 
 h2 a {
@@ -50,7 +76,8 @@ h2 a:hover {
     width: 20px;
     height: 20px;
   }
-  h2 span {
+
+  h2 .tipstitle {
     font-size: 16px;
   }
 }

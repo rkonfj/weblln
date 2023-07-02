@@ -59,7 +59,8 @@ const messages = {
             copied: 'Copied to clipboard',
             sessionExpired: 'Api key expired, redirect to login',
             confirmunfollow: 'Confirm unfollow',
-            confirmdelete: 'Confirm delete'
+            confirmdelete: 'Confirm delete',
+            tweets: 'Tweets'
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -127,7 +128,8 @@ const messages = {
             copied: '已复制到剪贴板',
             sessionExpired: 'Api key 失效，请重新登录',
             confirmunfollow: '确认取消关注',
-            confirmdelete: '确认删除'
+            confirmdelete: '确认删除',
+            tweets: '推文'
         },
         misc: {
             signinagree: '认证即表示你同意',
