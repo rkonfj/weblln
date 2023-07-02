@@ -3,25 +3,64 @@ import StatusView from './StatusView.vue'
 import BackIcon from '../components/icons/IconBack.vue'
 import CloseIcon from '../components/icons/CloseIcon.vue'
 import NextIcon from '../components/icons/NextIcon.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router';
 
 const curImage = ref(0)
 const images = ref()
 const route = useRoute()
+const nextSwipe = ref(true)
 
 onMounted(() => {
     curImage.value = route.params.num - 1
+    window.sessionStorage.setItem('disable-swipe-nav', 'true')
 })
 
+onUnmounted(() => {
+    window.sessionStorage.removeItem('disable-swipe-nav')
+})
+
+const vSwipe = {
+    mounted: (el, binding) => {
+        let startX, startY
+
+        el.addEventListener('touchstart', (event) => {
+            startX = event.touches[0].clientX
+            startY = event.touches[0].clientY
+        }, { passive: true })
+
+        el.addEventListener('touchend', (e) => {
+            nextSwipe.value = true
+        }, { passive: true })
+
+        el.addEventListener('touchmove', (event) => {
+            const deltaX = event.touches[0].clientX - startX
+            const deltaY = event.touches[0].clientY - startY
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                binding.value(deltaX)
+            }
+        }, { passive: true })
+    }
+}
+
+function showImage(v) {
+    if (v > 80 && curImage.value > 0 && nextSwipe.value) {
+        curImage.value--
+        nextSwipe.value = false
+    } else if (v < -80 && curImage.value < images.value.length - 1 && nextSwipe.value) {
+        curImage.value++
+        nextSwipe.value = false
+    }
+}
+
 function renderImages(ctx) {
-    console.log(JSON.stringify(ctx))
     images.value = ctx.imgs
 }
 </script>
 <template>
     <div class="mainarea">
-        <div class="imagepreview">
+        <div class="imagepreview" v-swipe="showImage">
             <div v-if="images">
                 <div class="close btn" @click="$router.go(-1)">
                     <CloseIcon />

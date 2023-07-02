@@ -94,6 +94,9 @@ async function loadTipMessages() {
   }
 }
 function openNav(v) {
+  if (window.sessionStorage.getItem('disable-swipe-nav')) {
+    return
+  }
   if (v < 80) {
     return
   }
@@ -106,6 +109,9 @@ function openNav(v) {
   }
 }
 function closeNav(v) {
+  if (window.sessionStorage.getItem('disable-swipe-nav')) {
+    return
+  }
   if (v > -80) {
     return
   }

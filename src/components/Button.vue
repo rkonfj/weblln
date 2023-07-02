@@ -13,7 +13,7 @@ defineProps(['btn'])
     background-color: rgb(15, 20, 25);
     font-size: 15px;
     font-weight: bold;
-    padding: 0.4rem 1rem 0.4rem 1.2rem;
+    padding: 0.4rem 1.2rem 0.4rem 1.2rem;
     color: #fff;
     border-radius: 20px;
     transition: 0.4s;
