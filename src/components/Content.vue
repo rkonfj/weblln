@@ -65,10 +65,10 @@ onMounted(() => {
             <div v-if="images.length == 1" class="image"><img
                     @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
                     alt="Image" /></div>
-            <div v-if="images.length == 2" class="image w50 h100"><img
+            <div v-if="images.length == 2" class="image w50 "><img
                     @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
                     alt="Image" /></div>
-            <div v-if="images.length == 2" class="image w50 h100"><img
+            <div v-if="images.length == 2" class="image w50"><img
                     @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]"
                     alt="Image" /></div>
 
@@ -160,6 +160,9 @@ onMounted(() => {
     justify-content: center;
     flex: 1;
     width: 0;
+}
+
+.raw .media .fc:first-child {
     margin-right: 5px;
 }
 
@@ -172,52 +175,30 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: 15px;
-    min-width: min-content;
-    border: 1px solid #bbb;
+    border-radius: 12px;
     box-sizing: content-box;
-    flex: 1;
+    overflow: hidden;
+    min-width: fit-content;
+    aspect-ratio: 5/3;
+    box-shadow: 0 0 5px var(--lln-color-timeline);
 }
 
 .raw .media .w50 {
+    width: calc(50% - 2px);
+    min-width: unset;
+    margin-right: 0;
+}
+
+.raw .media .h100 {
+    aspect-ratio: 5/6;
     margin-right: 5px;
+    height: calc(100% - 2px);
 }
-
-.raw .media .h50 img {
-    min-height: 40px;
-    max-height: 200px;
-}
-
-.raw .media .h50 {
-    width: auto;
-}
-
-.raw .media .h100 img {
-    min-height: 80px;
-    max-height: 400px;
-}
-
 
 .raw .media img {
-    min-height: 80px;
-    max-height: 566px;
+    object-fit: cover;
     max-width: 100%;
-}
-
-@media (max-width: 60rem) {
-    .raw .media img {
-        min-height: 60px;
-        max-height: 300px;
-    }
-
-    .raw .media .h100 img {
-        min-height: 40px;
-        max-height: 200px;
-    }
-
-    .raw .media .h50 img {
-        min-height: 20px;
-        max-height: 97px;
-    }
+    max-height: 400px;
+    min-height: 80px;
 }
 </style>

@@ -77,6 +77,7 @@ h2 a:hover {
     height: 20px;
   }
 
+  h2 .title,
   h2 .tipstitle {
     font-size: 16px;
   }

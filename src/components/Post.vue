@@ -232,12 +232,12 @@ function resetLocal() {
                         <CloseIcon />
                     </div><img :src="images[0]" alt="Image" />
                 </div>
-                <div v-if="images.length == 2" class="image w50 h100">
+                <div v-if="images.length == 2" class="image w50">
                     <div class="close" @click="removeMedia(0)">
                         <CloseIcon />
                     </div><img :src="images[0]" alt="Image" />
                 </div>
-                <div v-if="images.length == 2" class="image w50 h100">
+                <div v-if="images.length == 2" class="image w50">
                     <div class="close" @click="removeMedia(1)">
                         <CloseIcon />
                     </div><img :src="images[1]" alt="Image" />
@@ -379,6 +379,7 @@ function resetLocal() {
     justify-content: space-between;
     align-items: flex-start;
     margin: 10px 0;
+    position: relative;
 }
 
 .content .media .close {
@@ -412,9 +413,10 @@ function resetLocal() {
     justify-content: center;
     flex: 1;
     width: 0;
+}
+.content .media .fc:first-child {
     margin-right: 5px;
 }
-
 .content .media .fc .h50:first-child {
     margin-bottom: 5px;
 }
@@ -424,37 +426,31 @@ function resetLocal() {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: 15px;
-    min-width: min-content;
-    border: 1px solid #bbb;
+    border-radius: 12px;
     box-sizing: content-box;
-    position: relative;
+    overflow: hidden;
+    min-width: fit-content;
+    aspect-ratio: 5/3;
+    box-shadow: 0 0 5px var(--lln-color-timeline);
 }
 
 .content .media .w50 {
+    width: calc(50% - 2px);
+    min-width: unset;
+    margin-right: 0;
+}
+
+.content .media .h100 {
+    aspect-ratio: 5/6;
     margin-right: 5px;
-    flex: 1;
+    height: calc(100% - 2px);
 }
-
-.content .media .h50 img {
-    min-height: 40px;
-    max-height: 200px;
-}
-
-.content .media .h50 {
-    width: auto;
-}
-
-.content .media .h100 img {
-    min-height: 80px;
-    max-height: 400px;
-}
-
 
 .content .media img {
-    min-height: 80px;
-    max-height: 566px;
+    object-fit: cover;
     max-width: 100%;
+    max-height: 400px;
+    min-height: 80px;
 }
 
 .content .raw {

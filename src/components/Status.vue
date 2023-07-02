@@ -393,70 +393,14 @@ async function deleteStatus() {
   color: red;
   margin-left: 5px;
   font-size: 13px;
+  line-height: 18px;
 }
 
 .content .sf .tips {
   color: #bbb;
   margin-left: 5px;
   font-size: 13px;
-}
-
-.content .media {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 10px 0;
-}
-
-.content .media .fc {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  width: 0;
-  margin-right: 5px;
-}
-
-.content .media .fc .h50:first-child {
-  margin-bottom: 5px;
-}
-
-.content .media .image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 15px;
-  min-width: min-content;
-  border: 1px solid #bbb;
-  box-sizing: content-box;
-}
-
-.content .media .w50 {
-  margin-right: 5px;
-}
-
-.content .media .h50 img {
-  min-height: 40px;
-  max-height: 200px;
-}
-
-.content .media .h50 {
-  width: auto;
-}
-
-.content .media .h100 img {
-  min-height: 80px;
-  max-height: 400px;
-}
-
-
-.content .media img {
-  min-height: 80px;
-  max-height: 566px;
-  max-width: 100%;
+  line-height: 18px;
 }
 
 .content .op {
@@ -515,7 +459,7 @@ async function deleteStatus() {
 
 @media (max-width: 60rem) {
   .status .menu {
-    top: -12px
+    top: -10px
   }
 
   .status .menu ul {
@@ -527,20 +471,6 @@ async function deleteStatus() {
   }
   .content .author span {
     font-size: 13px;
-  }
-  .content .media img {
-    min-height: 60px;
-    max-height: 300px;
-  }
-
-  .content .media .h100 img {
-    min-height: 40px;
-    max-height: 200px;
-  }
-
-  .content .media .h50 img {
-    min-height: 20px;
-    max-height: 97px;
   }
 
   .avatararea .timeline {

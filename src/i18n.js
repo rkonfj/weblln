@@ -14,7 +14,7 @@ const messages = {
             thread: 'Thread',
             lang: 'Language',
             googleauth: 'Sign in with Google',
-            hello: 'New to LowLevelNews?',
+            hello: 'New to Low Level News?',
             welcome: 'Sign in now to get your own personalized timeline!',
             showmore: 'Show More',
             searchresult: 'Search Result'
@@ -83,8 +83,8 @@ const messages = {
             thread: '主题',
             lang: '语言',
             googleauth: '使用 Google 账号认证',
-            hello: '一见如旧，请先登录',
-            welcome: '立即认证，获取你自己的个性化时间线！',
+            hello: '登录，享受个性化社交！',
+            welcome: '立即认证，让我们一起开启新的社交冒险！',
             showmore: '加载更多',
             searchresult: '搜索结果'
         },
@@ -123,7 +123,7 @@ const messages = {
             embedtweet: '嵌入推文'
         },
         tips: {
-            success: '操作成功',
+            success: '完成',
             failed: '操作失败',
             copied: '已复制到剪贴板',
             sessionExpired: 'Api key 失效，请重新登录',
