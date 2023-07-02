@@ -8,7 +8,6 @@ const emit = defineEmits(['imagesReady'])
 const props = defineProps(['status', 'simple', 'hideMedia'])
 const images = ref([])
 const paragraphs = ref([])
-const error = ref()
 const imageCount = ref(0)
 const imageErrCount = ref(0)
 const imageLoadCount = ref(0)
@@ -21,7 +20,17 @@ onMounted(() => {
                 let img = new Image()
                 img.src = c.value
                 img.onload = () => {
-                    images.value[idx] = c.value
+                    let unshifted = true
+                    for (let i in images.value) {
+                        if (idx > images.value[i].i) {
+                            continue
+                        }
+                        images.value.splice(i, 0, { i: idx, v: c.value })
+                        unshifted = false
+                    }
+                    if (unshifted) {
+                        images.value.push({ i: idx, v: c.value })
+                    }
                     emit('imagesReady', {
                         imgs: images.value,
                         imgCount: imageCount.value,
@@ -31,7 +40,6 @@ onMounted(() => {
                     imageLoadCount.value++
                 }
                 img.onerror = () => {
-                    error.value = true
                     imageErrCount.value++
                 }
             })(imageCount.value)
@@ -63,41 +71,41 @@ onMounted(() => {
         </div>
         <div class="media" v-if="images.length > 0 && !hideMedia">
             <div v-if="images.length == 1" class="image"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
                     alt="Image" /></div>
             <div v-if="images.length == 2" class="image w50 "><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
                     alt="Image" /></div>
             <div v-if="images.length == 2" class="image w50"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1]"
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1].v"
                     alt="Image" /></div>
 
             <div v-if="images.length == 3" class="image w50 h100"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0]"
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
                     alt="Image" /></div>
             <div v-if="images.length == 3" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-                        :src="images[1]" alt="Image" /></div>
+                        :src="images[1].v" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-                        :src="images[2]" alt="Image" /></div>
+                        :src="images[2].v" alt="Image" /></div>
             </div>
             <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
-                        :src="images[0]" alt="Image" /></div>
+                        :src="images[0].v" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-                        :src="images[1]" alt="Image" /></div>
+                        :src="images[1].v" alt="Image" /></div>
             </div>
             <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-                        :src="images[2]" alt="Image" /></div>
+                        :src="images[2].v" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)"
-                        :src="images[3]" alt="Image" /></div>
+                        :src="images[3].v" alt="Image" /></div>
             </div>
         </div>
     </div>
@@ -192,7 +200,7 @@ onMounted(() => {
 .raw .media .h100 {
     aspect-ratio: 5/6;
     margin-right: 5px;
-    height: calc(100% - 2px);
+    height: 100%;
 }
 
 .raw .media img {

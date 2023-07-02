@@ -379,7 +379,6 @@ function resetLocal() {
     justify-content: space-between;
     align-items: flex-start;
     margin: 10px 0;
-    position: relative;
 }
 
 .content .media .close {
@@ -432,6 +431,7 @@ function resetLocal() {
     min-width: fit-content;
     aspect-ratio: 5/3;
     box-shadow: 0 0 5px var(--lln-color-timeline);
+    position: relative;
 }
 
 .content .media .w50 {

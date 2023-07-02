@@ -62,6 +62,7 @@ function renderImages(ctx) {
     <div class="mainarea">
         <div class="imagepreview" v-swipe="showImage">
             <div v-if="images">
+                <div class="count"><span>{{ curImage + 1 }}</span>/<span>{{ images.length }}</span></div>
                 <div class="close btn" @click="$router.go(-1)">
                     <CloseIcon />
                 </div>
@@ -71,7 +72,7 @@ function renderImages(ctx) {
                 <div class="next btn" v-if="curImage != images.length - 1" @click="curImage++">
                     <NextIcon />
                 </div>
-                <img :src="images[curImage]" alt="Image" />
+                <img :src="images[curImage].v" alt="Image" />
             </div>
         </div>
         <div class="status">
@@ -104,6 +105,19 @@ function renderImages(ctx) {
 .mainarea .close {
     top: 10px;
     left: 15px;
+}
+
+.mainarea .count {
+    position: absolute;
+    top: 0;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 100px;
+    color: #fff;
+    font-size: 15px;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .mainarea .prev {
