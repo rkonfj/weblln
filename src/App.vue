@@ -163,7 +163,16 @@ function closeNav(v) {
 
   </div>
   <div class="main-content" v-swipe="openNav" :style="mobileMain">
-    <RouterView v-if="!loading" @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" />
+    <RouterView @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" v-slot="{ Component }">
+      <transition>
+        <keep-alive>
+          <component v-if="!loading && $route.meta.keepalive" :is="Component" :key="$route.name" />
+        </keep-alive>
+      </transition>
+      <transition>
+        <component v-if="!loading && !$route.meta.keepalive" :is="Component" :key="$route.name" />
+      </transition>
+    </RouterView>
     <Loading v-if="loading" />
     <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
   </div>

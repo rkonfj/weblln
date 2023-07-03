@@ -56,7 +56,7 @@ async function loadSearchData(label, after) {
       </li>
     </ul>
     <div class="loadbtn" v-if="haveMore && !loading"
-      @click="loadSearchData($route.params.label, status[status.length - 1].id)">
+      @click="loadSearchData($route.params.label, status[status.length - 1].createRev)">
       {{ $t('nav.showmore') }}
     </div>
     <Loading v-if="loading" />

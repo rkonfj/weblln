@@ -114,7 +114,7 @@ async function follow() {
         <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="haveMore && !loading" @click="loadStatus(status[status.length - 1].id)">
+    <div class="loadbtn" v-if="haveMore && !loading" @click="loadStatus(status[status.length - 1].createRev)">
       加载更多
     </div>
     <Loading v-if="!profile || loading" />

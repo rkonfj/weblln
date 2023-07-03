@@ -57,7 +57,7 @@ async function loadBookmarks(after) {
       <NoBookmarkIcon />
     </div>
     <div class="loadbtn" v-if="bookmarks.length > 0 && haveMore && !loading"
-      @click="loadBookmarks(bookmarks[bookmarks.length - 1].id)">
+      @click="loadBookmarks(bookmarks[bookmarks.length - 1].createRev)">
       加载更多
     </div>
     <Loading v-if="loading" />

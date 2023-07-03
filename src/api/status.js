@@ -23,12 +23,12 @@ const status = {
     delete: async (statusID, session) => {
         return await http.delete(`/i/status/${statusID}`, { session: session })
     },
-    explore: async (after, size, session) => {
+    explore: async (opts, session) => {
         let afterQuery = ''
-        if (after) {
-            afterQuery = '&after=' + after
+        if (opts.after) {
+            afterQuery = '&after=' + opts.after
         }
-        return await http.get(`/o/explore?size=${size}${afterQuery}`, { session: session })
+        return await http.get(`/o/explore?size=${opts.size}&order=${opts.order}${afterQuery}`, { session: session })
     },
     search: async (opts) => {
         let afterQuery = ''
@@ -37,6 +37,9 @@ const status = {
         }
         return await http.get(`/o/search?type=${opts.type}&value=${opts.value}&size=${opts.size}${afterQuery}`,
             { session: opts.session })
+    },
+    newsProbe: async (after, session) => {
+        return await http.get(`/o/explore/news-probe?after=${after}`, { session: session })
     }
 }
 

@@ -51,7 +51,8 @@ const messages = {
             share: 'Share',
             delete: 'Delete',
             unfollow: 'Unfollow',
-            embedtweet: 'Embed Tweet'
+            embedtweet: 'Embed Tweet',
+            show: 'Show'
         },
         tips: {
             success: 'Done',
@@ -120,7 +121,8 @@ const messages = {
             share: '分享',
             delete: '删除',
             unfollow: '取消关注',
-            embedtweet: '嵌入推文'
+            embedtweet: '嵌入推文',
+            show: '展示'
         },
         tips: {
             success: '完成',

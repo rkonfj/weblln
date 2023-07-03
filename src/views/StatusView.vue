@@ -10,7 +10,7 @@ import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 
-import { ref, onMounted, getCurrentInstance, nextTick } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import lln from '../lln'
@@ -218,7 +218,7 @@ function handleImagesReady(ctx) {
         <Status :status="s" @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="comments.splice(i, 1)" />
       </li>
     </ul>
-    <div class="loadbtn" v-if="haveMore && !loading" @click="loadComments(comments[comments.length - 1].id)">
+    <div class="loadbtn" v-if="haveMore && !loading" @click="loadComments(comments[comments.length - 1].createRev)">
       加载更多
     </div>
     <Loading v-if="status.length == 0 || loading" />
