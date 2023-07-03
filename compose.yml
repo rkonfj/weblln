@@ -1,0 +1,60 @@
+services:
+  etcd:
+    restart: always
+    image: gcr.io/etcd-development/etcd:v3.5.9
+    container_name: etcd
+    command: 
+    - etcd
+    - --name
+    - s1
+    - --data-dir
+    - /data
+    - --listen-client-urls
+    - http://0.0.0.0:2379
+    - --advertise-client-urls 
+    - http://0.0.0.0:2379
+    - --listen-peer-urls
+    - http://0.0.0.0:2380
+    - --initial-advertise-peer-urls
+    - http://0.0.0.0:2380
+    - --initial-cluster
+    - s1=http://0.0.0.0:2380
+    - --initial-cluster-token
+    - tkn
+    - --initial-cluster-state
+    - new
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 100m
+          cpus: "1"
+    volumes:
+    - data:/data
+  lln:
+    restart: always
+    image: rkonfj/lln:v0.1.0
+    container_name: lln
+    environment:
+      OIDC_GOOGLE_CLIENT_ID: xxx
+      OIDC_GOOGLE_CLIENT_SECRET: xxx
+      OIDC_GOOGLE_REDIRECT: xxx
+    command: -c /etc/lln.yml
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 50m
+          cpus: "1"
+  weblln:
+    restart: always
+    image: rkonfj/weblln:v0.1.0
+    container_name: weblln
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 50m
+          cpus: "1"
+volumes:
+  data: {}

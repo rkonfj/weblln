@@ -1,0 +1,16 @@
+https://open.lowlevelnews.com
+
+@proxy {
+    path /i/* /o/*
+}
+
+handle @proxy {
+    reverse_proxy 127.0.0.1:8876
+}
+
+handle {
+    encode gzip
+    root * /usr/share/caddy
+    try_files {path} {path}/ /index.html
+    file_server
+}

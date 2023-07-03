@@ -1,2 +1,2 @@
-export const llnApi = 'https://api.lowlevelnews.com'
+export const llnApi = ''
 export const siteName = 'LLN'
