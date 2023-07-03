@@ -132,6 +132,7 @@ select,
   border-radius: 16px;
   background-color: var(--color-background);
   color: var(--lln-color-text);
+  font-family: inherit;
 }
 
 .bio {
