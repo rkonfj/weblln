@@ -10,9 +10,9 @@ import Loading from '../components/Loading.vue'
 const emit = defineEmits(['tipsDeleted'])
 const { proxy } = getCurrentInstance()
 const session = ref()
-const loading = ref()
-const haveMore = ref(true)
-const messages = ref()
+const loading = ref(true)
+const haveMore = ref()
+const messages = ref([])
 
 onMounted(async () => {
   session.value = lln.loadSession()
@@ -22,20 +22,12 @@ onMounted(async () => {
 async function loadMessages(after) {
   loading.value = true
   try {
-    let msgs = await proxy.$lln.message.listMessages(after, 20, session.value)
-    deleteTipMessages(msgs)
-    if (!after) {
-      messages.value = []
-      if (msgs != null) {
-        messages.value = msgs
-      }
-    } else {
-      if (msgs != null) {
-        for (let s of msgs) {
-          messages.value.push(s)
-        }
-      } else {
-        haveMore.value = false
+    let resp = await proxy.$lln.message.listMessages(after, 20, session.value)
+    haveMore.value = resp.more
+    deleteTipMessages(resp.v)
+    if (resp.v != null) {
+      for (let s of resp.v) {
+        messages.value.push(s)
       }
     }
   } catch (e) {
@@ -122,16 +114,16 @@ function tipsMsg(id) {
       </li>
     </ul>
     <div class="op">
-      <div class="btn" v-if="messages && messages.length > 0 && messages.length % 20 == 0 && haveMore && !loading"
+      <div class="btn" v-if="haveMore && !loading"
         @click="loadMessages(messages[messages.length - 1].id)">
         加载更多
       </div>
-      <div class="btn del" v-if="messages && messages.length > 0" @click="deleteMessages">
+      <div class="btn del" v-if="messages.length > 0" @click="deleteMessages">
         删除已加载
       </div>
     </div>
-    <Loading v-if="!messages || loading" />
-    <div v-if="messages && messages.length == 0" class="empty">
+    <Loading v-if="loading" />
+    <div v-if="messages.length == 0" class="empty">
       <NoMsgIcon />
     </div>
   </main>

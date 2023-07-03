@@ -55,11 +55,9 @@ onMounted(() => {
         <div class="sf" v-if="simple" v-for="c in paragraphs">
             <p class="paragraph" v-html="lln.renderText(c)"></p>
         </div>
-        <div v-if="!simple && paragraphs.length > 0">
-            <div>
-                <span v-html="lln.renderText(paragraphs[0])"></span>
-                <span v-if="paragraphs.length > 1">...<a class="showMore">{{ $t('status.showmore') }}</a></span>
-            </div>
+        <div class="overview" v-if="!simple && paragraphs.length > 0">
+            <div v-html="lln.renderText(paragraphs[0])"></div>
+            <div v-if="paragraphs.length > 1">...<a class="showMore">{{ $t('status.showmore') }}</a></div>
         </div>
         <div class="sf" v-if="imageErrCount > 0">
             <ErrorIcon class="icon" />

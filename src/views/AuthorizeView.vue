@@ -1,10 +1,12 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
-let message = ref("")
+const { proxy } = getCurrentInstance()
+const message = ref("")
 
 onMounted(async () => {
     let provider = route.params.provider
@@ -13,19 +15,18 @@ onMounted(async () => {
         message.value = 'An error occurred'
         return
     }
-    let resp = await fetch(`${inject('llnApi')}/o/authorize/${provider}?state=${route.query.state}&code=${code}`, {
-        method: "post",
-    })
-    if (resp.status == 200) {
-        let sessionObj = await resp.json()
+    try {
+        let resp = await proxy.$lln.user.authorize(provider, route.query.state, code)
+        let sessionObj = resp.v
         window.localStorage.setItem('session', JSON.stringify(sessionObj))
         if (!window.localStorage.getItem('lang') && sessionObj.locale) {
             window.localStorage.setItem('lang', sessionObj.locale.split('-')[0])
         }
         window.location.href = resp.headers.get("X-Jump")
         return
+    } catch (e) {
+        message.value = e.message
     }
-    message.value = (await resp.text())
 })
 </script>
 <template>

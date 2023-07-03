@@ -1,6 +1,9 @@
 import http from './net'
 
 const user = {
+    authorize: async (provider, state, code) => {
+        return await http.post(`/o/authorize/${provider}?state=${state}&code=${code}`, {})
+    },
     logout: async function (session) {
         return await http.delete('/i/authorize', {
             session: session

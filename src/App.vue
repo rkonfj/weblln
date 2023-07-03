@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 
 import Login from './components/Login.vue'
 import Labels from './components/Labels.vue'
@@ -12,6 +12,7 @@ import BookmarkIcon from './components/icons/IconBookmark.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
 
+const { proxy } = getCurrentInstance()
 const session = ref()
 const loading = ref()
 const shouldLogin = ref()
@@ -19,8 +20,6 @@ const router = useRouter()
 const tips = ref()
 const mobileSidebar = ref()
 const mobileMain = ref()
-let llnApi = ""
-
 
 router.beforeEach(() => {
   loading.value = true
@@ -53,12 +52,20 @@ const vSwipe = {
 }
 
 onMounted(() => {
-  llnApi = inject('llnApi')
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
+  loadSiteRestriction()
 })
+
+function loadSiteRestriction() {
+  if (session.value) {
+    proxy.$lln.misc.restriction(session.value).then(r => {
+      window.localStorage.setItem('restriction', JSON.stringify(r))
+    })
+  }
+}
 
 function logout() {
   session.value = null
@@ -75,23 +82,23 @@ async function loadTipMessages() {
   if (!session.value) {
     return
   }
-  let resp = await fetch(`${llnApi}/i/messages/tips`, {
-    headers: {
-      "Authorization": session.value.apiKey,
+  try {
+    let resp = await proxy.$lln.message.tips(session.value)
+    if (resp.headers.get("X-Session-Valid") == "false") {
+      session.value = null
     }
-  })
-  if (resp.headers.get("X-Session-Valid") == "false") {
-    session.value = null
+    window.localStorage.setItem('tips', JSON.stringify(resp.v))
+    if (resp.v == null) {
+      tips.value = null
+    } else if (resp.v.length == 100) {
+      tips.value = '99+'
+    } else {
+      tips.value = resp.v.length
+    }
+  } catch (e) {
+    console.error('load tips messages error: ', e.message)
   }
-  let msgs = await resp.json()
-  window.localStorage.setItem('tips', JSON.stringify(msgs))
-  if (msgs == null) {
-    tips.value = null
-  } else if (msgs.length == 100) {
-    tips.value = '99+'
-  } else {
-    tips.value = msgs.length
-  }
+
 }
 function openNav(v) {
   if (window.sessionStorage.getItem('disable-swipe-nav')) {

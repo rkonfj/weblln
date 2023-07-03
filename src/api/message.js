@@ -22,6 +22,9 @@ const message = {
         return await http.get(`/i/messages?size=${size}${afterQuery}`, {
             session: session
         })
+    },
+    tips: async (session) => {
+        return await http.get(`/i/messages/tips`, { session: session })
     }
 }
 

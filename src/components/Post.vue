@@ -19,6 +19,7 @@ const activeClass = ref("")
 const session = ref(null)
 const contentRaw = ref("")
 const paragraphs = ref([])
+const paragraphsContinue = ref([])
 const textarea = ref("")
 const images = ref([])
 const mediaMode = ref()
@@ -27,6 +28,7 @@ const avatar = ref("")
 const progressColor = ref("hsla(160, 100%, 37%, 1)")
 const progressC = ref(0)
 
+const siteRestriction = JSON.parse(window.localStorage.getItem('restriction'))
 
 let llnApi = ""
 
@@ -86,17 +88,19 @@ async function newStatus() {
     })
     loading.value = false
     if (resp.status == 200) {
+        textarea.value.placeholder = props.placeholder
         contentRaw.value = ''
         paragraphs.value = []
+        paragraphsContinue.value = []
         images.value = []
         progressC.value = 0
         resetLocal()
         emit('posted')
     } else if (resp.status == 401) {
-        toast('Api Key expired, please log in again', {type: 'error'})
+        toast('Api Key expired, please log in again', { type: 'error' })
         setTimeout(() => window.location.reload(), 1000)
     } else {
-        toast(await resp.text(), {type: 'error'})
+        toast(await resp.text(), { type: 'error' })
     }
 }
 
@@ -112,18 +116,28 @@ function updateContentModel() {
     const innerHeight = textarea.value.scrollHeight - paddingTop - paddingBottom
     textarea.value.rows = innerHeight / lineHeight
 
-    progressC.value = contentRaw.value.length / 300 * 2 * Math.PI * 10
+    updateContentLengthTips()
 
-    if (contentRaw.value.length > 380) {
-        progressColor.value = 'red'
-    } else {
-        progressColor.value = 'hsla(160, 100%, 37%, 1)'
-    }
     saveToLocal()
     if (contentRaw.value.length > 0 || images.value.length > 0 || paragraphs.value.length > 0) {
         activeClass.value = "active"
     } else {
         activeClass.value = ""
+    }
+}
+
+function updateContentLengthTips() {
+    let lengthLimit = 1
+    if (siteRestriction) {
+        lengthLimit = paragraphs.value.length == 0
+            ? siteRestriction.status.overviewLimit : siteRestriction.status.contentLimit
+    }
+
+    progressC.value = contentRaw.value.length / lengthLimit * 2 * Math.PI * 10
+    if (contentRaw.value.length > lengthLimit) {
+        progressColor.value = 'red'
+    } else {
+        progressColor.value = 'hsla(160, 100%, 37%, 1)'
     }
 }
 
@@ -147,6 +161,34 @@ function addParagraph() {
     nextTick(updateContentModel)
 }
 
+function editParagraph(i) {
+    if (contentRaw.value.length > 0) {
+        paragraphsContinue.value.unshift(contentRaw.value)
+    }
+
+    if (paragraphs.value.length - 1 > i) {
+        for (let p of paragraphs.value.splice(i + 1)) {
+            paragraphsContinue.value.unshift(p)
+        }
+    }
+
+    closeCurrentParagraph()
+}
+
+function editParagraphContinue(i) {
+    if (contentRaw.value.length > 0) {
+        paragraphs.value.push(contentRaw.value)
+    }
+    if (paragraphsContinue.value.length > 0) {
+        for (let p of paragraphsContinue.value.splice(0, i)) {
+            paragraphs.value.push(p)
+        }
+    }
+    contentRaw.value = paragraphsContinue.value.shift()
+    textarea.value.focus()
+    nextTick(updateContentModel)
+}
+
 function closeCurrentParagraph() {
     contentRaw.value = paragraphs.value.pop()
     textarea.value.focus()
@@ -157,9 +199,11 @@ function closeCurrentParagraph() {
 }
 
 function saveToLocal() {
-    let inputKey = `input/${window.location.pathname}`
-    let paragraphsKey = `paragraphs/${window.location.pathname}`
-    let imagesKey = `images/${window.location.pathname}`
+    let inputKey = `input${window.location.pathname}`
+    let paragraphsKey = `paragraphs${window.location.pathname}`
+    let paragraphsContinueKey = `paragraphsContinue${window.location.pathname}`
+    let imagesKey = `images${window.location.pathname}`
+
     if (!contentRaw.value || contentRaw.value.length == 0) {
         window.localStorage.removeItem(inputKey)
     } else {
@@ -170,6 +214,11 @@ function saveToLocal() {
     } else {
         window.localStorage.setItem(paragraphsKey, JSON.stringify(paragraphs.value))
     }
+    if (paragraphsContinue.value.length == 0) {
+        window.localStorage.removeItem(paragraphsContinueKey)
+    } else {
+        window.localStorage.setItem(paragraphsContinueKey, JSON.stringify(paragraphsContinue.value))
+    }
     if (images.value.length == 0) {
         window.localStorage.removeItem(imagesKey)
     } else {
@@ -178,9 +227,10 @@ function saveToLocal() {
 }
 
 function restoreFromLocal() {
-    let inputKey = `input/${window.location.pathname}`
-    let paragraphsKey = `paragraphs/${window.location.pathname}`
-    let imagesKey = `images/${window.location.pathname}`
+    let inputKey = `input${window.location.pathname}`
+    let paragraphsKey = `paragraphs${window.location.pathname}`
+    let paragraphsContinueKey = `paragraphsContinue${window.location.pathname}`
+    let imagesKey = `images${window.location.pathname}`
     let cur = window.localStorage.getItem(inputKey)
     if (cur) {
         contentRaw.value = cur
@@ -189,6 +239,11 @@ function restoreFromLocal() {
     let p = window.localStorage.getItem(paragraphsKey)
     if (p) {
         paragraphs.value = JSON.parse(p)
+    }
+
+    let pc = window.localStorage.getItem(paragraphsContinueKey)
+    if (pc) {
+        paragraphsContinue.value = JSON.parse(pc)
     }
 
     let imgs = window.localStorage.getItem(imagesKey)
@@ -217,7 +272,8 @@ function resetLocal() {
             </a>
         </div>
         <div class="content">
-            <p class="paragraph" v-for="p in paragraphs" v-html="lln.renderText(p)"></p>
+            <p class="paragraph" @click="editParagraph(i)" v-for="(p, i) in paragraphs" :key="i" v-html="lln.renderText(p)">
+            </p>
             <div class="editarea">
                 <div class="close" @click="closeCurrentParagraph" v-if="paragraphs.length > 0">
                     <CloseIcon />
@@ -226,6 +282,9 @@ function resetLocal() {
                     @paste="paseText" @input="updateContentModel" :placeholder="placeholder">
                 </textarea>
             </div>
+            <p class="paragraph" @click="editParagraphContinue(i)" v-for="(p, i) in paragraphsContinue" :key="i"
+                v-html="lln.renderText(p)">
+            </p>
             <div class="media" v-if="images.length > 0">
                 <div v-if="images.length == 1" class="image">
                     <div class="close" @click="removeMedia(0)">
@@ -413,9 +472,11 @@ function resetLocal() {
     flex: 1;
     width: 0;
 }
+
 .content .media .fc:first-child {
     margin-right: 5px;
 }
+
 .content .media .fc .h50:first-child {
     margin-bottom: 5px;
 }
