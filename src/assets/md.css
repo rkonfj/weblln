@@ -50,11 +50,17 @@ pre::-webkit-scrollbar-thumb {
     margin-left: 20px;
 }
 
+.raw ul li,
+.paragraph ul li {
+    list-style: disc;
+    margin-left: 20px;
+}
+
 .raw h2,
 .paragraph h2 {
     border-bottom: 1px solid var(--lln-color-border);
     margin-bottom: 5px;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .codeblock {

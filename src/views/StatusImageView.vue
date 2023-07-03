@@ -61,7 +61,7 @@ function renderImages(ctx) {
 <template>
     <div class="mainarea">
         <div class="imagepreview" v-swipe="showImage">
-            <div v-if="images">
+            <div v-if="images && images.length > curImage">
                 <div class="count"><span>{{ curImage + 1 }}</span>/<span>{{ images.length }}</span></div>
                 <div class="close btn" @click="$router.go(-1)">
                     <CloseIcon />
