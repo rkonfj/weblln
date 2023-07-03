@@ -1,4 +1,4 @@
-https://open.lowlevelnews.com
+https://{$LLN_DOMAIN}
 
 @proxy {
     path /i/* /o/*

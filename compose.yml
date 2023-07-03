@@ -50,6 +50,8 @@ services:
     restart: always
     image: rkonfj/weblln:v0.1.0
     container_name: weblln
+    environment:
+      LLN_DOMAIN: open.lowlevelnews.com
     network_mode: host
     deploy:
       resources:
