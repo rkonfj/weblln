@@ -16,39 +16,43 @@ const imageLoadCount = ref(0)
 onMounted(() => {
     for (let c of props.status.content) {
         if (c.type == 'img') {
-            (function (idx) {
-                let img = new Image()
-                img.src = c.value
-                img.onload = () => {
-                    let unshifted = true
-                    for (let i in images.value) {
-                        if (idx > images.value[i].i) {
-                            continue
-                        }
-                        images.value.splice(i, 0, { i: idx, v: c.value })
-                        unshifted = false
-                    }
-                    if (unshifted) {
-                        images.value.push({ i: idx, v: c.value })
-                    }
-                    emit('imagesReady', {
-                        imgs: images.value,
-                        imgCount: imageCount.value,
-                        imgLoadCount: imageLoadCount.value,
-                        imgErrCount: imageErrCount.value
-                    })
-                    imageLoadCount.value++
-                }
-                img.onerror = () => {
-                    imageErrCount.value++
-                }
-            })(imageCount.value)
+            handleImageContent(c, imageCount.value)
             imageCount.value++
         } else {
             paragraphs.value.push(c.value)
         }
     }
 })
+
+function handleImageContent(c, idx) {
+    let img = new Image()
+    img.src = c.value
+    img.onload = () => {
+        let unshifted = true
+        // asc order
+        for (let i in images.value) {
+            if (idx > images.value[i].i) {
+                continue
+            }
+            images.value.splice(idx, 0, { i: idx, v: c.value })
+            unshifted = false
+        }
+        if (unshifted) {
+            images.value.push({ i: idx, v: c.value })
+        }
+
+        emit('imagesReady', {
+            imgs: images.value,
+            imgCount: imageCount.value,
+            imgLoadCount: imageLoadCount.value,
+            imgErrCount: imageErrCount.value
+        })
+        imageLoadCount.value++
+    }
+    img.onerror = () => {
+        imageErrCount.value++
+    }
+}
 </script>
 <template>
     <div class="raw">
@@ -183,7 +187,6 @@ onMounted(() => {
     overflow: hidden;
     border-radius: 12px;
     box-sizing: content-box;
-    overflow: hidden;
     min-width: fit-content;
     aspect-ratio: 5/3;
     box-shadow: 0 0 5px var(--lln-color-timeline);

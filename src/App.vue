@@ -427,3 +427,14 @@ footer .foot a:hover {
   }
 }
 </style>
+<style>
+.Toastify__toast {
+  padding: 5px 12px;
+  background-color: var(--color-main);
+  box-shadow: var(--color-main);
+  color: #fff;
+}
+.Toastify__toast-icon {
+  width: 14px;
+}
+</style>

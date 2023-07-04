@@ -224,6 +224,7 @@ async function deleteStatus() {
   position: absolute;
   top: -6px;
   right: -5px;
+  z-index: 11;
 }
 
 .status .menu ul {

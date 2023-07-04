@@ -20,6 +20,8 @@
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
+  --color-main: hsla(160, 100%, 37%, 1);
+
   /* semantic color variables for this project */
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
