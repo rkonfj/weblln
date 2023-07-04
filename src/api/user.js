@@ -26,6 +26,9 @@ const user = {
             afterQuery = '&after=' + after
         }
         return await http.get(`/i/bookmarks?size=${size}${afterQuery}`, { session: session })
+    },
+    profile: async (uniqueName, session) => {
+        return await http.get(`/o/user/${uniqueName}`, { session: session })
     }
 }
 

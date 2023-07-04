@@ -488,7 +488,6 @@ function resetLocal() {
     overflow: hidden;
     border-radius: 12px;
     box-sizing: content-box;
-    overflow: hidden;
     min-width: fit-content;
     aspect-ratio: 5/3;
     box-shadow: 0 0 5px var(--lln-color-timeline);

@@ -4,10 +4,9 @@ import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
 import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
-import { ref, onMounted, inject, getCurrentInstance } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
-import { toast } from 'vue3-toastify'
 
 const emit = defineEmits(['shouldLogin'])
 const { proxy } = getCurrentInstance()
@@ -17,24 +16,18 @@ const session = ref()
 const status = ref([])
 const loading = ref(true)
 const haveMore = ref()
-let llnApi = ""
-
 
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  llnApi = inject('llnApi')
-  let opts = {}
-  if (session.value) {
-    opts.headers = {
-      "Authorization": session.value.apiKey,
-    }
+  try {
+    profile.value = await proxy.$lln.user.profile(route.params.uniqueName, session.value)
+    loadStatus()
+  } catch (e) {
+    proxy.$toast(e.message, { type: 'error' })
   }
-  let resp = await fetch(`${llnApi}/o/user/${route.params.uniqueName}`, opts)
-  profile.value = await resp.json()
-  loadStatus()
 })
 
 async function loadStatus(after) {
@@ -58,23 +51,17 @@ async function follow() {
     emit('shouldLogin')
     return
   }
-
-  let resp = await fetch(`${llnApi}/i/follow/user/${profile.value.uniqueName}`, {
-    method: 'POST',
-    headers: {
-      "Authorization": session.value.apiKey,
+  try {
+    await proxy.$lln.user.follow(profile.value.uniqueName, session.value)
+    profile.value.following = !profile.value.following
+    profile.value.following ? profile.value.followers++ : profile.value.followers--
+  } catch (e) {
+    if (resp.status == 401) {
+      emit('shouldLogin')
+      return
     }
-  })
-  if (resp.status == 401) {
-    toast('401')
-    return
+    proxy.$toast(e.message, { type: 'error' })
   }
-  if (resp.status != 200) {
-    toast(await resp.text())
-    return
-  }
-  profile.value.following = !profile.value.following
-  profile.value.following ? profile.value.followers++ : profile.value.followers--
 }
 </script>
 <template>
@@ -99,11 +86,11 @@ async function follow() {
         </div>
         <div class="info">
           <div class="item">
-            <a class="" @click="toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followings }}</span> {{
+            <a class="" @click="$toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followings }}</span> {{
               $t('user.following') }}</a>
           </div>
           <div class="item">
-            <a class="" @click="toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followers }}</span> {{
+            <a class="" @click="$toast('暂不支持查看', { type: 'warning' })"><span>{{ profile.followers }}</span> {{
               $t('user.followers') }}</a>
           </div>
         </div>
@@ -127,10 +114,6 @@ main {
   border-right: 1px solid var(--lln-color-border);
 }
 
-main ul {
-  margin-top: 10px;
-}
-
 main .loadbtn,
 main ul li {
   display: flex;
@@ -149,6 +132,10 @@ main .loadbtn {
   justify-content: center;
   align-items: center;
   color: hsla(160, 100%, 37%, 1);
+}
+
+.mainarea {
+  border-bottom: 1px solid var(--lln-color-border);
 }
 
 .mainarea .bg {
@@ -200,7 +187,7 @@ main .loadbtn {
   display: inline-block;
   position: absolute;
   top: -45px;
-  right: 20px;
+  right: 15px;
 }
 
 .mainarea .profile .bio {
