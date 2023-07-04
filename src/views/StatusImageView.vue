@@ -45,10 +45,10 @@ const vSwipe = {
 }
 
 function showImage(v) {
-    if (v > 80 && curImage.value > 0 && nextSwipe.value) {
+    if (v > 50 && curImage.value > 0 && nextSwipe.value) {
         curImage.value--
         nextSwipe.value = false
-    } else if (v < -80 && curImage.value < images.value.length - 1 && nextSwipe.value) {
+    } else if (v < -50 && curImage.value < images.value.length - 1 && nextSwipe.value) {
         curImage.value++
         nextSwipe.value = false
     }
