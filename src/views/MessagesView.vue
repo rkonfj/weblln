@@ -123,7 +123,7 @@ function tipsMsg(id) {
       </div>
     </div>
     <Loading v-if="loading" />
-    <div v-if="messages.length == 0" class="empty">
+    <div v-if="messages.length == 0 && !loading" class="empty">
       <NoMsgIcon />
     </div>
   </main>
