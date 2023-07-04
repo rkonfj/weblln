@@ -96,6 +96,7 @@ async function newStatus() {
         progressC.value = 0
         resetLocal()
         emit('posted')
+        toast(t('tips.success'), { type: 'success' })
     } else if (resp.status == 401) {
         toast('Api Key expired, please log in again', { type: 'error' })
         setTimeout(() => window.location.reload(), 1000)
@@ -253,11 +254,13 @@ function restoreFromLocal() {
 }
 
 function resetLocal() {
-    let inputKey = `input/${window.location.pathname}`
-    let paragraphsKey = `paragraphs/${window.location.pathname}`
-    let imagesKey = `images/${window.location.pathname}`
+    let inputKey = `input${window.location.pathname}`
+    let paragraphsKey = `paragraphs${window.location.pathname}`
+    let paragraphsContinueKey = `paragraphsContinue${window.location.pathname}`
+    let imagesKey = `images${window.location.pathname}`
     window.localStorage.removeItem(inputKey)
     window.localStorage.removeItem(paragraphsKey)
+    window.localStorage.removeItem(paragraphsContinueKey)
     window.localStorage.removeItem(imagesKey)
 }
 

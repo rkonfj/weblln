@@ -428,13 +428,30 @@ footer .foot a:hover {
 }
 </style>
 <style>
-.Toastify__toast {
-  padding: 5px 12px;
-  background-color: var(--color-main);
-  box-shadow: var(--color-main);
-  color: #fff;
-}
-.Toastify__toast-icon {
-  width: 14px;
+@media (min-width: 60rem) {
+  .Toastify {
+    --toastify-icon-color-success: #fff;
+    --toastify-icon-color-error: #fff;
+    --toastify-icon-color-warning: #fff;
+  }
+
+  .Toastify__toast {
+    padding: 5px 12px;
+    background-color: var(--color-main);
+    box-shadow: var(--color-main);
+    color: #fff;
+  }
+
+  .Toastify__toast--error {
+    background-color: var(--toastify-color-error);
+  }
+
+  .Toastify__toast--warning {
+    background-color: var(--toastify-color-warning);
+  }
+
+  .Toastify__toast-icon {
+    width: 16px;
+  }
 }
 </style>

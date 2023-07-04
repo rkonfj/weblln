@@ -91,8 +91,21 @@ async function loadNewStatus() {
       session.value = null
     }
     if (resp.v) {
+      const removeList = []
       for (let s of resp.v) {
         status.value.unshift(s)
+        if (s.prev) {
+          removeList.push(s.prev.id)
+        }
+      }
+
+      // remove linked status
+      let i = status.value.length
+      while(i--) {
+        let s = status.value[i]
+        if (removeList.includes(s.id)) {
+          status.value.splice(i, 1)
+        }
       }
     }
     news.value = 0
