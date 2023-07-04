@@ -1,6 +1,8 @@
 <script setup>
 import { inject, ref, onMounted } from 'vue';
 import GoogleIcon from './icons/IconGoogle.vue'
+import GithubIcon from './icons/GithubIcon.vue'
+
 import { RouterLink } from 'vue-router'
 const llnApi = ref("")
 onMounted(() => {
@@ -13,18 +15,21 @@ onMounted(() => {
         <h2>{{ $t('nav.hello') }}</h2>
         <div class="tips">{{ $t('nav.welcome') }}</div>
         <div class="btnarea">
+            <a class="loginbtn" :href="`${llnApi}/o/oidc/github?jump=${$route.path}`">
+                <GithubIcon /><div class="text">{{ $t('nav.githubauth') }}</div>
+            </a>
             <a class="loginbtn" :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
-                <GoogleIcon /><span>{{ $t('nav.googleauth') }}</span>
+                <GoogleIcon /><div class="text">{{ $t('nav.googleauth') }}</div>
             </a>
         </div>
-        <div class="tips">
+        <div class="tips links">
             {{ $t('misc.signinagree') }} <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> {{ $t('misc.and') }}
             <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>
 </template>
 
-<style scoped>
+<style>
 .sidelogin {
     width: 320px;
     border: 1px solid var(--lln-color-border);
@@ -39,13 +44,19 @@ onMounted(() => {
     padding: 5px 10px;
     border-radius: 20px;
     width: 100%;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
     font-size: 16px;
     justify-content: center;
 }
 
-.sidelogin .loginbtn span {
+.sidelogin .loginbtn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sidelogin .loginbtn .text {
     margin-left: 6px;
     color: var(--lln-color-text);
     font-weight: bolder;
@@ -63,7 +74,6 @@ onMounted(() => {
 }
 
 h2 {
-    padding: 0 3px;
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;

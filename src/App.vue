@@ -20,6 +20,7 @@ const router = useRouter()
 const tips = ref()
 const mobileSidebar = ref()
 const mobileMain = ref()
+const showFullLogin = ref()
 
 router.beforeEach(() => {
   loading.value = true
@@ -181,7 +182,12 @@ function closeNav(v) {
       </transition>
     </RouterView>
     <Loading v-if="loading" />
-    <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
+    <div v-if="!session && !showFullLogin" @click="showFullLogin = true" :class="{ 'shake': shouldLogin }"
+      class="sidelogin">
+      <h2>{{ $t('nav.hello') }}</h2>
+      <div class="tips">{{ $t('nav.welcome') }}</div>
+    </div>
+    <Login v-if="!session && showFullLogin" :class="{ 'shake': shouldLogin }" />
   </div>
   <div class="right-sidebar">
     <footer>
