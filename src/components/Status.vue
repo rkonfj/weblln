@@ -14,8 +14,7 @@ import DeleteIcon from '../components/icons/DeleteIcon.vue'
 import FollowIcon from '../components/icons/FollowIcon.vue'
 import UnfollowIcon from '../components/icons/UnfollowIcon.vue'
 import CodeIcon from '../components/icons/CodeIcon.vue'
-
-
+import VerifiedIcon from './icons/VerifiedIcon.vue'
 
 const emit = defineEmits(['shouldLogin', 'imagesReady', 'deleted'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple', 'menu'])
@@ -173,15 +172,19 @@ async function deleteStatus() {
       <div v-if="timeline" class="timeline"></div>
     </div>
     <div class="content">
-      <div class="author" v-if="!simple">
-        <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+      <div class="author" @click.stop="$router.push(`/${status.user.uniqueName}`)" v-if="!simple">
+        <a>{{ status.user.name }}</a>
+        <VerifiedIcon v-if="status.user.verifiedCode == 1" class="verified" />
         <span>@{{ status.user.uniqueName }}</span>
         <span class="w">·</span>
         <span class="w" :title="DateTime.fromISO(status.createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)">{{
           DateTime.fromISO(status.createTime).toRelative() }}</span>
       </div>
-      <div class="author simpleauthor" v-if="simple">
-        <RouterLink @click.stop :to="`/${status.user.uniqueName}`">{{ status.user.name }}</RouterLink>
+      <div class="author simpleauthor" @click.stop="$router.push(`/${status.user.uniqueName}`)" v-if="simple">
+        <a>
+          {{ status.user.name }}
+          <VerifiedIcon v-if="status.user.verifiedCode == 1" class="verified" />
+        </a>
         <span>@{{ status.user.uniqueName }}</span>
       </div>
       <div v-if="status.prev && status.prev.user" class="replyflag">
@@ -330,6 +333,12 @@ async function deleteStatus() {
   display: flex;
 }
 
+.content .author .verified {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+}
+
 .content .author span {
   color: rgb(83, 100, 113);
   margin-left: 10px;
@@ -355,6 +364,10 @@ async function deleteStatus() {
   flex-direction: column;
   height: 40px;
   justify-content: center;
+}
+
+.content .simpleauthor a {
+  display: flex;
 }
 
 .content .simpleauthor span {
@@ -470,6 +483,7 @@ async function deleteStatus() {
   .content {
     margin-top: 0;
   }
+
   .content .author span {
     font-size: 13px;
   }

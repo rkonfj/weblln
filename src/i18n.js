@@ -64,6 +64,9 @@ const messages = {
             confirmdelete: 'Confirm delete',
             tweets: 'Tweets'
         },
+        verified:{
+            c1: "Server Specialist"
+        },
         misc: {
             signinagree: 'By signing in, you agree to the',
             and: 'and',
@@ -134,6 +137,9 @@ const messages = {
             confirmunfollow: '确认取消关注',
             confirmdelete: '确认删除',
             tweets: '推文'
+        },
+        verified:{
+            c1: "服务器玩家"
         },
         misc: {
             signinagree: '认证即表示你同意',

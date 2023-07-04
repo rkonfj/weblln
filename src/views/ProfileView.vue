@@ -4,6 +4,8 @@ import Loading from '../components/Loading.vue'
 import Status from '../components/Status.vue'
 import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
+import VerifiedIcon from '../components/icons/VerifiedIcon.vue'
+
 import { ref, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
@@ -77,7 +79,10 @@ async function follow() {
         <div class="info">
           <Button class="follow" v-if="!session || session.id != profile.id" @click="follow"
             :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
-          <div class="n">{{ profile.name }}</div>
+          <div class="n">{{ profile.name }}
+            <VerifiedIcon v-if="profile.verifiedCode == 1" class="verified" />
+            <span>{{ $t('verified.c1') }}</span>
+          </div>
           <div class="un">@{{ profile.uniqueName }}</div>
           <div class="bio" v-if="profile.bio && profile.bio.length > 0">{{ profile.bio }}</div>
           <div class="join">
@@ -197,6 +202,21 @@ main .loadbtn {
 .mainarea .profile .n {
   font-size: 20px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.mainarea .profile .n .verified {
+  width: 18px;
+  height: 18px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.mainarea .profile .n span {
+  font-size: 12px;
+  color: hsla(160, 100%, 37%, .8);
+  margin-left: 2px;
 }
 
 .mainarea .profile .un {
