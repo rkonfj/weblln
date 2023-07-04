@@ -16,14 +16,17 @@ onMounted(() => {
         <div class="tips">{{ $t('nav.welcome') }}</div>
         <div class="btnarea">
             <a class="loginbtn" :href="`${llnApi}/o/oidc/github?jump=${$route.path}`">
-                <GithubIcon /><div class="text">{{ $t('nav.githubauth') }}</div>
+                <GithubIcon />
+                <div class="text">{{ $t('nav.githubauth') }}</div>
             </a>
             <a class="loginbtn" :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
-                <GoogleIcon /><div class="text">{{ $t('nav.googleauth') }}</div>
+                <GoogleIcon />
+                <div class="text">{{ $t('nav.googleauth') }}</div>
             </a>
         </div>
         <div class="tips links">
-            {{ $t('misc.signinagree') }} <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> {{ $t('misc.and') }}
+            {{ $t('misc.signinagree') }} <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> {{
+                $t('misc.and') }}
             <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>
@@ -72,7 +75,9 @@ onMounted(() => {
     color: #666;
     line-height: 16px;
 }
+</style>
 
+<style scoped>
 h2 {
     margin-bottom: 10px;
     font-size: 20px;

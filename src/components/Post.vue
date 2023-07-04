@@ -518,8 +518,8 @@ function resetLocal() {
 
 .content .raw {
     width: 100%;
-    min-height: 4.5rem;
-    padding: 0.3rem 0 .5rem 0;
+    min-height: 3.5rem;
+    padding: 0.3rem 0 .2rem 0;
     outline: none;
     border: none;
     max-width: 100%;
@@ -641,6 +641,10 @@ function resetLocal() {
 }
 
 @media (max-width: 60rem) {
+    .content .raw {
+        font-size: 16px;
+    }
+
     .content .media img {
         min-height: 60px;
         max-height: 300px;
