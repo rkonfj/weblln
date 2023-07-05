@@ -1,9 +1,10 @@
 code {
     background-color: var(--lln-color-border);
     padding: 2px 5px;
-    margin: 0 2px;
     border-radius: 3px;
+    display: inline-block;
     font-size: 13px;
+    line-height: 13px;
     color: var(--lln-color-code);
     font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
 }
@@ -14,18 +15,18 @@ pre {
     display: block;
     width: 100%;
     margin: 5px 0px;
-    padding: 2px 6px;
+    padding: 8px;
     border-radius: 3px;
     font-size: 13px;
     color: var(--lln-color-code);
     font-family: Monaco, Consolas, 'Ubuntu Mono', Inconsolata, sans-serif;
-    line-height: 18px;
     overflow-x: auto;
 }
 
 pre code {
     margin: 0;
     padding: 0;
+    line-height: 1.25;
 }
 
 pre::-webkit-scrollbar {
