@@ -331,6 +331,7 @@ async function deleteStatus() {
   margin-bottom: 5px;
   color: var(--lln-color-text);
   display: flex;
+  cursor: pointer;
 }
 
 .content .author .verified {

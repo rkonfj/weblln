@@ -1,13 +1,10 @@
 <script setup>
-import { inject, ref, onMounted } from 'vue';
 import GoogleIcon from './icons/IconGoogle.vue'
 import GithubIcon from './icons/GithubIcon.vue'
 
 import { RouterLink } from 'vue-router'
-const llnApi = ref("")
-onMounted(() => {
-    llnApi.value = inject('llnApi')
-})
+import { llnApi, oidcProviders } from '../config'
+
 </script>
 
 <template>
@@ -15,13 +12,15 @@ onMounted(() => {
         <h2>{{ $t('nav.hello') }}</h2>
         <div class="tips">{{ $t('nav.welcome') }}</div>
         <div class="btnarea">
-            <a class="loginbtn" :href="`${llnApi}/o/oidc/github?jump=${$route.path}`">
-                <GithubIcon />
-                <div class="text">{{ $t('nav.githubauth') }}</div>
-            </a>
-            <a class="loginbtn" :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
+            <a v-if="oidcProviders.includes('google')" class="loginbtn"
+                :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
                 <GoogleIcon />
                 <div class="text">{{ $t('nav.googleauth') }}</div>
+            </a>
+            <a v-if="oidcProviders.includes('github')" class="loginbtn"
+                :href="`${llnApi}/o/oidc/github?jump=${$route.path}`">
+                <GithubIcon />
+                <div class="text">{{ $t('nav.githubauth') }}</div>
             </a>
         </div>
         <div class="tips links">
@@ -47,7 +46,7 @@ onMounted(() => {
     padding: 5px 10px;
     border-radius: 20px;
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
     font-size: 16px;

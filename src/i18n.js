@@ -65,7 +65,8 @@ const messages = {
             tweets: 'Tweets'
         },
         verified:{
-            c1: "Server Specialist"
+            c1: "Server Specialist",
+            c2: "Official "
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -139,7 +140,8 @@ const messages = {
             tweets: '推文'
         },
         verified:{
-            c1: "服务器玩家"
+            c1: "服务器玩家",
+            c2: "官方",
         },
         misc: {
             signinagree: '认证即表示你同意',

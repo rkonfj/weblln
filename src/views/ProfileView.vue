@@ -80,8 +80,8 @@ async function follow() {
           <Button class="follow" v-if="!session || session.id != profile.id" @click="follow"
             :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
           <div class="n">{{ profile.name }}
-            <VerifiedIcon v-if="profile.verifiedCode == 1" class="verified" />
-            <span v-if="profile.verifiedCode == 1">{{ $t('verified.c1') }}</span>
+            <VerifiedIcon v-if="profile.verifiedCode > 0" class="verified" />
+            <span v-if="profile.verifiedCode > 0">{{ $t(`verified.c${profile.verifiedCode}`) }}</span>
           </div>
           <div class="un">@{{ profile.uniqueName }}</div>
           <div class="bio" v-if="profile.bio && profile.bio.length > 0">{{ profile.bio }}</div>
