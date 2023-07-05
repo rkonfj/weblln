@@ -101,7 +101,7 @@ async function loadNewStatus() {
 
       // remove linked status
       let i = status.value.length
-      while(i--) {
+      while (i--) {
         let s = status.value[i]
         if (removeList.includes(s.id)) {
           status.value.splice(i, 1)
@@ -124,12 +124,12 @@ async function loadNewStatus() {
     <Loading v-if="loadingNews" />
     <ul>
       <div v-for="(s, i) in status">
-        <li @click="$router.push(`/${s.prev.user.uniqueName}/status/${s.prev.id}`)" v-if="s.prev"
-          style="border-bottom: none;">
-          <Status @shouldLogin="$emit('shouldLogin')" :key="s.prev.id" :timeline="true" :status="s.prev" />
+        <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)" :style="s.next ? `border-bottom: none;` : ''">
+          <Status @shouldLogin="$emit('shouldLogin')" @deleted="status.splice(i, 1)" :key="s.id" :timeline="s.next"
+            :status="s" />
         </li>
-        <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-          <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
+        <li @click="$router.push(`/${s.next.user.uniqueName}/status/${s.next.id}`)" v-if="s.next">
+          <Status @shouldLogin="$emit('shouldLogin')" @deleted="s.next = null" :key="s.next.id" :status="s.next" />
         </li>
       </div>
     </ul>

@@ -40,6 +40,9 @@ const status = {
     },
     newsProbe: async (after, session) => {
         return await http.get(`/o/explore/news-probe?after=${after}`, { session: session })
+    },
+    labels: async (size, session) => {
+        return await http.get(`/o/labels?size=${size}`, { session: session })
     }
 }
 

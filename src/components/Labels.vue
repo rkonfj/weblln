@@ -1,8 +1,9 @@
 <script setup>
 import Loading from '../components/Loading.vue'
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, getCurrentInstance } from 'vue'
 
 const emit = defineEmits(['sessionExpired'])
+const { proxy } = getCurrentInstance()
 const labels = ref()
 const session = ref()
 
@@ -11,20 +12,19 @@ onMounted(async () => {
     if (sessionStr) {
         session.value = JSON.parse(sessionStr)
     }
-    let opts = {}
-    if (session.value) {
-        opts.headers = {
-            "Authorization": session.value.apiKey,
+    try {
+        let resp = await proxy.$lln.status.labels(10, session.value)
+        if (resp.headers.get("X-Session-Valid") == "false") {
+            emit("sessionExpired")
         }
+        labels.value = resp.v
+        if (labels.value == null) {
+            labels.value = []
+        }
+    } catch (e) {
+        proxy.$toast(e.message, { type: 'error' })
     }
-    let resp = await fetch(`${inject('llnApi')}/o/labels`, opts)
-    if (resp.headers.get("X-Session-Valid") == "false") {
-        emit("sessionExpired")
-    }
-    labels.value = await resp.json()
-    if (labels.value == null) {
-        labels.value = []
-    }
+
 })
 </script>
 <template>
@@ -32,7 +32,8 @@ onMounted(async () => {
         <div v-if="labels && labels.length > 0">
             <h2>{{ $t('nav.hot') }}</h2>
             <ul>
-                <li v-for="label in labels" @click="$router.push(`/search/labels/${label.value}`)" :class="$route.params.label === label.value ? 'active' : ''">
+                <li v-for="label in labels" @click="$router.push(`/search/labels/${label.value}`)"
+                    :class="$route.params.label === label.value ? 'active' : ''">
                     <div class="label">#{{ label.value }}</div>
                     <div class="count">{{ label.count }}</div>
                 </li>
