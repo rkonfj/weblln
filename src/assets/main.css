@@ -13,6 +13,7 @@ a,
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
+  outline: none;
 }
 
 ul {
@@ -22,6 +23,7 @@ ul {
 
 li {
   list-style: none;
+  outline: none;
 }
 
 main {

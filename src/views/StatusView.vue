@@ -9,8 +9,9 @@ import LikedIcon from '../components/icons/LikedIcon.vue'
 import BookmarkIcon from '../components/icons/IconBookmark.vue'
 import BookmarkedIcon from '../components/icons/BookmarkIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
+import UpIcon from '../components/icons/UpIcon.vue'
 
-import { ref, onMounted, getCurrentInstance } from 'vue'
+import { ref, markRaw, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import lln from '../lln'
@@ -140,6 +141,32 @@ function share() {
 function handleImagesReady(ctx) {
   emit('imagesReady', ctx)
 }
+
+function buildMenu() {
+  const statusMenu = ref([])
+  if (session.value) {
+    statusMenu.value = [{
+      component: markRaw(UpIcon),
+      title: proxy.$t('btn.recommand'),
+      confirmedtitle: proxy.$t('btn.confirm'),
+      action: recommand,
+    }]
+  }
+  return statusMenu.value
+}
+
+function recommand(s) {
+  if (!this.confirmed) {
+    return true
+  }
+  proxy.$lln.status.recommand(s.id, true, session.value)
+    .then(() => proxy.$toast(proxy.$t('tips.success'), { type: 'success' }))
+    .catch(e => {
+      if (e.code == 403) {
+        proxy.$toast('Forbidden', { type: 'error' })
+      }
+    })
+}
 </script>
 <template>
   <main>
@@ -216,12 +243,19 @@ function handleImagesReady(ctx) {
     <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"
       :btntext="$t('status.reply')" :prevstatus="status[status.length - 1].id" />
     <ul>
-      <li v-for="(s, i) in comments" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status :status="s" @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="comments.splice(i, 1)" />
-      </li>
+      <div v-for="(s, i) in comments">
+        <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)" :style="s.next ? `border-bottom: none;` : ''">
+          <Status @shouldLogin="$emit('shouldLogin')" @deleted="comments.splice(i, 1)" :key="s.id" :timeline="s.next"
+            :status="s" :menu="buildMenu()" />
+        </li>
+        <li @click="$router.push(`/${s.next.user.uniqueName}/status/${s.next.id}`)" v-if="s.next">
+          <Status @shouldLogin="$emit('shouldLogin')" @deleted="s.next = null" :key="s.next.id" :status="s.next"
+            :menu="buildMenu()" />
+        </li>
+      </div>
     </ul>
     <div class="loadbtn" v-if="haveMore && !loading" @click="loadComments(comments[comments.length - 1].createRev)">
-      加载更多
+      {{ $t('nav.showmore') }}
     </div>
     <Loading v-if="status.length == 0 || loading" />
   </main>
@@ -232,7 +266,7 @@ main {
   border-left: 1px solid var(--lln-color-border);
   border-right: 1px solid var(--lln-color-border);
   background-color: var(--color-background);
-  z-index: 1000;
+  z-index: 10;
 }
 
 main .loadbtn,
