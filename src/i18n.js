@@ -29,6 +29,7 @@ const messages = {
             mediaaddr: 'Paste your picture url here',
             paragraph: 'New paragraph',
             showmore: 'Show more',
+            views: 'Views',
             comments: 'Comments',
             likes: 'Likes',
             bookmarks: 'Bookmarks',
@@ -107,8 +108,9 @@ const messages = {
             mediaaddr: '粘贴图片地址到这儿',
             paragraph: '新段落',
             showmore: '显示更多',
+            views: '浏览',
             comments: '评论',
-            likes: '喜欢次数',
+            likes: '喜欢',
             bookmarks: '书签',
             expandtimeline: '展开时间线'
         },

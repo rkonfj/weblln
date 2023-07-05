@@ -188,6 +188,8 @@ function handleImagesReady(ctx) {
       <div class="item dot"
         v-if="status[status.length - 1].comments + status[status.length - 1].likeCount + status[status.length - 1].bookmarks > 0">
         ·</div>
+      <div class="item" v-if="status[status.length - 1].views > 0"><span>{{ status[status.length - 1].views
+      }}</span><span>{{ $t('status.views') }}</span></div>
       <div class="item" v-if="status[status.length - 1].comments > 0"><span>{{ status[status.length - 1].comments
       }}</span><span>{{ $t('status.comments') }}</span></div>
       <div class="item" v-if="status[status.length - 1].likeCount > 0"><span>{{ status[status.length - 1].likeCount

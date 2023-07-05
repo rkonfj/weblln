@@ -318,6 +318,8 @@ async function deleteStatus() {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  border: .5px solid var(--lln-color-border);
+  box-shadow: 0 0 2px var(--lln-color-border);
 }
 
 .avatar svg {
