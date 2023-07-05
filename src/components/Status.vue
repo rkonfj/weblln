@@ -375,7 +375,6 @@ async function deleteStatus() {
   display: flex;
   flex-direction: column;
   height: 40px;
-  justify-content: center;
 }
 
 .content .simpleauthor a {

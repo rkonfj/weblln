@@ -37,8 +37,8 @@ import { llnApi, oidcProviders } from '../config'
     border: 1px solid var(--lln-color-border);
     border-radius: 16px;
     padding: 5px 15px;
-    margin-top: 20px;
-    z-index: 9998;
+    margin-top: 15px;
+    z-index: 12;
 }
 
 .sidelogin .loginbtn {

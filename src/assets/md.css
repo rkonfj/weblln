@@ -39,6 +39,15 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 3px;
 }
 
+hr {
+    height: 2px;
+    border: none;
+    background: var(--lln-color-timeline);
+    width: calc(100% / 5);
+    margin: 10px auto;
+    margin-bottom: 15px;
+}
+
 .raw ol,
 .paragraph ol {
     padding: 0;
@@ -60,7 +69,7 @@ pre::-webkit-scrollbar-thumb {
 .raw h2,
 .paragraph h2 {
     border-bottom: 1px solid var(--lln-color-border);
-    margin-bottom: 5px;
+    margin: 5px 0;
     font-size: 17px;
 }
 

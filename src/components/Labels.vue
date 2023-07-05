@@ -13,7 +13,7 @@ onMounted(async () => {
         session.value = JSON.parse(sessionStr)
     }
     try {
-        let resp = await proxy.$lln.status.labels(10, session.value)
+        let resp = await proxy.$lln.status.labels(12, session.value)
         if (resp.headers.get("X-Session-Valid") == "false") {
             emit("sessionExpired")
         }
@@ -47,13 +47,18 @@ onMounted(async () => {
     width: 320px;
     border: 1px solid var(--lln-color-border);
     border-radius: 16px;
-    padding: 0 0 16px 0;
+    padding: 0 0 12px 0;
     background-color: var(--lln-color-side-bg);
     margin-top: 20px;
 }
 
+.sidelabels ul {
+    overflow-y: auto;
+    max-height: calc(100vh - 420px);
+}
+
 .sidelabels li {
-    padding: 10px 15px;
+    padding: 9px 15px;
     display: flex;
     justify-content: space-between;
 }
@@ -75,12 +80,23 @@ onMounted(async () => {
     color: #666;
 }
 
+.sidelabels ul::-webkit-scrollbar {
+    width: 8px;
+    transition: 0.4s;
+}
+
+.sidelabels ul::-webkit-scrollbar-thumb {
+    background-color: rgb(83, 100, 113, 0.3);
+    border-radius: 3px;
+}
+
 h2 {
     padding: 6px 15px;
     font-size: 20px;
     font-weight: bold;
     color: #000;
     color: var(--lln-color-text);
+    margin-bottom: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
