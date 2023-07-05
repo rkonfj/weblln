@@ -53,7 +53,10 @@ const messages = {
             delete: 'Delete',
             unfollow: 'Unfollow',
             embedtweet: 'Embed Tweet',
-            show: 'Show'
+            show: 'Show',
+            recommand: 'Recommand',
+            notRecommand: 'Not recommand',
+            confirm: 'Confirm'
         },
         tips: {
             success: 'Done',
@@ -128,7 +131,10 @@ const messages = {
             delete: '删除',
             unfollow: '取消关注',
             embedtweet: '嵌入推文',
-            show: '展示'
+            show: '展示',
+            recommand: '推荐',
+            notRecommand: '不推荐',
+            confirm: '确认'
         },
         tips: {
             success: '完成',

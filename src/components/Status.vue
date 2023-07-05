@@ -27,6 +27,11 @@ const confirmed = ref()
 function closeMenu() {
   menuOpened.value = false
   confirmed.value = false
+  if (props.menu) {
+    for (let item of props.menu) {
+      item.confirmed = false
+    }
+  }
 }
 
 onMounted(() => {
@@ -141,8 +146,12 @@ async function deleteStatus() {
         <MenuIcon @click.stop="menuOpened = !menuOpened" />
       </a>
       <transition name="slide-down">
-        <ul v-if="menuOpened" @blur="closeMenu">
-          <li v-for="item in menu" @click="item.action(status)">{{ item.title }}</li>
+        <ul v-if="menuOpened">
+          <li v-for="item in menu" @click.stop="(item.confirmed = item.action(status)) ? '' : (menuOpened = false)">
+            <component :is="item.component"></component>
+            <span v-if="item.confirmed">{{ item.confirmedtitle }}</span>
+            <span v-if="!item.confirmed">{{ item.title }}</span>
+          </li>
           <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id">
             <DeleteIcon class="delete" />
             <span v-if="confirmed" class="delete"> {{ $t('tips.confirmdelete') }}</span>

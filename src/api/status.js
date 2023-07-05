@@ -43,6 +43,12 @@ const status = {
     },
     labels: async (size, session) => {
         return await http.get(`/o/labels?size=${size}`, { session: session })
+    },
+    recommand: async (statusID, recommand, session) => {
+        if (recommand) {
+            return await http.post(`/v/status/${statusID}/recommand`, { session: session })
+        }
+        return await http.delete(`/v/status/${statusID}/recommand`, { session: session })
     }
 }
 

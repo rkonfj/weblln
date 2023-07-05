@@ -5,8 +5,10 @@ import Status from '../components/Status.vue'
 import Button from '../components/Button.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
 import VerifiedIcon from '../components/icons/VerifiedIcon.vue'
+import UpIcon from '../components/icons/UpIcon.vue'
 
-import { ref, onMounted, getCurrentInstance } from 'vue'
+
+import { ref, markRaw, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 
@@ -65,6 +67,32 @@ async function follow() {
     proxy.$toast(e.message, { type: 'error' })
   }
 }
+
+function buildMenu(i) {
+  const statusMenu = ref([])
+  if (session.value) {
+    statusMenu.value = [{
+      component: markRaw(UpIcon),
+      title: proxy.$t('btn.recommand'),
+      confirmedtitle: proxy.$t('btn.confirm'),
+      action: recommand, i: i
+    }]
+  }
+  return statusMenu.value
+}
+
+function recommand(s) {
+  if (!this.confirmed) {
+    return true
+  }
+  proxy.$lln.status.recommand(s.id, true, session.value)
+    .then(() => proxy.$toast(proxy.$t('tips.success'), { type: 'success' }))
+    .catch(e => {
+      if (e.code == 403) {
+        proxy.$toast('Forbidden', { type: 'error' })
+      }
+    })
+}
 </script>
 <template>
   <main>
@@ -103,7 +131,8 @@ async function follow() {
     </div>
     <ul>
       <li v-for="(s, i) in status" @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)">
-        <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s" />
+        <Status @shouldLogin="$emit('shouldLogin')" :key="s.id" @deleted="status.splice(i, 1)" :status="s"
+          :menu="buildMenu(i)" />
       </li>
     </ul>
     <div class="loadbtn" v-if="haveMore && !loading" @click="loadStatus(status[status.length - 1].createRev)">

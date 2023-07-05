@@ -3,7 +3,10 @@ import Status from '../components/Status.vue'
 import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
-import { ref, onMounted, getCurrentInstance, onActivated, onDeactivated } from 'vue'
+import NotIcon from '../components/icons/NotIcon.vue'
+
+
+import { ref, markRaw, onMounted, getCurrentInstance, onActivated, onDeactivated } from 'vue'
 
 const { proxy } = getCurrentInstance()
 const session = ref()
@@ -114,6 +117,34 @@ async function loadNewStatus() {
   }
   loadingNews.value = false
 }
+
+function buildMenu(i) {
+  const menu = ref([])
+  if (session.value) {
+    menu.value = [{
+      component: markRaw(NotIcon),
+      title: proxy.$t('btn.notRecommand'),
+      confirmedtitle: proxy.$t('btn.confirm'),
+      action: notRecommand, i: i
+    }]
+  }
+  return menu.value
+}
+
+async function notRecommand(s) {
+  if (!this.confirmed) {
+    return true
+  }
+  try {
+    await proxy.$lln.status.recommand(s.id, false, session.value)
+    status.value.splice(this.i, 1)
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+  } catch (e) {
+    if (e.code == 403) {
+      proxy.$toast('Forbidden', { type: 'error' })
+    }
+  }
+}
 </script>
 <template>
   <main>
@@ -126,7 +157,7 @@ async function loadNewStatus() {
       <div v-for="(s, i) in status">
         <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)" :style="s.next ? `border-bottom: none;` : ''">
           <Status @shouldLogin="$emit('shouldLogin')" @deleted="status.splice(i, 1)" :key="s.id" :timeline="s.next"
-            :status="s" />
+            :status="s" :menu="buildMenu(i)" />
         </li>
         <li @click="$router.push(`/${s.next.user.uniqueName}/status/${s.next.id}`)" v-if="s.next">
           <Status @shouldLogin="$emit('shouldLogin')" @deleted="s.next = null" :key="s.next.id" :status="s.next" />
