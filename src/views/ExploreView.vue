@@ -120,7 +120,7 @@ async function loadNewStatus() {
 
 function buildMenu(i) {
   const menu = ref([])
-  if (session.value) {
+  if (session.value?.admin) {
     menu.value = [{
       component: markRaw(NotIcon),
       title: proxy.$t('btn.notRecommand'),

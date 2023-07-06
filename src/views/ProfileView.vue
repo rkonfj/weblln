@@ -70,7 +70,7 @@ async function follow() {
 
 function buildMenu(i) {
   const statusMenu = ref([])
-  if (session.value) {
+  if (session.value?.admin) {
     statusMenu.value = [{
       component: markRaw(UpIcon),
       title: proxy.$t('btn.recommand'),
