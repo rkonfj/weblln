@@ -1,6 +1,7 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Button from '../components/Button.vue'
+import Toggle from '@vueform/toggle'
 
 import { useI18n } from 'vue-i18n'
 import { watch, onMounted, ref, inject } from 'vue'
@@ -11,6 +12,7 @@ import { toast } from 'vue3-toastify'
 const session = ref()
 const { t, locale } = useI18n()
 const router = useRouter()
+const imageAutoload = ref(true)
 let llnApi = ""
 
 watch(locale, lang => {
@@ -23,6 +25,7 @@ onMounted(() => {
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
+  imageAutoload.value = !JSON.parse(localStorage.getItem('hideImages'))
   llnApi = inject('llnApi')
 })
 
@@ -44,6 +47,10 @@ async function modifyProfile() {
   }
   toast(t('tips.success'), { type: 'success' })
   setTimeout(() => router.push('/logout'), 1000)
+}
+
+function setImageAutoload(v) {
+  localStorage.setItem('hideImages', !v)
 }
 
 </script>
@@ -75,6 +82,12 @@ async function modifyProfile() {
     </div>
     <div class="language">
       <div class="line">
+        <div class="key">{{ $t('tips.imageautoload') }}</div>
+        <div class="value">
+          <Toggle v-model="imageAutoload" @change="setImageAutoload" />
+        </div>
+      </div>
+      <div class="line">
         <div class="key">{{ $t('nav.lang') }}</div>
         <div class="value">
           <select v-model="$i18n.locale">
@@ -86,6 +99,8 @@ async function modifyProfile() {
     </div>
   </main>
 </template>
+
+<style src="@vueform/toggle/themes/default.css"></style>
 
 <style scoped>
 main {

@@ -66,7 +66,8 @@ const messages = {
             sessionExpired: 'Api key expired, redirect to login',
             confirmunfollow: 'Confirm unfollow',
             confirmdelete: 'Confirm delete',
-            tweets: 'Tweets'
+            tweets: 'Tweets',
+            imageautoload: 'Image autoload'
         },
         verified:{
             c1: "Server Specialist",
@@ -145,7 +146,8 @@ const messages = {
             sessionExpired: 'Api key 失效，请重新登录',
             confirmunfollow: '确认取消关注',
             confirmdelete: '确认删除',
-            tweets: '推文'
+            tweets: '推文',
+            imageautoload: '图片加载'
         },
         verified:{
             c1: "服务器玩家",

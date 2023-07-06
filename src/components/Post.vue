@@ -89,6 +89,7 @@ async function newStatus() {
     loading.value = false
     if (resp.status == 200) {
         textarea.value.placeholder = props.placeholder
+        textarea.value.rows = 2
         contentRaw.value = ''
         paragraphs.value = []
         paragraphsContinue.value = []

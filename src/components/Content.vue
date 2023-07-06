@@ -2,27 +2,40 @@
 import { onMounted, ref } from 'vue';
 import lln from '../lln'
 import ErrorIcon from './icons/ErrorIcon.vue'
+import SuccessIcon from './icons/SuccessIcon.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
 
 const emit = defineEmits(['imagesReady'])
 const props = defineProps(['status', 'simple', 'hideMedia'])
 const images = ref([])
 const paragraphs = ref([])
-const imageCount = ref(0)
 const imageErrCount = ref(0)
 const imageLoadCount = ref(0)
+const hideImages = ref()
+
+const imageBuffer = []
 
 
 onMounted(() => {
     for (let c of props.status.content) {
         if (c.type == 'img') {
-            handleImageContent(c, imageCount.value)
-            imageCount.value++
+            imageBuffer.push(c)
         } else {
             paragraphs.value.push(c.value)
         }
     }
+    hideImages.value = JSON.parse(window.localStorage.getItem('hideImages'))
+    if (!hideImages.value) {
+        loadImages()
+    }
 })
+
+function loadImages() {
+    hideImages.value = false
+    for (let idx in imageBuffer) {
+        handleImageContent(imageBuffer[idx], idx)
+    }
+}
 
 function handleImageContent(c, idx) {
     let img = new Image()
@@ -43,7 +56,7 @@ function handleImageContent(c, idx) {
 
         emit('imagesReady', {
             imgs: images.value,
-            imgCount: imageCount.value,
+            imgCount: imageBuffer.length,
             imgLoadCount: imageLoadCount.value,
             imgErrCount: imageErrCount.value
         })
@@ -67,9 +80,13 @@ function handleImageContent(c, idx) {
             <ErrorIcon class="icon" />
             <span class="error">{{ imageErrCount }} 张图片没有加载成功</span>
         </div>
-        <div class="sf" v-if="imageCount > 0 && imageLoadCount + imageErrCount < imageCount">
+        <div class="sf" v-if="!hideImages && imageBuffer.length > 0 && imageLoadCount + imageErrCount < imageBuffer.length">
             <LoadingIcon class="icon" />
-            <span class="tips">{{ imageCount - imageLoadCount - imageErrCount }} 张图片正在加载</span>
+            <span class="tips">{{ imageBuffer.length - imageLoadCount - imageErrCount }} 张图片正在加载</span>
+        </div>
+        <div class="sf" v-if="hideImages && imageBuffer.length" @click.stop="loadImages">
+            <SuccessIcon class="icon" />
+            <span class="tips success">点击加载 {{ imageBuffer.length }} 张图片</span>
         </div>
         <div class="media" v-if="images.length > 0 && !hideMedia">
             <div v-if="images.length == 1" class="image"><img
@@ -153,6 +170,10 @@ function handleImageContent(c, idx) {
     color: #bbb;
     margin-left: 5px;
     font-size: 13px;
+}
+
+.raw .sf .success {
+    color: hsla(160, 100%, 37%, 1);
 }
 
 .raw .media {
