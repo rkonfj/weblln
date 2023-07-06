@@ -14,7 +14,8 @@ import DeleteIcon from '../components/icons/DeleteIcon.vue'
 import FollowIcon from '../components/icons/FollowIcon.vue'
 import UnfollowIcon from '../components/icons/UnfollowIcon.vue'
 import CodeIcon from '../components/icons/CodeIcon.vue'
-import VerifiedIcon from './icons/VerifiedIcon.vue'
+import Verified from '../components/Verified.vue'
+
 
 const emit = defineEmits(['shouldLogin', 'imagesReady', 'deleted'])
 const props = defineProps(['status', 'timeline', 'hideMedia', 'simple', 'menu'])
@@ -183,7 +184,7 @@ async function deleteStatus() {
     <div class="content">
       <div class="author" @click.stop="$router.push(`/${status.user.uniqueName}`)" v-if="!simple">
         <a>{{ status.user.name }}</a>
-        <VerifiedIcon v-if="status.user.verifiedCode == 1" class="verified" />
+        <Verified v-if="status.user.verifiedCode > 0" :code="status.user.verifiedCode" />
         <span>@{{ status.user.uniqueName }}</span>
         <span class="w">·</span>
         <span class="w" :title="DateTime.fromISO(status.createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)">{{
@@ -192,7 +193,7 @@ async function deleteStatus() {
       <div class="author simpleauthor" @click.stop="$router.push(`/${status.user.uniqueName}`)" v-if="simple">
         <a>
           {{ status.user.name }}
-          <VerifiedIcon v-if="status.user.verifiedCode == 1" class="verified" />
+          <Verified v-if="status.user.verifiedCode > 0" :code="status.user.verifiedCode" />
         </a>
         <span>@{{ status.user.uniqueName }}</span>
       </div>
@@ -343,12 +344,6 @@ async function deleteStatus() {
   color: var(--lln-color-text);
   display: flex;
   cursor: pointer;
-}
-
-.content .author .verified {
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
 }
 
 .content .author span {

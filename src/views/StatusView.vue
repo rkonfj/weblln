@@ -213,7 +213,7 @@ function recommand(s) {
       <div class="time">{{
         DateTime.fromISO(status[status.length - 1].createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY) }}</div>
       <div class="item dot"
-        v-if="status[status.length - 1].comments + status[status.length - 1].likeCount + status[status.length - 1].bookmarks > 0">
+        v-if="status[status.length - 1].views + status[status.length - 1].comments + status[status.length - 1].likeCount + status[status.length - 1].bookmarks > 0">
         ·</div>
       <div class="item" v-if="status[status.length - 1].views > 0"><span>{{ status[status.length - 1].views
       }}</span><span>{{ $t('status.views') }}</span></div>

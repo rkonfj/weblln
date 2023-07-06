@@ -71,7 +71,7 @@ const messages = {
         },
         verified:{
             c1: "Server Specialist",
-            c2: "Official "
+            c11: "Organization"
         },
         misc: {
             signinagree: 'By signing in, you agree to the',
@@ -151,7 +151,7 @@ const messages = {
         },
         verified:{
             c1: "服务器玩家",
-            c2: "官方",
+            c11: "组织号",
         },
         misc: {
             signinagree: '认证即表示你同意',
