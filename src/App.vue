@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { ref, onMounted, getCurrentInstance } from 'vue'
+import { ref, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 
 import Login from './components/Login.vue'
 import Labels from './components/Labels.vue'
@@ -9,6 +9,7 @@ import SettingsIcon from './components/icons/IconSettings.vue'
 import HomeIcon from './components/icons/IconHome.vue'
 import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
+import NotificationIcon from './components/icons/NotificationIcon.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
 
@@ -21,6 +22,8 @@ const tips = ref()
 const mobileSidebar = ref()
 const mobileMain = ref()
 const showFullLogin = ref()
+
+let messagesProbeInterval = null
 
 router.beforeEach(() => {
   loading.value = true
@@ -58,6 +61,16 @@ onMounted(() => {
     session.value = JSON.parse(sessionStr)
   }
   loadSiteRestriction()
+  if (!messagesProbeInterval) {
+    messagesProbeInterval = setInterval(loadTipMessages, 15000)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (messagesProbeInterval) {
+    clearInterval(messagesProbeInterval)
+    messagesProbeInterval = null
+  }
 })
 
 function loadSiteRestriction() {
@@ -132,6 +145,14 @@ function closeNav(v) {
     }
   }
 }
+
+function openNotification() {
+  if (tips.value) {
+    proxy.$router.push('/messages')
+    return
+  }
+  openNav()
+}
 </script>
 
 <template>
@@ -170,7 +191,13 @@ function closeNav(v) {
     </nav>
 
   </div>
-  <div class="main-content" v-swipe="openNav" :style="mobileMain">
+  <div class="main-content" :style="mobileMain">
+    <div class="mobileop" v-swipe="openNav">
+      <div class="btn">
+        <div v-if="tips" class="red"></div>
+        <NotificationIcon @click="openNotification" />
+      </div>
+    </div>
     <RouterView @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" v-slot="{ Component }">
       <transition>
         <keep-alive>
@@ -303,6 +330,7 @@ nav a span {
   min-width: 0;
 }
 
+.main-content .mobileop,
 .main-content .sidelogin {
   display: none;
 }
@@ -380,6 +408,46 @@ footer .foot a:hover {
     bottom: 0;
     background-color: #fff;
     width: 100%;
+  }
+
+  .main-content .mobileop {
+    position: fixed;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    top: 0;
+    right: 0;
+    height: 3.2rem;
+    padding: 0;
+    width: calc(100% - 60px);
+    z-index: 21;
+    background: transparent;
+  }
+
+  .main-content .mobileop .btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 11px;
+    position: relative;
+  }
+
+  .main-content .mobileop .btn .red {
+    position: absolute;
+    right: 5px;
+    top: 2px;
+
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #d6204b;
+  }
+
+  .main-content .mobileop svg {
+    width: 16px;
+    height: 16px;
   }
 }
 

@@ -29,7 +29,7 @@ h2 {
   top: 0;
   color: var(--color-text);
   backdrop-filter: blur(10px);
-  z-index: 10000;
+  z-index: 20;
 }
 
 h2 .block {

@@ -115,10 +115,11 @@ main {
 
 .line {
   display: flex;
-  line-height: 38px;
+  height: min-content;
+  line-height: 18px;
   justify-content: space-between;
   align-items: center;
-  margin: 5px 0;
+  padding: 5px 0;
   min-width: 0;
 }
 
@@ -187,6 +188,7 @@ option {
 
 .language {
   padding: 10px 15px;
+  display: block;
 }
 
 .language span {

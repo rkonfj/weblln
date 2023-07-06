@@ -147,7 +147,7 @@ const messages = {
             confirmunfollow: '确认取消关注',
             confirmdelete: '确认删除',
             tweets: '推文',
-            imageautoload: '图片加载'
+            imageautoload: '加载图片'
         },
         verified:{
             c1: "服务器玩家",
