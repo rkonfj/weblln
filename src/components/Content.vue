@@ -24,7 +24,7 @@ onMounted(() => {
             paragraphs.value.push(c.value)
         }
     }
-    hideImages.value = JSON.parse(window.localStorage.getItem('hideImages'))
+    hideImages.value = JSON.parse(window.localStorage.getItem('hideImages')) && !props.hideMedia
     if (!hideImages.value) {
         loadImages()
     }
