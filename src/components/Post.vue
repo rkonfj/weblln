@@ -4,14 +4,17 @@ import ParagraphIcon from './icons/ParagraphIcon.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 import lln from '../lln'
-import { ref, onMounted, inject, nextTick } from 'vue'
+import { ref, onMounted, inject, nextTick, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { toast } from 'vue3-toastify'
 
+import { llnApi, fileApi, cutQuery53, cutQuery56 } from '../config'
+
 const props = defineProps(['placeholder', 'btntext', 'prevstatus'])
 const emit = defineEmits(['posted'])
 const { t } = useI18n()
+const { proxy } = getCurrentInstance()
 
 const sessionUniqueName = ref("")
 const sessionPicture = ref("")
@@ -27,10 +30,9 @@ const loading = ref(false)
 const avatar = ref("")
 const progressColor = ref("hsla(160, 100%, 37%, 1)")
 const progressC = ref(0)
+const fileHandler = ref()
 
 const siteRestriction = JSON.parse(window.localStorage.getItem('restriction'))
-
-let llnApi = ""
 
 onMounted(() => {
     let sessionStr = window.localStorage.getItem("session")
@@ -45,7 +47,6 @@ onMounted(() => {
     image.onload = () => {
         avatar.value = image.src
     }
-    llnApi = inject('llnApi')
     restoreFromLocal()
 })
 
@@ -265,6 +266,30 @@ function resetLocal() {
     window.localStorage.removeItem(imagesKey)
 }
 
+async function uploadFile(event) {
+    let f = event.target.files[0]
+    try {
+        proxy.$toast('正在上传')
+        let resp = await proxy.$lln.misc.uploadFile(f, session.value)
+        images.value.push(`${resp.path}`)
+        proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+    } catch (e) {
+        if (e.code == 401) {
+            proxy.$toast('401', { type: 'error' })
+            return
+        }
+        proxy.$toast(e.message, { type: 'error' })
+    }
+    fileHandler.value.value = null
+}
+
+function imagePreview(src, h) {
+    if (h) {
+        return `${fileApi}${src}?${cutQuery56}`
+    }
+    return `${fileApi}${src}?${cutQuery53}`
+}
+
 </script>
 
 <template>
@@ -293,64 +318,65 @@ function resetLocal() {
                 <div v-if="images.length == 1" class="image">
                     <div class="close" @click="removeMedia(0)">
                         <CloseIcon />
-                    </div><img :src="images[0]" alt="Image" />
+                    </div><img :src="imagePreview(images[0])" alt="Image" />
                 </div>
                 <div v-if="images.length == 2" class="image w50">
                     <div class="close" @click="removeMedia(0)">
                         <CloseIcon />
-                    </div><img :src="images[0]" alt="Image" />
+                    </div><img :src="imagePreview(images[0])" alt="Image" />
                 </div>
                 <div v-if="images.length == 2" class="image w50">
                     <div class="close" @click="removeMedia(1)">
                         <CloseIcon />
-                    </div><img :src="images[1]" alt="Image" />
+                    </div><img :src="imagePreview(images[1])" alt="Image" />
                 </div>
 
                 <div v-if="images.length == 3" class="image w50 h100">
                     <div class="close" @click="removeMedia(0)">
                         <CloseIcon />
-                    </div><img :src="images[0]" alt="Image" />
+                    </div><img :src="imagePreview(images[0], true)" alt="Image" />
                 </div>
                 <div v-if="images.length == 3" class="fc">
                     <div class="image h50">
                         <div class="close" @click="removeMedia(1)">
                             <CloseIcon />
-                        </div><img :src="images[1]" alt="Image" />
+                        </div><img :src="imagePreview(images[1])" alt="Image" />
                     </div>
                     <div class="image h50">
                         <div class="close" @click="removeMedia(2)">
                             <CloseIcon />
-                        </div><img :src="images[2]" alt="Image" />
+                        </div><img :src="imagePreview(images[2])" alt="Image" />
                     </div>
                 </div>
                 <div v-if="images.length >= 4" class="fc">
                     <div class="image h50">
                         <div class="close" @click="removeMedia(0)">
                             <CloseIcon />
-                        </div><img :src="images[0]" alt="Image" />
+                        </div><img :src="imagePreview(images[0])" alt="Image" />
                     </div>
                     <div class="image h50">
                         <div class="close" @click="removeMedia(1)">
                             <CloseIcon />
-                        </div><img :src="images[1]" alt="Image" />
+                        </div><img :src="imagePreview(images[1])" alt="Image" />
                     </div>
                 </div>
                 <div v-if="images.length >= 4" class="fc">
                     <div class="image h50">
                         <div class="close" @click="removeMedia(2)">
                             <CloseIcon />
-                        </div><img :src="images[2]" alt="Image" />
+                        </div><img :src="imagePreview(images[2])" alt="Image" />
                     </div>
                     <div class="image h50">
                         <div class="close" @click="removeMedia(3)">
                             <CloseIcon />
-                        </div><img :src="images[3]" alt="Image" />
+                        </div><img :src="imagePreview(images[3])" alt="Image" />
                     </div>
                 </div>
             </div>
             <div class="operate">
                 <div class="func">
-                    <a title="媒体" @click="mediaMode = !mediaMode">
+                    <input type="file" accept="image/*" style="display: none;" @change="uploadFile" ref="fileHandler" />
+                    <a title="媒体" @click="fileHandler.click()">
                         <MediaIcon />
                     </a>
                     <input class="mediaAddress" type="text" v-if="mediaMode" :placeholder="$t('status.mediaaddr')"

@@ -5,6 +5,7 @@ import CloseIcon from '../components/icons/CloseIcon.vue'
 import NextIcon from '../components/icons/NextIcon.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router';
+import { fileApi } from '../config'
 
 const curImage = ref(0)
 const images = ref()
@@ -57,6 +58,13 @@ function showImage(v) {
 function renderImages(ctx) {
     images.value = ctx.imgs
 }
+
+function imageSrc(src) {
+    if(src.startsWith('https')) {
+        return src
+    }
+    return `${fileApi}${src}`
+}
 </script>
 <template>
     <div class="mainarea">
@@ -72,7 +80,7 @@ function renderImages(ctx) {
                 <div class="next btn" v-if="curImage != images.length - 1" @click="curImage++">
                     <NextIcon />
                 </div>
-                <img :src="images[curImage].v" alt="Image" />
+                <img :src="imageSrc(images[curImage].v)" alt="Image" />
             </div>
         </div>
         <div class="status">

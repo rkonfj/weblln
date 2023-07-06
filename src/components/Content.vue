@@ -5,6 +5,8 @@ import ErrorIcon from './icons/ErrorIcon.vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
 
+import { fileApi, cutQuery53, cutQuery56 } from '../config';
+
 const emit = defineEmits(['imagesReady'])
 const props = defineProps(['status', 'simple', 'hideMedia'])
 const images = ref([])
@@ -39,7 +41,7 @@ function loadImages() {
 
 function handleImageContent(c, idx) {
     let img = new Image()
-    img.src = c.value
+    img.src = imagePreview(c.value)
     img.onload = () => {
         let unshifted = true
         // asc order
@@ -66,6 +68,31 @@ function handleImageContent(c, idx) {
         imageErrCount.value++
     }
 }
+
+function imagePreview(src, h) {
+    if (src.startsWith('https')) {
+        return src
+    }
+    if (h) {
+        return `${fileApi}${src}?${cutQuery56}`
+    }
+    return `${fileApi}${src}?${cutQuery53}`
+}
+
+function calcImageClass(i) {
+    if (images.value.length == 2) {
+        return 'w50'
+    }
+    if (images.value.length == 3 && i == 0) {
+        return 'w50 h100'
+    }
+    if (images.value.length == 3 && i != 0) {
+        return 'h50'
+    }
+    if (images.value.length == 4 && i != 0) {
+        return 'h50'
+    }
+}
 </script>
 <template>
     <div class="raw">
@@ -90,41 +117,41 @@ function handleImageContent(c, idx) {
         </div>
         <div class="media" v-if="images.length > 0 && !hideMedia">
             <div v-if="images.length == 1" class="image"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
-                    alt="Image" /></div>
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
+                    :src="imagePreview(images[0].v)" alt="Image" /></div>
             <div v-if="images.length == 2" class="image w50 "><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
-                    alt="Image" /></div>
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
+                    :src="imagePreview(images[0].v)" alt="Image" /></div>
             <div v-if="images.length == 2" class="image w50"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)" :src="images[1].v"
-                    alt="Image" /></div>
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
+                    :src="imagePreview(images[1].v)" alt="Image" /></div>
 
             <div v-if="images.length == 3" class="image w50 h100"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)" :src="images[0].v"
-                    alt="Image" /></div>
+                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
+                    :src="imagePreview(images[0].v, true)" alt="Image" /></div>
             <div v-if="images.length == 3" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-                        :src="images[1].v" alt="Image" /></div>
+                        :src="imagePreview(images[1].v)" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-                        :src="images[2].v" alt="Image" /></div>
+                        :src="imagePreview(images[2].v)" alt="Image" /></div>
             </div>
             <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
-                        :src="images[0].v" alt="Image" /></div>
+                        :src="imagePreview(images[0].v)" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/2`)"
-                        :src="images[1].v" alt="Image" /></div>
+                        :src="imagePreview(images[1].v)" alt="Image" /></div>
             </div>
             <div v-if="images.length >= 4" class="fc">
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/3`)"
-                        :src="images[2].v" alt="Image" /></div>
+                        :src="imagePreview(images[2].v)" alt="Image" /></div>
                 <div class="image h50"><img
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)"
-                        :src="images[3].v" alt="Image" /></div>
+                        :src="imagePreview(images[3].v)" alt="Image" /></div>
             </div>
         </div>
     </div>
