@@ -6,7 +6,7 @@ import Loading from '../components/Loading.vue'
 import NotIcon from '../components/icons/NotIcon.vue'
 
 
-import { ref, markRaw, onMounted, getCurrentInstance, onActivated, onDeactivated } from 'vue'
+import { ref, markRaw, onMounted, getCurrentInstance, onActivated, onDeactivated, nextTick } from 'vue'
 
 const { proxy } = getCurrentInstance()
 const session = ref()
@@ -33,6 +33,11 @@ onActivated(async () => {
   if (!newsProbeInterval) {
     newsProbeInterval = setInterval(newsProbe, 15000)
   }
+
+  let scrollY = parseInt(window.sessionStorage.getItem('exploreScrollY'))
+  if (scrollY && scrollY > 0) {
+    nextTick(() => window.scrollTo(0, scrollY))
+  }
 })
 
 onDeactivated(() => {
@@ -40,6 +45,7 @@ onDeactivated(() => {
     clearInterval(newsProbeInterval)
     newsProbeInterval = null
   }
+  window.sessionStorage.setItem('exploreScrollY', window.scrollY)
 })
 
 async function loadExploreData(opts) {
