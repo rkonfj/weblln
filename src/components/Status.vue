@@ -247,7 +247,7 @@ async function deleteStatus() {
   background-color: var(--color-background);
   border: 1px solid var(--lln-color-border);
   border-radius: 15px;
-  box-shadow: 0 0 10px var(--lln-color-border);
+  box-shadow: 0 0 5px var(--lln-color-border);
   padding: 0;
 }
 
