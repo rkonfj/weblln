@@ -115,7 +115,7 @@ function tipsMsg(id) {
     </ul>
     <div class="op">
       <div class="btn" v-if="haveMore && !loading"
-        @click="loadMessages(messages[messages.length - 1].id)">
+        @click="loadMessages(messages[messages.length - 1].createRev)">
         加载更多
       </div>
       <div class="btn del" v-if="messages.length > 0" @click="deleteMessages">
