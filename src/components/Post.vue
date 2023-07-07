@@ -267,6 +267,10 @@ function resetLocal() {
 }
 
 async function uploadFile(event) {
+    if (event.target.files.length == 0) {
+        proxy.$toast('取消上传', { type: 'error' })
+        return
+    }
     let f = event.target.files[0]
     try {
         proxy.$toast('正在上传')
@@ -284,10 +288,46 @@ async function uploadFile(event) {
 }
 
 function imagePreview(src, h) {
+    if (src.startsWith('https')) {
+        return src
+    }
     if (h) {
         return `${fileApi}${src}?${cutQuery56}`
     }
     return `${fileApi}${src}?${cutQuery53}`
+}
+
+
+let pasteImageURLTimer = null
+function pasteImageURL(e) {
+    e.stopPropagation()
+    if (pasteImageURLTimer) {
+        return
+    }
+    pasteImageURLTimer = setTimeout(async () => {
+        if (navigator.clipboard) {
+            try {
+                let text = await navigator.clipboard.readText()
+                if (text.startsWith('https')) {
+                    images.value.push(text)
+                } else {
+                    proxy.$toast('不支持的图片格式，正在准备上传')
+                }
+            } catch (e) {
+                proxy.$toast(`${proxy.$t('misc.badop')}: ${e.message}`)
+            }
+        } else {
+            proxy.$toast(proxy.$t('misc.badop'))
+        }
+        stopPasteImageURL()
+    }, 600)
+}
+
+function stopPasteImageURL() {
+    if (pasteImageURLTimer) {
+        clearTimeout(pasteImageURLTimer)
+        pasteImageURLTimer = null
+    }
 }
 
 </script>
@@ -376,7 +416,8 @@ function imagePreview(src, h) {
             <div class="operate">
                 <div class="func">
                     <input type="file" accept="image/*" style="display: none;" @change="uploadFile" ref="fileHandler" />
-                    <a title="媒体" @click="fileHandler.click()">
+                    <a title="媒体" @click="fileHandler.click()" @touchstart="pasteImageURL" @mousedown="pasteImageURL"
+                        @touchend="stopPasteImageURL" @mouseup="stopPasteImageURL">
                         <MediaIcon />
                     </a>
                     <input class="mediaAddress" type="text" v-if="mediaMode" :placeholder="$t('status.mediaaddr')"
@@ -468,6 +509,7 @@ function imagePreview(src, h) {
     justify-content: space-between;
     align-items: flex-start;
     margin: 10px 0;
+    user-select: none;
 }
 
 .content .media .close {

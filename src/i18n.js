@@ -62,6 +62,8 @@ const messages = {
         tips: {
             success: 'Done',
             failed: 'Failed',
+            canceled: 'Canceled',
+            uploading: 'Uploading',
             copied: 'Copied to clipboard',
             sessionExpired: 'Api key expired, redirect to login',
             confirmunfollow: 'Confirm unfollow',
@@ -142,6 +144,8 @@ const messages = {
         tips: {
             success: '完成',
             failed: '操作失败',
+            canceled: '已取消',
+            uploading: '正在上传',
             copied: '已复制到剪贴板',
             sessionExpired: 'Api key 失效，请重新登录',
             confirmunfollow: '确认取消关注',
