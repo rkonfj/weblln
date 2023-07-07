@@ -80,10 +80,44 @@ async function loadExploreData(opts) {
 async function newsProbe() {
   if (status.value.length > 0) {
     try {
-      let resp = await proxy.$lln.status.newsProbe(status.value[0].createRev, session.value)
-      news.value = resp.v
+      let max = status.value[0].createRev;
+      let min = status.value.length > 20 ?
+        status.value[19].createRev : status.value[status.value.length - 1].createRev
+      let resp = await proxy.$lln.status.newsProbe(min, max, session.value)
+      news.value = resp.v.news
+      upgradeStatus(resp.v.cm, resp.v.lm)
     } catch (e) {
       console.error('explore news probe error: ', e.message)
+    }
+  }
+}
+
+async function upgradeStatus(cm, lm) {
+  console.log(lm, cm)
+  if (lm) {
+    for (let i = 0; i < Object.keys(lm).length; i++) {
+      console.log(lm[status.value[i].id])
+      status.value[i].likeCount = lm[status.value[i].id]
+    }
+  }
+  if (cm) {
+    for (let i = 0; i < Object.keys(cm).length; i++) {
+      if (cm[status.value[i].id] == 0) {
+        status.value[i].next = null
+        status.value[i].comments = cm[status.value[i].id]
+        continue
+      }
+      if (cm[status.value[i].id] > status.value[i].comments) {
+        try {
+          let r = await proxy.$lln.status.getStatusRecommandComment(status.value[i].id, session.value)
+          if (r && r.v) {
+            status.value[i].next = r.v
+            status.value[i].comments = cm[status.value[i].id]
+          }
+        } catch (e) {
+          console.error(e.message)
+        }
+      }
     }
   }
 }

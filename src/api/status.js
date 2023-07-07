@@ -38,8 +38,8 @@ const status = {
         return await http.get(`/o/search?type=${opts.type}&value=${opts.value}&size=${opts.size}${afterQuery}`,
             { session: opts.session })
     },
-    newsProbe: async (after, session) => {
-        return await http.get(`/o/explore/news-probe?after=${after}`, { session: session })
+    newsProbe: async (min, max, session) => {
+        return await http.get(`/o/explore/news-probe?min=${min}&max=${max}`, { session: session })
     },
     labels: async (size, session) => {
         return await http.get(`/o/labels?size=${size}`, { session: session })
@@ -49,6 +49,9 @@ const status = {
             return await http.post(`/v/status/${statusID}/recommand`, { session: session })
         }
         return await http.delete(`/v/status/${statusID}/recommand`, { session: session })
+    },
+    getStatusRecommandComment: async (statusID, session) => {
+        return await http.get(`/o/explore/status/${statusID}/comment`, { session: session })
     }
 }
 
