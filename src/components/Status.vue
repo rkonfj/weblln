@@ -3,7 +3,10 @@ import { onMounted, ref, nextTick, getCurrentInstance, onBeforeUnmount } from 'v
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
 
+import lln from '../lln'
+
 import Content from './Content.vue'
+import Avatar from './Avatar.vue'
 import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
@@ -41,7 +44,7 @@ onMounted(() => {
     session.value = JSON.parse(sessionStr)
   }
   const image = new Image()
-  image.src = props.status.user.picture
+  image.src = lln.avatarPreview(props.status.user.picture)
   image.onload = () => {
     avatar.value = image.src
   }
@@ -176,7 +179,7 @@ async function deleteStatus() {
     </div>
     <div class="avatararea">
       <RouterLink @click.stop :to="`/${status.user.uniqueName}`" class="avatar">
-        <img v-if="avatar" class="avatarimg" :src="status.user.picture" alt="avatar" />
+        <Avatar v-if="avatar" class="avatarimg" :src="status.user.picture" />
         <DefaultAvatarIcon class="avatarimg" v-else />
       </RouterLink>
       <div v-if="timeline" class="timeline"></div>

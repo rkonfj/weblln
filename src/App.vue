@@ -315,6 +315,11 @@ nav a span {
   margin-left: 10px;
 }
 
+main {
+  border-left: 1px solid var(--lln-color-border);
+  border-right: 1px solid var(--lln-color-border);
+}
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -390,6 +395,11 @@ footer .foot a:hover {
 @media (max-width: 60rem) {
   nav {
     width: 100%;
+  }
+
+  main {
+    border-left: none;
+    border-right: none;
   }
 
   .sidebar,

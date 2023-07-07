@@ -1,20 +1,21 @@
 <script setup>
+import Avatar from './Avatar.vue'
 import LogoutIcon from './icons/IconLogout.vue'
 defineProps(['session'])
 </script>
 <template>
-    <div class="sessionuser">
-        <RouterLink class="profile" :to="'/' + session.uniqueName">
-            <img :src="session.picture" alt="avatar" />
-            <div class="namearea">
-                <div class="n1">{{ session.name }}</div>
-                <div class="n2">@{{ session.uniqueName }}</div>
-            </div>
-        </RouterLink>
-        <RouterLink class="logout" to="/logout">
-            <LogoutIcon />
-        </RouterLink>
-    </div>
+  <div class="sessionuser">
+    <RouterLink class="profile" :to="'/' + session.uniqueName">
+      <Avatar :src="session.picture" />
+      <div class="namearea">
+        <div class="n1">{{ session.name }}</div>
+        <div class="n2">@{{ session.uniqueName }}</div>
+      </div>
+    </RouterLink>
+    <RouterLink class="logout" to="/logout">
+      <LogoutIcon />
+    </RouterLink>
+  </div>
 </template>
 <style scoped>
 .sessionuser {

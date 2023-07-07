@@ -1,4 +1,5 @@
 import { marked } from 'marked'
+import { fileApi, cutQuery11 } from './config'
 
 const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
 const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
@@ -34,9 +35,17 @@ function loadSession() {
     }
 }
 
+function avatarPreview(src) {
+    if (src.startsWith('https')) {
+        return src
+    }
+    return `${fileApi}${src}?${cutQuery11}`
+}
+
 const lln = {
     renderText: renderText,
-    loadSession: loadSession
+    loadSession: loadSession,
+    avatarPreview: avatarPreview,
 }
 
 export default lln

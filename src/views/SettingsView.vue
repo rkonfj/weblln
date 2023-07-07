@@ -1,19 +1,24 @@
 <script setup>
 import Title from '../components/Title.vue'
 import Button from '../components/Button.vue'
+import Avatar from '../components/Avatar.vue'
+import ProfileBgImage from '../components/ProfileBgImage.vue'
+import PictureEditIcon from '../components/icons/PictureEditIcon.vue'
 import Toggle from '@vueform/toggle'
 
 import { useI18n } from 'vue-i18n'
-import { watch, onMounted, ref, inject } from 'vue'
+import { watch, onMounted, ref, getCurrentInstance } from 'vue'
 import { Settings } from 'luxon'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
+import { llnApi } from '../config'
 
 const session = ref()
 const { t, locale } = useI18n()
+const { proxy } = getCurrentInstance()
 const router = useRouter()
 const imageAutoload = ref(true)
-let llnApi = ""
+const fileHandler = ref()
 
 watch(locale, lang => {
   localStorage.setItem('lang', lang)
@@ -26,7 +31,6 @@ onMounted(() => {
     session.value = JSON.parse(sessionStr)
   }
   imageAutoload.value = !JSON.parse(localStorage.getItem('hideImages'))
-  llnApi = inject('llnApi')
 })
 
 async function modifyProfile() {
@@ -36,6 +40,8 @@ async function modifyProfile() {
       "Authorization": session.value.apiKey,
     },
     body: JSON.stringify({
+      picture: session.value.picture,
+      bg: session.value.bg,
       name: session.value.name,
       uniqueName: session.value.uniqueName,
       bio: session.value.bio
@@ -53,13 +59,49 @@ function setImageAutoload(v) {
   localStorage.setItem('hideImages', !v)
 }
 
+let ep = null
+
+async function uploadFile(event) {
+  if (event.target.files.length == 0) {
+    proxy.$toast('取消上传', { type: 'error' })
+    return
+  }
+  let f = event.target.files[0]
+  try {
+    proxy.$toast('正在上传')
+    let resp = await proxy.$lln.misc.uploadFile(f, session.value)
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+    session.value[ep] = resp.path
+  } catch (e) {
+    if (e.code == 401) {
+      proxy.$toast('401', { type: 'error' })
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  fileHandler.value.value = null
+}
+
+function effectProp(prop) {
+  ep = prop
+}
 </script>
 <template>
   <main>
     <Title :title="$t('nav.settings')" />
+    <input type="file" accept="image/*" style="display: none;" @change="uploadFile" ref="fileHandler" />
+    <div class="bg" v-if="session">
+      <div class="edit" @click="fileHandler.click(); effectProp('bg')">
+        <PictureEditIcon />
+      </div>
+      <ProfileBgImage v-if="session" :src="session.bg" />
+    </div>
     <div class="user" v-if="session">
-      <div class="avatar" @click="toast('暂不支持修改头像', { type: 'warning' })">
-        <img :src="session.picture" alt="avatar" />
+      <div class="avatar">
+        <div class="edit" @click="fileHandler.click(); effectProp('picture')">
+          <PictureEditIcon />
+        </div>
+        <Avatar :src="session.picture" />
       </div>
       <div class="line">
         <div class="key">{{ $t('user.name') }}</div>
@@ -106,6 +148,44 @@ function setImageAutoload(v) {
 main {
   border-left: 1px solid var(--lln-color-border);
   border-right: 1px solid var(--lln-color-border);
+}
+
+.bg {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/1;
+  background-color: var(--lln-color-timeline);
+}
+
+.edit {
+  color: rgb(255, 255, 255, 0.8);
+  background-color: rgb(0, 0, 0, 0.6);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.edit svg {
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+}
+
+.bg img {
+  width: 100%;
+  aspect-ratio: 3/1;
+  margin-bottom: -5px;
+  object-fit: cover;
 }
 
 .user {
@@ -171,14 +251,17 @@ select,
 }
 
 .user .avatar {
-  margin-bottom: 20px;
-  width: 80px;
-  height: 80px;
+  border: 1px solid var(--lln-color-border);
+  border-radius: 50%;
+  margin: -70px 0 20px 0px;
+  width: 120px;
+  height: 120px;
+  position: relative;
 }
 
 .user .avatar img {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
 }
 

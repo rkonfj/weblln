@@ -1,10 +1,11 @@
 <script setup>
+import Avatar from './Avatar.vue'
 import MediaIcon from './icons/IconMedia.vue'
 import ParagraphIcon from './icons/ParagraphIcon.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 import lln from '../lln'
-import { ref, onMounted, inject, nextTick, getCurrentInstance } from 'vue'
+import { ref, onMounted, nextTick, getCurrentInstance } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { toast } from 'vue3-toastify'
@@ -43,7 +44,7 @@ onMounted(() => {
         sessionPicture.value = sessionObj.picture
     }
     const image = new Image()
-    image.src = sessionPicture.value
+    image.src = lln.avatarPreview(sessionPicture.value)
     image.onload = () => {
         avatar.value = image.src
     }
@@ -329,14 +330,13 @@ function stopPasteImageURL() {
         pasteImageURLTimer = null
     }
 }
-
 </script>
 
 <template>
     <div class="postarea">
         <div class="avatararea">
             <a class="avatar" :href="'/' + sessionUniqueName">
-                <img :src="sessionPicture" alt="avatar" v-if="avatar" />
+                <Avatar v-if="avatar" :src="sessionPicture" />
                 <DefaultAvatarIcon class="avatarimg" v-else />
             </a>
         </div>
