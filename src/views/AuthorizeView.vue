@@ -37,11 +37,6 @@ onMounted(async () => {
     </main>
 </template>
 <style scoped>
-main {
-    border-left: 1px solid var(--lln-color-border);
-    border-right: 1px solid var(--lln-color-border);
-}
-
 main ul li {
     display: flex;
     padding: 10px 20px;

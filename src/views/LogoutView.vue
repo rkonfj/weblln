@@ -21,10 +21,3 @@ onMounted(async () => {
     <Loading />
   </main>
 </template>
-
-<style scoped>
-main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
-}
-</style>

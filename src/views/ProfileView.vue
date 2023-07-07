@@ -38,6 +38,11 @@ onMounted(async () => {
     }
     loadStatus()
   } catch (e) {
+    if (e.code == 404) {
+      proxy.$toast('Not Found', { type: 'error' })
+      setTimeout(() => proxy.$router.push('/explore'), 1000)
+      return
+    }
     proxy.$toast(e.message, { type: 'error' })
   }
 })
@@ -45,7 +50,7 @@ onMounted(async () => {
 async function loadStatus(after) {
   loading.value = true
   try {
-    let resp = await proxy.$lln.user.status(route.params.uniqueName, after, 12, session.value)
+    let resp = await proxy.$lln.user.status(route.params.uniqueName, after, 15, session.value)
     haveMore.value = resp.more
     if (resp.v) {
       for (let s of resp.v) {

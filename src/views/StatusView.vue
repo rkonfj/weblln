@@ -263,8 +263,6 @@ function recommand(s) {
 
 <style scoped>
 main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
   background-color: var(--color-background);
   z-index: 10;
 }

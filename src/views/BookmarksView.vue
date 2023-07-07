@@ -27,7 +27,7 @@ onMounted(async () => {
 async function loadBookmarks(after) {
   loading.value = true
   try {
-    let resp = await proxy.$lln.user.bookmarks(after, 12, session.value)
+    let resp = await proxy.$lln.user.bookmarks(after, 20, session.value)
     haveMore.value = resp.more
     let ss = resp.v
     if (ss != null) {
@@ -65,11 +65,6 @@ async function loadBookmarks(after) {
 </template>
 
 <style scoped>
-main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
-}
-
 main ul li {
   display: flex;
   padding: 10px 15px;

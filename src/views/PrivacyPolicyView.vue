@@ -15,11 +15,6 @@ import Title from '../components/Title.vue'
 </template>
 
 <style scoped>
-main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
-}
-
 main ul li {
   padding: 2px 15px;
 }

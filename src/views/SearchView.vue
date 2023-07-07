@@ -64,11 +64,6 @@ async function loadSearchData(label, after) {
 </template>
 
 <style scoped>
-main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
-}
-
 main .loadbtn,
 main ul li {
   display: flex;

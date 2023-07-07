@@ -145,11 +145,6 @@ function effectProp(prop) {
 <style src="@vueform/toggle/themes/default.css"></style>
 
 <style scoped>
-main {
-  border-left: 1px solid var(--lln-color-border);
-  border-right: 1px solid var(--lln-color-border);
-}
-
 .bg {
   position: relative;
   width: 100%;

@@ -47,7 +47,7 @@ async function loadExploreData(opts) {
     opts = {}
   }
   if (!opts.size) {
-    opts.size = 15
+    opts.size = 18
   }
   loading.value = true
   try {
