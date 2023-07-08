@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { ref, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
+import { ref, onMounted, getCurrentInstance, onBeforeUnmount, onBeforeMount } from 'vue'
 
 import Login from './components/Login.vue'
 import Labels from './components/Labels.vue'
@@ -9,9 +9,12 @@ import SettingsIcon from './components/icons/IconSettings.vue'
 import HomeIcon from './components/icons/IconHome.vue'
 import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
+import AdminIcon from './components/icons/AdminIcon.vue'
 import NotificationIcon from './components/icons/NotificationIcon.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
+
+import { loadSettings } from './lln'
 
 const { proxy } = getCurrentInstance()
 const session = ref()
@@ -22,6 +25,7 @@ const tips = ref()
 const mobileSidebar = ref()
 const mobileMain = ref()
 const showFullLogin = ref()
+const settings = ref()
 
 let messagesProbeInterval = null
 
@@ -55,12 +59,15 @@ const vSwipe = {
   }
 }
 
-onMounted(() => {
+onBeforeMount(async () => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  loadSiteRestriction()
+  settings.value = await loadSettings()
+})
+
+onMounted(() => {
   if (!messagesProbeInterval) {
     messagesProbeInterval = setInterval(loadTipMessages, 15000)
   }
@@ -73,13 +80,6 @@ onBeforeUnmount(() => {
   }
 })
 
-function loadSiteRestriction() {
-  if (session.value) {
-    proxy.$lln.misc.restriction(session.value).then(r => {
-      window.localStorage.setItem('restriction', JSON.stringify(r))
-    })
-  }
-}
 
 function logout() {
   session.value = null
@@ -186,6 +186,11 @@ function openNotification() {
             <SettingsIcon /><span>{{ $t('nav.settings') }}</span>
           </RouterLink>
         </li>
+        <li v-if="session && session.admin">
+          <RouterLink to="/admin">
+            <AdminIcon /><span>{{ $t('nav.admin') }}</span>
+          </RouterLink>
+        </li>
       </ul>
       <SessionUser v-if="session" :session="session" />
     </nav>
@@ -221,9 +226,9 @@ function openNotification() {
       <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
       <Labels @session-expired="logout" />
       <div class="foot">
-        <span>
-          <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink>
-          <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
+        <span v-if="settings">
+          <RouterLink :to="settings.termsOfService">{{ $t('nav.termsofservice') }}</RouterLink>
+          <RouterLink :to="settings.privacyPolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
         </span>
         © {{ new Date().getFullYear() }} <a href="https://github.com/rkonfj/weblln">WebLLN</a>
       </div>

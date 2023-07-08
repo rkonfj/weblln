@@ -1,0 +1,50 @@
+.formarea {
+    padding: 2px 15px;
+}
+.formarea .line {
+    display: flex;
+    height: min-content;
+    line-height: 18px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    min-width: 0;
+}
+
+.formarea .key {
+    flex: 0 0 80px;
+    display: inline-block;
+    font-weight: bold;
+    padding: 0 10px 0 0;
+    color: var(--lln-color-text);
+}
+
+.formarea .value {
+    flex: 1;
+    min-width: 0;
+}
+
+.formarea textarea,
+.formarea select,
+.formarea input {
+    padding: 5px 10px;
+    line-height: 22px;
+    width: 100%;
+    border: 1px solid var(--lln-color-timeline);
+    outline-color: hsla(160, 100%, 37%, 1);
+    font-size: 16px;
+    border-radius: 16px;
+    background-color: var(--color-background);
+    color: var(--lln-color-text);
+    font-family: inherit;
+}
+
+.formarea option {
+    padding: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .formarea button {
+        background-color: var(--lln-color-side-bg);
+    }
+}

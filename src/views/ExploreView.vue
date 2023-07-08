@@ -93,10 +93,8 @@ async function newsProbe() {
 }
 
 async function upgradeStatus(cm, lm) {
-  console.log(lm, cm)
   if (lm) {
     for (let i = 0; i < Object.keys(lm).length; i++) {
-      console.log(lm[status.value[i].id])
       status.value[i].likeCount = lm[status.value[i].id]
     }
   }

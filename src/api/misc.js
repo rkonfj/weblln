@@ -1,8 +1,14 @@
 import http from './net'
 
 const misc = {
-    restriction: async (session) => {
-        return await http.get(`/i/restriction`, { session: session })
+    settings: async (modRev, session) => {
+        return await http.get(`/o/settings?modRev=${modRev}`, { session: session })
+    },
+    saveSettings: async (settings, session) => {
+        return await http.put(`/v/settings`, {
+            session: session,
+            body: settings,
+        })
     },
     getSignedUploadURL: async (filepath, session) => {
         return await http.get(`/i/signed-upload-url?object=${filepath}`, { session: session })

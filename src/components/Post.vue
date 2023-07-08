@@ -33,7 +33,7 @@ const progressColor = ref("hsla(160, 100%, 37%, 1)")
 const progressC = ref(0)
 const fileHandler = ref()
 
-const siteRestriction = JSON.parse(window.localStorage.getItem('restriction'))
+const settings = JSON.parse(window.localStorage.getItem('settings'))
 
 onMounted(() => {
     let sessionStr = window.localStorage.getItem("session")
@@ -132,9 +132,9 @@ function updateContentModel() {
 
 function updateContentLengthTips() {
     let lengthLimit = 1
-    if (siteRestriction) {
+    if (settings) {
         lengthLimit = paragraphs.value.length == 0
-            ? siteRestriction.status.overviewLimit : siteRestriction.status.contentLimit
+            ? settings.status.overviewLimit : settings.status.contentLimit
     }
 
     progressC.value = contentRaw.value.length / lengthLimit * 2 * Math.PI * 10

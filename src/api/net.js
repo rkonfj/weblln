@@ -39,11 +39,17 @@ async function request(url, opts) {
     }
     let resp = await fetch(`${llnApi}${url}`, options)
     await checkResp(resp)
+    let r = {}
     try {
-        let r = await resp.json()
+        r = await resp.json()
         r.headers = resp.headers
+        r.code = resp.status
         return r
-    } catch (_) { }
+    } catch (_) {
+        r.headers = resp.headers
+        r.code = resp.status
+        return r
+    }
 }
 
 async function checkResp(resp) {
@@ -52,7 +58,7 @@ async function checkResp(resp) {
         err.code = resp.status
         throw err
     }
-    if (resp.status != 200) {
+    if (resp.status != 200 && resp.status != 304) {
         let err = new Error(await resp.text())
         err.code = resp.status
         throw err

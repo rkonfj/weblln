@@ -1,9 +1,18 @@
 <script setup>
 import GoogleIcon from './icons/IconGoogle.vue'
 import GithubIcon from './icons/GithubIcon.vue'
+import Loading from './Loading.vue'
 
 import { RouterLink } from 'vue-router'
 import { llnApi, oidcProviders } from '../config'
+import { onMounted, ref } from 'vue';
+import { loadSettings } from '../lln'
+
+const settings = ref()
+
+onMounted(async () => {
+    settings.value = await loadSettings()
+})
 
 </script>
 
@@ -11,16 +20,12 @@ import { llnApi, oidcProviders } from '../config'
     <div class="sidelogin">
         <h2>{{ $t('nav.hello') }}</h2>
         <div class="tips">{{ $t('nav.welcome') }}</div>
-        <div class="btnarea">
-            <a v-if="oidcProviders.includes('google')" class="loginbtn"
-                :href="`${llnApi}/o/oidc/google?jump=${$route.path}`">
-                <GoogleIcon />
-                <div class="text">{{ $t('nav.googleauth') }}</div>
-            </a>
-            <a v-if="oidcProviders.includes('github')" class="loginbtn"
-                :href="`${llnApi}/o/oidc/github?jump=${$route.path}`">
-                <GithubIcon />
-                <div class="text">{{ $t('nav.githubauth') }}</div>
+        <Loading v-if="!settings" />
+        <div v-if="settings" class="btnarea">
+            <a class="loginbtn" v-for="provider of settings.oidcProviders" :href="`${llnApi}/o/oidc/${provider}?jump=${$route.path}`">
+                <GoogleIcon v-if="provider == 'google'" />
+                <GithubIcon v-if="provider == 'github'" />
+                <div class="text">{{ $t(`nav.${provider}auth`) }}</div>
             </a>
         </div>
         <div class="tips links">

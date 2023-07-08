@@ -29,6 +29,11 @@ const router = createRouter({
       path: '/bookmarks',
       name: 'bookmarks',
       component: () => import('./views/BookmarksView.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('./views/AdminView.vue')
     },{
       path: '/:user/status/:id',
       name: 'status',
