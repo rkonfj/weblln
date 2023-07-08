@@ -73,6 +73,7 @@ const messages = {
         },
         verified:{
             c1: "Server Specialist",
+            c6: "NodeSeeker",
             c11: "Organization"
         },
         misc: {
@@ -155,6 +156,7 @@ const messages = {
         },
         verified:{
             c1: "服务器玩家",
+            c6: "NodeSeeker",
             c11: "组织号",
         },
         misc: {
