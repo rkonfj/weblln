@@ -17,10 +17,6 @@ onMounted(async () => {
   if (sessionStr) {
     session.value = JSON.parse(sessionStr)
   }
-  if (!session.value) {
-    proxy.$router.push('/')
-    return
-  }
   loadBookmarks()
 })
 
@@ -37,7 +33,8 @@ async function loadBookmarks(after) {
     }
   } catch (e) {
     if (e.code == 401) {
-      proxy.$router.push('/')
+      proxy.$toast(proxy.$t('tips.sessionExpired', { type: 'error' }))
+      setTimeout(proxy.$router.push('/logout'), 1000)
       return
     }
     proxy.$toast(e.message, { type: 'error' })
