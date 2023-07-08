@@ -39,6 +39,9 @@ services:
       OIDC_GOOGLE_CLIENT_ID: xxx
       OIDC_GOOGLE_CLIENT_SECRET: xxx
       OIDC_GOOGLE_REDIRECT: xxx
+      OIDC_GITHUB_CLIENT_ID: xxx
+      OIDC_GITHUB_CLIENT_SECRET: xxx
+      OIDC_GITHUB_REDIRECT: xxx
     command: -c /etc/lln.yml
     network_mode: host
     deploy:
@@ -58,5 +61,8 @@ services:
         limits:
           memory: 50m
           cpus: "1"
+    volumes:
+    - weblln:/data/caddy
 volumes:
   data: {}
+  weblln: {}
