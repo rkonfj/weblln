@@ -43,16 +43,17 @@ function handleImageContent(c, idx) {
     let img = new Image()
     img.src = imagePreview(c.value)
     img.onload = () => {
-        let unshifted = true
+        let shouldPush = true
         // asc order
-        for (let i in images.value) {
+        for (let i = 0; i < images.value.length; i++) {
             if (idx > images.value[i].i) {
                 continue
             }
-            images.value.splice(idx, 0, { i: idx, v: c.value })
-            unshifted = false
+            images.value.splice(i, 0, { i: idx, v: c.value })
+            shouldPush = false
+            break
         }
-        if (unshifted) {
+        if (shouldPush) {
             images.value.push({ i: idx, v: c.value })
         }
 

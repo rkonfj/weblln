@@ -1,10 +1,18 @@
 https://{$LLN_DOMAIN}
 
-@proxy {
+@api {
     path /i/* /o/*
 }
 
-handle @proxy {
+@spider {
+    header_regexp User-Agent ^.*([Bb]ot|[Cc]rawler|[Ss]pider|[Gg]oogle|[Bb]ing|[Yy]ahoo|[Bb]aidu).*$
+}
+
+handle @api {
+    reverse_proxy 127.0.0.1:8876
+}
+
+handle @spider {
     reverse_proxy 127.0.0.1:8876
 }
 
