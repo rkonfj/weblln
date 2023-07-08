@@ -165,18 +165,18 @@ function buildMenu(i) {
       component: markRaw(NotIcon),
       title: proxy.$t('btn.notRecommand'),
       confirmedtitle: proxy.$t('btn.confirm'),
-      action: notRecommand, i: i
+      action: notRecommend, i: i
     }]
   }
   return menu.value
 }
 
-async function notRecommand(s) {
+async function notRecommend(s) {
   if (!this.confirmed) {
     return true
   }
   try {
-    await proxy.$lln.status.recommand(s.id, false, session.value)
+    await proxy.$lln.status.recommend(s.id, false, session.value)
     status.value.splice(this.i, 1)
     proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
   } catch (e) {

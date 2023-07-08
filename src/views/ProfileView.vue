@@ -88,17 +88,17 @@ function buildMenu(i) {
       component: markRaw(UpIcon),
       title: proxy.$t('btn.recommand'),
       confirmedtitle: proxy.$t('btn.confirm'),
-      action: recommand, i: i
+      action: recommend, i: i
     }]
   }
   return statusMenu.value
 }
 
-function recommand(s) {
+function recommend(s) {
   if (!this.confirmed) {
     return true
   }
-  proxy.$lln.status.recommand(s.id, true, session.value)
+  proxy.$lln.status.recommend(s.id, true, session.value)
     .then(() => proxy.$toast(proxy.$t('tips.success'), { type: 'success' }))
     .catch(e => {
       if (e.code == 403) {

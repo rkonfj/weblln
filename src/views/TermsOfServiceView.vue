@@ -4,5 +4,11 @@ import Title from '../components/Title.vue'
 <template>
     <main>
       <Title :title="$t('nav.termsofservice')" />
+      <div class="empty">稍等片刻</div>
     </main>
 </template>
+<style scoped>
+main .empty {
+  padding: 2px 15px;
+}
+</style>
