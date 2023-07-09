@@ -29,10 +29,10 @@ onMounted(async () => {
                 <div class="text">{{ $t(`nav.${provider}auth`) }}</div>
             </a>
         </div>
-        <div class="tips links">
-            {{ $t('misc.signinagree') }} <RouterLink to="/termsofservice">{{ $t('nav.termsofservice') }}</RouterLink> {{
+        <div v-if="settings" class="tips links">
+            {{ $t('misc.signinagree') }} <RouterLink :to="settings.termsOfService">{{ $t('nav.termsofservice') }}</RouterLink> {{
                 $t('misc.and') }}
-            <RouterLink to="/privacypolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
+            <RouterLink :to="settings.privacyPolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
     </div>
 </template>

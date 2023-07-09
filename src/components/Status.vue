@@ -156,7 +156,7 @@ async function deleteStatus() {
             <span v-if="item.confirmed">{{ item.confirmedtitle }}</span>
             <span v-if="!item.confirmed">{{ item.title }}</span>
           </li>
-          <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id">
+          <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id && status.comments == 0">
             <DeleteIcon class="delete" />
             <span v-if="confirmed" class="delete"> {{ $t('tips.confirmdelete') }}</span>
             <span v-if="!confirmed" class="delete">{{ $t('btn.delete') }}</span>

@@ -234,7 +234,7 @@ function calcImageClass(i) {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 6px;
     box-sizing: content-box;
     min-width: fit-content;
     aspect-ratio: 5/3;
