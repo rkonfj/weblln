@@ -64,6 +64,7 @@ const messages = {
             success: 'Done',
             failed: 'Failed',
             canceled: 'Canceled',
+            disabled: 'The operation is forbidden',
             uploading: 'Uploading',
             copied: 'Copied to clipboard',
             sessionExpired: 'Api key expired, redirect to login',
@@ -74,7 +75,7 @@ const messages = {
         },
         verified:{
             c1: "Server Specialist",
-            c6: "NodeSeeker",
+            c6: "Node Seeker",
             c11: "Organization"
         },
         misc: {
@@ -148,6 +149,7 @@ const messages = {
             success: '完成',
             failed: '操作失败',
             canceled: '已取消',
+            disabled: '该操作被禁止',
             uploading: '正在上传',
             copied: '已复制到剪贴板',
             sessionExpired: 'Api key 失效，请重新登录',
@@ -158,7 +160,7 @@ const messages = {
         },
         verified:{
             c1: "服务器玩家",
-            c6: "NodeSeeker",
+            c6: "Node Seeker",
             c11: "组织号",
         },
         misc: {

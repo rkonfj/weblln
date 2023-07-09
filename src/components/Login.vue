@@ -4,7 +4,7 @@ import GithubIcon from './icons/GithubIcon.vue'
 import Loading from './Loading.vue'
 
 import { RouterLink } from 'vue-router'
-import { llnApi, oidcProviders } from '../config'
+import { llnApi } from '../config'
 import { onMounted, ref } from 'vue';
 import { loadSettings } from '../lln'
 
@@ -22,7 +22,8 @@ onMounted(async () => {
         <div class="tips">{{ $t('nav.welcome') }}</div>
         <Loading v-if="!settings" />
         <div v-if="settings" class="btnarea">
-            <a class="loginbtn" v-for="provider of settings.oidcProviders" :href="`${llnApi}/o/oidc/${provider}?jump=${$route.path}`">
+            <a class="loginbtn" v-for="provider of settings.oidcProviders"
+                :href="`${llnApi}/o/oidc/${provider}?jump=${$route.path}`">
                 <GoogleIcon v-if="provider == 'google'" />
                 <GithubIcon v-if="provider == 'github'" />
                 <div class="text">{{ $t(`nav.${provider}auth`) }}</div>

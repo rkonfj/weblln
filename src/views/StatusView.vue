@@ -129,6 +129,10 @@ async function like() {
 function comment() {
   if (!session.value) {
     emit('shouldLogin')
+    return
+  }
+  if (status.value[status.value.length - 1].disabled) {
+    proxy.$toast(proxy.$t('tips.disabled'))
   }
 }
 
@@ -225,7 +229,7 @@ function recommand(s) {
       }}</span><span>{{ $t('status.bookmarks') }}</span></div>
     </div>
     <div class="operate" v-if="status.length > 0">
-      <a @click="comment" :title="$t('btn.comment')">
+      <a @click="comment" :title="$t('btn.comment')" v-if="!status[status.length - 1].disabled">
         <CommentIcon :title="$t('btn.comment')" />
       </a>
       <a @click="like" :title="$t('btn.like')">
@@ -240,8 +244,8 @@ function recommand(s) {
         <ShareIcon :title="$t('btn.share')" />
       </a>
     </div>
-    <Post v-if="status.length > 0 && session" @posted="loadComments" :placeholder="$t('status.replyPrompt')"
-      :btntext="$t('status.reply')" :prevstatus="status[status.length - 1].id" />
+    <Post v-if="session && status.length > 0 && !status[status.length - 1].disabled" @posted="loadComments"
+      :placeholder="$t('status.replyPrompt')" :btntext="$t('status.reply')" :prevstatus="status[status.length - 1].id" />
     <ul>
       <div v-for="(s, i) in comments">
         <li @click="$router.push(`/${s.user.uniqueName}/status/${s.id}`)" :style="s.next ? `border-bottom: none;` : ''">
