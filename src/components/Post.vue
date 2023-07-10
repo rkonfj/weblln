@@ -347,8 +347,8 @@ function stopPasteImageURL() {
                 <div class="close" @click="closeCurrentParagraph" v-if="paragraphs.length > 0">
                     <CloseIcon />
                 </div>
-                <textarea class="raw" ref="textarea" rows="2" v-model="contentRaw" @dragover.prevent @drop="handleDragEnter"
-                    @paste="paseText" @input="updateContentModel" :placeholder="placeholder">
+                <textarea class="raw" ref="textarea" rows="1" v-model="contentRaw" @dragover.prevent @drop="handleDragEnter"
+                    @paste="paseText" @input="updateContentModel" @focus="updateContentModel" :placeholder="placeholder">
                 </textarea>
             </div>
             <p class="paragraph" @click="editParagraphContinue(i)" v-for="(p, i) in paragraphsContinue" :key="i"
@@ -589,7 +589,6 @@ function stopPasteImageURL() {
 
 .content .raw {
     width: 100%;
-    min-height: 3.5rem;
     padding: 0.3rem 0 .2rem 0;
     outline: none;
     border: none;
