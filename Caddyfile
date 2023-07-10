@@ -1,11 +1,15 @@
 https://{$LLN_DOMAIN}
 
 @api {
-    path /i/* /o/*
+    path /i/* /o/* /v/*
 }
 
 @spider {
-    header_regexp User-Agent ^.*([Bb]ot|[Cc]rawler|[Ss]pider|[Gg]oogle|[Bb]ing|[Yy]ahoo|[Bb]aidu).*$
+    header_regexp User-Agent ^.*([Bb]ot|[Cc]rawler|[Ss]pider|curl|[Gg]oogle|[Bb]ing|[Yy]ahoo|[Bb]aidu).*$
+}
+
+@raw {
+    query raw=*
 }
 
 handle @api {
@@ -13,6 +17,10 @@ handle @api {
 }
 
 handle @spider {
+    reverse_proxy 127.0.0.1:8876
+}
+
+handle @raw {
     reverse_proxy 127.0.0.1:8876
 }
 
