@@ -1,3 +1,4 @@
+import he from 'he'
 import { marked } from 'marked'
 import { fileApi, cutQuery11 } from './config'
 import misc from './api/misc'
@@ -8,7 +9,13 @@ const renderer = new marked.Renderer()
 
 renderer.text = (text) => {
     text = text.replaceAll(atRegex, m => `<a class="at" href="/${m.substring(1)}">${m}</a>`)
-    text = text.replaceAll(labelRegex, m => `<a class="label" href="/search/labels/${m.substring(1)}">${m}</a>`)
+    text = text.replaceAll(labelRegex, m => {
+        let t = `&${m};`
+        if (he.unescape(t) != t) {
+            return m
+        }
+        return `<a class="label" href="/search/labels/${m.substring(1)}">${m}</a>`
+    })
     return text
 }
 
