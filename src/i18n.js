@@ -72,7 +72,8 @@ const messages = {
             confirmunfollow: 'Confirm unfollow',
             confirmdelete: 'Confirm delete',
             tweets: 'Tweets',
-            imageautoload: 'Image autoload'
+            imageautoload: 'Image autoload',
+            search: 'Search'
         },
         verified:{
             c1: "Server Specialist",
@@ -158,7 +159,8 @@ const messages = {
             confirmunfollow: '确认取消关注',
             confirmdelete: '确认删除',
             tweets: '推文',
-            imageautoload: '加载图片'
+            imageautoload: '加载图片',
+            search: '搜索'
         },
         verified:{
             c1: "服务器玩家",

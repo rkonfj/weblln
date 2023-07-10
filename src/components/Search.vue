@@ -34,8 +34,8 @@ function openGoogleSearch() {
         <div class="close" ref="close" @click="searchInput = ''; searchInputRef.focus()">
             <CloseIcon />
         </div>
-        <input type="text" ref="searchInputRef" v-model="searchInput" placeholder="Search LLN" @input="showFocusAction"
-            @focus="showFocusAction" @blur="showFocusAction" />
+        <input type="text" ref="searchInputRef" v-model="searchInput" :placeholder="`${$t('tips.search')} LLN`" @input="showFocusAction"
+            @focus="showFocusAction" @blur="showFocusAction" @keydown.enter="openGoogleSearch" />
         <div class="holder" ref="holder">
             <div class="item" @click="$router.push(`/search/labels/${searchInput}`)">
                 <LabelIcon /> {{ searchInput }}
