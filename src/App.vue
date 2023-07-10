@@ -13,6 +13,7 @@ import AdminIcon from './components/icons/AdminIcon.vue'
 import NotificationIcon from './components/icons/NotificationIcon.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
+import Search from './components/Search.vue'
 
 import { loadSettings } from './lln'
 
@@ -223,6 +224,7 @@ function openNotification() {
   </div>
   <div class="right-sidebar">
     <footer>
+      <Search v-if="session" />
       <Login v-if="!session" :class="{ 'shake': shouldLogin }" />
       <Labels @session-expired="logout" />
       <div class="foot">
