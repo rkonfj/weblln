@@ -72,6 +72,15 @@ hr {
     margin: 5px 0;
     font-size: 17px;
 }
+.raw p,
+.paragraph p {
+    margin-bottom: 10px;
+}
+
+.raw p:last-child,
+.paragraph p:last-child {
+    margin-bottom: 0;
+}
 
 .codeblock {
     position: relative;

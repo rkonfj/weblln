@@ -98,7 +98,7 @@ function calcImageClass(i) {
 <template>
     <div class="raw">
         <div class="sf" v-if="simple" v-for="c in paragraphs">
-            <p class="paragraph" v-html="lln.renderText(c)"></p>
+            <div class="paragraph" v-html="lln.renderText(c)"></div>
         </div>
         <div class="overview" v-if="!simple && paragraphs.length > 0">
             <div v-html="lln.renderText(paragraphs[0])"></div>
