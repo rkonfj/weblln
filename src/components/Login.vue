@@ -2,6 +2,7 @@
 import GoogleIcon from './icons/IconGoogle.vue'
 import GithubIcon from './icons/GithubIcon.vue'
 import MicrosoftIcon from './icons/MicrosoftIcon.vue'
+import GitlabIcon from './icons/GitlabIcon.vue'
 import Loading from './Loading.vue'
 
 import { RouterLink } from 'vue-router'
@@ -28,6 +29,7 @@ onMounted(async () => {
                 <GoogleIcon v-if="provider == 'google'" />
                 <GithubIcon v-if="provider == 'github'" />
                 <MicrosoftIcon v-if="provider == 'microsoft'" />
+                <GitlabIcon v-if="provider == 'gitlab'" />
                 <div class="text">{{ $t(`nav.${provider}auth`) }}</div>
             </a>
         </div>

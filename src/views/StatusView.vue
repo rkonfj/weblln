@@ -14,7 +14,7 @@ import UpIcon from '../components/icons/UpIcon.vue'
 import { ref, markRaw, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
-import lln from '../lln'
+import { loadSession } from '../lln'
 
 defineProps(['hideMedia'])
 
@@ -29,9 +29,20 @@ const loading = ref(true)
 const haveMore = ref()
 
 onMounted(async () => {
-  session.value = lln.loadSession()
+  session.value = loadSession()
+  await loadStatus()
+  await loadComments()
+})
+
+async function loadStatus() {
   try {
     let s = await proxy.$lln.status.getStatus(route.params.id, session.value)
+    for (let c of s.content) {
+      if(c.type == 'text') {
+        document.title = `${c.value} - ${document.title}`
+        break
+      }
+    }
     let prev = s.prev
     s.prev = null
     status.value.unshift(s)
@@ -49,8 +60,7 @@ onMounted(async () => {
     }
     proxy.$toast(e.message, { type: 'error' })
   }
-  await loadComments()
-})
+}
 
 async function loadComments(after) {
   loading.value = true

@@ -1,4 +1,4 @@
-export const llnApi = ''
+export const llnApi = 'https://lowlevelnews.com'
 export const siteName = 'LLN'
 export const fileApi = 'https://llnf-1252785209.cos.ap-guangzhou.myqcloud.com'
 export const cutQuery11 = 'imageMogr2/gravity/Center/cut/768x768'

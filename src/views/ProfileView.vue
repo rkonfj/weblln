@@ -9,10 +9,10 @@ import CalendarIcon from '../components/icons/IconCalendar.vue'
 import Verified from '../components/Verified.vue'
 import UpIcon from '../components/icons/UpIcon.vue'
 
-
 import { ref, markRaw, onMounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
+import { loadSession } from '../lln'
 
 const emit = defineEmits(['shouldLogin'])
 const { proxy } = getCurrentInstance()
@@ -25,12 +25,14 @@ const haveMore = ref()
 const profileBgImage = ref()
 
 onMounted(async () => {
-  let sessionStr = window.localStorage.getItem("session")
-  if (sessionStr) {
-    session.value = JSON.parse(sessionStr)
-  }
+  session.value = loadSession()
+  await loadProfile()
+})
+
+async function loadProfile() {
   try {
     profile.value = await proxy.$lln.user.profile(route.params.uniqueName, session.value)
+    document.title = `${profile.value.name} ${profile.value.tweets} Tweets - ${document.title}`
     const bgImage = new Image()
     bgImage.src = profile.value.bg
     bgImage.onload = () => {
@@ -45,7 +47,7 @@ onMounted(async () => {
     }
     proxy.$toast(e.message, { type: 'error' })
   }
-})
+}
 
 async function loadStatus(after) {
   loading.value = true
