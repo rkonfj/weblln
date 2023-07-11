@@ -11,6 +11,7 @@ import MessageIcon from './components/icons/IconMessage.vue'
 import BookmarkIcon from './components/icons/IconBookmark.vue'
 import AdminIcon from './components/icons/AdminIcon.vue'
 import NotificationIcon from './components/icons/NotificationIcon.vue'
+import TipsIcon from './components/icons/TipsIcon.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
 import Search from './components/Search.vue'
@@ -159,40 +160,48 @@ function openNotification() {
 <template>
   <div class="sidebar" :style="mobileSidebar" v-swipe="closeNav">
     <nav>
-      <ul>
-        <li>
-          <RouterLink class="home" to="/">
-            <div class="version">beta</div>
-            <HomeIcon />
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/explore">
-            <ExploreIcon /><span>{{ session ? $t('nav.home') : $t('nav.explore') }}</span>
-          </RouterLink>
-        </li>
-        <li v-if="session">
-          <RouterLink class="msgLink" to="/messages">
-            <div v-if="tips" class="tips">{{ tips }}</div>
-            <MessageIcon /><span>{{ $t('nav.messages') }}</span>
-          </RouterLink>
-        </li>
-        <li v-if="session">
-          <RouterLink to="/bookmarks">
-            <BookmarkIcon /><span>{{ $t('nav.bookmarks') }}</span>
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/settings">
-            <SettingsIcon /><span>{{ $t('nav.settings') }}</span>
-          </RouterLink>
-        </li>
-        <li v-if="session && session.admin">
-          <RouterLink to="/admin">
-            <AdminIcon /><span>{{ $t('nav.admin') }}</span>
-          </RouterLink>
-        </li>
-      </ul>
+      <div>
+        <ul>
+          <li>
+            <RouterLink class="home" to="/">
+              <div class="version">beta</div>
+              <HomeIcon />
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/explore">
+              <ExploreIcon /><span>{{ session ? $t('nav.home') : $t('nav.explore') }}</span>
+            </RouterLink>
+          </li>
+          <li v-if="session">
+            <RouterLink class="msgLink" to="/messages">
+              <div v-if="tips" class="tips">{{ tips }}</div>
+              <MessageIcon /><span>{{ $t('nav.messages') }}</span>
+            </RouterLink>
+          </li>
+          <li v-if="session">
+            <RouterLink to="/bookmarks">
+              <BookmarkIcon /><span>{{ $t('nav.bookmarks') }}</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/settings">
+              <SettingsIcon /><span>{{ $t('nav.settings') }}</span>
+            </RouterLink>
+          </li>
+          <li v-if="session && session.admin">
+            <RouterLink to="/admin">
+              <AdminIcon /><span>{{ $t('nav.admin') }}</span>
+            </RouterLink>
+          </li>
+        </ul>
+        <div v-if="!session" class="board">
+          <TipsIcon />
+          <p>欢迎来到 Low Level News 技术分享社区！</p>
+          <p>给大家提供以微博客的这种较新的技术社交方式！广播自己的经验、见解和创意，以及关注感兴趣的人或组织。</p>
+          <p>预期这种方式能够更加高效。</p>
+        </div>
+      </div>
       <SessionUser v-if="session" :session="session" />
     </nav>
 
@@ -323,6 +332,20 @@ nav ul li:first-child a {
 
 nav a span {
   margin-left: 10px;
+}
+
+nav .board {
+  margin: 20px 20px 0 20px;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 10px;
+  background-color: var(--lln-color-border);
+}
+
+nav .board svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--color-main);
 }
 
 main {
