@@ -78,7 +78,7 @@ onMounted(async () => {
 .sidelogin .btnarea {
     margin: 18px -15px;
     padding: 0 15px;
-    max-height: 130px;
+    max-height: 135px;
     overflow-y: auto;
 }
 
