@@ -27,13 +27,19 @@ async function saveSettings() {
   }
 }
 
-function addFriend() {
-  settings.value.friends.push({
+function addFriend(i) {
+  let friend = {
     logo: '',
     title: '',
     url: '',
     desc: ''
-  })
+  }
+  if (i >=0 ) {
+    settings.value.friends.splice(i, 0, friend)
+    console.log(JSON.stringify(settings.value.friends))
+    return
+  }
+  settings.value.friends.push(friend)
 }
 
 function deleteFriend(i) {
@@ -54,6 +60,12 @@ function deleteFriend(i) {
         <div class="value"><input placeholder="相对链接" type="text" v-model="settings.privacyPolicy" /></div>
       </div>
       <div class="line">
+        <div class="key">公告</div>
+        <div class="value">
+          <textarea rows="5" v-model="settings.announcement" />
+        </div>
+      </div>
+      <div class="line">
         <div class="key">{{ $t('nav.friends') }}</div>
         <div class="value"><a class="opbtn" @click="addFriend">新增</a></div>
       </div>
@@ -71,7 +83,7 @@ function deleteFriend(i) {
           <div class="line">
             <input type="text" v-model="item.desc" placeholder="Description" />
           </div>
-          <a class="opbtn" @click="deleteFriend(i)">删除</a>
+          <a class="opbtn" @click="deleteFriend(i)">删除</a> <a class="opbtn" @click="addFriend(i)">新增</a>
         </li>
       </ul>
       <div class="line">

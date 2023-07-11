@@ -12,11 +12,12 @@ import BookmarkIcon from './components/icons/IconBookmark.vue'
 import AdminIcon from './components/icons/AdminIcon.vue'
 import NotificationIcon from './components/icons/NotificationIcon.vue'
 import TipsIcon from './components/icons/TipsIcon.vue'
+import CloseIcon from './components/icons/CloseIcon.vue'
 import SessionUser from './components/SessionUser.vue'
 import Loading from './components/Loading.vue'
 import Search from './components/Search.vue'
 
-import { loadSettings } from './lln'
+import { loadSettings, renderText } from './lln'
 
 const { proxy } = getCurrentInstance()
 const session = ref()
@@ -28,6 +29,7 @@ const mobileSidebar = ref()
 const mobileMain = ref()
 const showFullLogin = ref()
 const settings = ref()
+const announcement = ref(true)
 
 let messagesProbeInterval = null
 
@@ -73,6 +75,7 @@ onMounted(() => {
   if (!messagesProbeInterval) {
     messagesProbeInterval = setInterval(loadTipMessages, 15000)
   }
+  announcement.value = !JSON.parse(window.localStorage.getItem('announced'))
 })
 
 onBeforeUnmount(() => {
@@ -155,6 +158,12 @@ function openNotification() {
   }
   openNav()
 }
+
+function closeAnnouncement() {
+  announcement.value = false
+  window.localStorage.setItem('announced', 'true')
+}
+
 </script>
 
 <template>
@@ -195,11 +204,13 @@ function openNotification() {
             </RouterLink>
           </li>
         </ul>
-        <div v-if="!session" class="board">
+
+        <div v-if="settings && settings.announcement.length > 0 && announcement" class="board">
           <TipsIcon />
-          <p>欢迎来到 Low Level News 技术分享社区！</p>
-          <p>给大家提供以微博客的这种较新的技术社交方式！广播自己的经验、见解和创意，以及关注感兴趣的人或组织。</p>
-          <p>预期这种方式能够更加高效。</p>
+          <div class="close" @click="closeAnnouncement">
+            <CloseIcon />
+          </div>
+          <div class="announcement" v-html="renderText(settings.announcement)"></div>
         </div>
       </div>
       <SessionUser v-if="session" :session="session" />
@@ -335,17 +346,42 @@ nav a span {
 }
 
 nav .board {
-  margin: 20px 20px 0 20px;
+  position: relative;
+  margin: 20px 15px 0px 15px;
   padding: 10px;
   font-size: 15px;
   border-radius: 10px;
-  background-color: var(--lln-color-border);
+  background-color: var(--lln-color-side-bg);
 }
 
 nav .board svg {
   width: 18px;
   height: 18px;
   fill: var(--color-main);
+}
+
+nav .board .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+nav .board .close svg {
+  height: 14px;
+  width: 14px;
+  fill: var(--color-text);
+}
+
+nav .board .close:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 main {
@@ -554,6 +590,11 @@ footer .foot a:hover {
 }
 </style>
 <style>
+.announcement p {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
 @media (min-width: 60rem) {
   .Toastify {
     --toastify-icon-color-success: #fff;

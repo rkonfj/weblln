@@ -32,7 +32,7 @@ renderer.code = (code) => {
 
 marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })
 
-function renderText(text) {
+export function renderText(text) {
     return marked.parse(text)
 }
 
@@ -63,10 +63,15 @@ async function updateSettings(modRev) {
     let resp = await misc.settings(modRev)
     if (resp.code == 200) {
         window.localStorage.setItem('settings', JSON.stringify(resp.v))
+        if(modRev > 0) {
+            let settings = JSON.parse(window.localStorage.getItem('settings'))
+            if(settings.announcement != resp.v.announcement) {
+                window.localStorage.removeItem('announced')
+            }
+        }
     }
     return resp.v
 }
-
 
 const lln = {
     renderText: renderText,
