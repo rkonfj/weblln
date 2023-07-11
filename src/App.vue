@@ -231,8 +231,11 @@ function openNotification() {
         <span v-if="settings">
           <RouterLink :to="settings.termsOfService">{{ $t('nav.termsofservice') }}</RouterLink>
           <RouterLink :to="settings.privacyPolicy">{{ $t('nav.privacypolicy') }}</RouterLink>
+          <RouterLink v-if="settings.friends.length > 0" to="/friends">{{ $t('nav.friends') }}</RouterLink>
         </span>
-        © {{ new Date().getFullYear() }} <a href="https://github.com/rkonfj/weblln">WebLLN</a>
+        <div class="copyright">
+          © {{ new Date().getFullYear() }} <a href="https://github.com/rkonfj/weblln">WebLLN</a>
+        </div>
       </div>
     </footer>
   </div>
@@ -360,6 +363,11 @@ footer {
 footer .foot {
   padding: 18px 13px;
   font-size: 13px;
+  max-width: 320px;
+}
+
+footer .foot .copyright {
+  display: inline-block;
 }
 
 footer .foot a {
@@ -425,6 +433,10 @@ footer .foot a:hover {
     bottom: 0;
     background-color: #fff;
     width: 100%;
+  }
+
+  .main-content .sidelogin .btnarea {
+    max-height: unset;
   }
 
   .main-content .mobileop {

@@ -65,7 +65,7 @@ onMounted(async () => {
 
 .sidelabels .active,
 .sidelabels li:hover {
-    background-color: var(--lln-color-bg-hover);
+    background-color: var(--lln-color-border);
     cursor: pointer;
     transition: 0.4s;
 }
@@ -86,7 +86,7 @@ onMounted(async () => {
 }
 
 .sidelabels ul::-webkit-scrollbar-thumb {
-    background-color: rgb(83, 100, 113, 0.3);
+    background-color: var(--lln-color-timeline);
     border-radius: 3px;
 }
 

@@ -34,7 +34,8 @@ onMounted(async () => {
             </a>
         </div>
         <div v-if="settings" class="tips links">
-            {{ $t('misc.signinagree') }} <RouterLink :to="settings.termsOfService">{{ $t('nav.termsofservice') }}</RouterLink> {{
+            {{ $t('misc.signinagree') }} <RouterLink :to="settings.termsOfService">{{ $t('nav.termsofservice') }}
+            </RouterLink> {{
                 $t('misc.and') }}
             <RouterLink :to="settings.privacyPolicy">{{ $t('nav.privacypolicy') }}</RouterLink>。
         </div>
@@ -75,7 +76,20 @@ onMounted(async () => {
 }
 
 .sidelogin .btnarea {
-    margin: 18px 0;
+    margin: 18px -15px;
+    padding: 0 15px;
+    max-height: 130px;
+    overflow-y: auto;
+}
+
+.sidelogin .btnarea::-webkit-scrollbar {
+    width: 8px;
+    transition: 0.4s;
+}
+
+.sidelogin .btnarea::-webkit-scrollbar-thumb {
+    background-color: var(--lln-color-timeline);
+    border-radius: 3px;
 }
 
 .sidelogin .tips {
