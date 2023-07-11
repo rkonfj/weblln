@@ -49,12 +49,12 @@ onMounted(async () => {
     border-radius: 16px;
     padding: 0 0 12px 0;
     background-color: var(--lln-color-side-bg);
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .sidelabels ul {
     overflow-y: auto;
-    max-height: calc(100vh - 420px);
+    max-height: calc(100vh - 430px);
 }
 
 .sidelabels li {

@@ -58,8 +58,8 @@ const messages = {
             unfollow: 'Unfollow',
             embedtweet: 'Embed Tweet',
             show: 'Show',
-            recommand: 'Recommand',
-            notRecommand: 'Not recommand',
+            recommend: 'Recommend',
+            notRecommend: 'Not recommend',
             confirm: 'Confirm'
         },
         tips: {
@@ -146,8 +146,8 @@ const messages = {
             unfollow: '取消关注',
             embedtweet: '嵌入推文',
             show: '展示',
-            recommand: '推荐',
-            notRecommand: '不推荐',
+            recommend: '推荐',
+            notRecommend: '不推荐',
             confirm: '确认'
         },
         tips: {

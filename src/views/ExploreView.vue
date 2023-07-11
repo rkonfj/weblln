@@ -85,37 +85,42 @@ async function newsProbe() {
         status.value[19].createRev : status.value[status.value.length - 1].createRev
       let resp = await proxy.$lln.status.newsProbe(min, max, session.value)
       news.value = resp.v.news
-      upgradeStatus(resp.v.cm, resp.v.lm)
+      upgradeComments(resp.v.cm)
+      upgradeLikes(resp.v.lm)
     } catch (e) {
       console.error('explore news probe error: ', e.message)
     }
   }
 }
 
-async function upgradeStatus(cm, lm) {
+async function upgradeComments(cm) {
+  if (!cm) {
+    return
+  }
+  for (let i = 0; i < Object.keys(cm).length; i++) {
+    if (cm[status.value[i].id] == 0) {
+      status.value[i].next = null
+      status.value[i].comments = cm[status.value[i].id]
+      continue
+    }
+    if (cm[status.value[i].id] > status.value[i].comments) {
+      try {
+        let r = await proxy.$lln.status.getStatusRecommendComment(status.value[i].id, session.value)
+        if (r?.v) {
+          status.value[i].next = r.v
+          status.value[i].comments = cm[status.value[i].id]
+        }
+      } catch (e) {
+        console.error(e.message)
+      }
+    }
+  }
+}
+
+async function upgradeLikes(lm) {
   if (lm) {
     for (let i = 0; i < Object.keys(lm).length; i++) {
       status.value[i].likeCount = lm[status.value[i].id]
-    }
-  }
-  if (cm) {
-    for (let i = 0; i < Object.keys(cm).length; i++) {
-      if (cm[status.value[i].id] == 0) {
-        status.value[i].next = null
-        status.value[i].comments = cm[status.value[i].id]
-        continue
-      }
-      if (cm[status.value[i].id] > status.value[i].comments) {
-        try {
-          let r = await proxy.$lln.status.getStatusRecommandComment(status.value[i].id, session.value)
-          if (r && r.v) {
-            status.value[i].next = r.v
-            status.value[i].comments = cm[status.value[i].id]
-          }
-        } catch (e) {
-          console.error(e.message)
-        }
-      }
     }
   }
 }
@@ -161,7 +166,7 @@ function buildMenu(i) {
   if (session.value?.admin) {
     menu.value = [{
       component: markRaw(NotIcon),
-      title: proxy.$t('btn.notRecommand'),
+      title: proxy.$t('btn.notRecommend'),
       confirmedtitle: proxy.$t('btn.confirm'),
       action: notRecommend, i: i
     }]

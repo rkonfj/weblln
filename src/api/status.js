@@ -50,7 +50,7 @@ const status = {
         }
         return await http.delete(`/v/status/${statusID}/recommend`, { session: session })
     },
-    getStatusRecommandComment: async (statusID, session) => {
+    getStatusRecommendComment: async (statusID, session) => {
         return await http.get(`/o/explore/status/${statusID}/comment`, { session: session })
     }
 }

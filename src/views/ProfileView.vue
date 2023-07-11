@@ -88,7 +88,7 @@ function buildMenu(i) {
   if (session.value?.admin) {
     statusMenu.value = [{
       component: markRaw(UpIcon),
-      title: proxy.$t('btn.recommand'),
+      title: proxy.$t('btn.recommend'),
       confirmedtitle: proxy.$t('btn.confirm'),
       action: recommend, i: i
     }]

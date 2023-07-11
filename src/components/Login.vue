@@ -47,7 +47,7 @@ onMounted(async () => {
     border: 1px solid var(--lln-color-border);
     border-radius: 16px;
     padding: 5px 15px;
-    margin-top: 15px;
+    margin-top: 10px;
     z-index: 12;
 }
 
@@ -56,7 +56,7 @@ onMounted(async () => {
     padding: 5px 10px;
     border-radius: 20px;
     width: 100%;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     display: flex;
     align-items: center;
     font-size: 16px;
@@ -75,7 +75,7 @@ onMounted(async () => {
 }
 
 .sidelogin .btnarea {
-    margin: 20px 0;
+    margin: 18px 0;
 }
 
 .sidelogin .tips {
