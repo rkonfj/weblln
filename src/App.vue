@@ -314,7 +314,7 @@ nav ul .home .version {
 nav ul .home svg {
   width: 38px;
   height: 38px;
-  fill: var(--lln-color-text);
+  fill: var(--color-main);
 }
 
 nav ul .home svg path {
