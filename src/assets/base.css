@@ -42,6 +42,8 @@
   --lln-color-timeline: rgb(207, 217, 222);
   --lln-color-side-bg: rgb(247, 249, 249);
   --lln-color-code: #4d4d4c;
+  --lln-color-login-border: rgb(239, 243, 244);
+  --lln-color-login-bg: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,6 +66,9 @@
     --lln-color-side-bg: rgb(22, 24, 28);
     --lln-color-nav-hover: rgba(231, 233, 234, 0.1);
     --lln-color-code: rgba(235, 235, 235, 0.64);
+    --lln-color-login-border: rgb(47, 51, 54);
+    --lln-color-login-bg: rgb(22, 24, 28);
+
   }
 
   .Toastify {

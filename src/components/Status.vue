@@ -269,6 +269,7 @@ async function deleteStatus() {
 .status .menu ul li svg {
   width: 18px;
   height: 18px;
+  fill: var(--lln-color-text);
 }
 
 .status .menu ul li .delete {

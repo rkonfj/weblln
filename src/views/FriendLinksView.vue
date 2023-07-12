@@ -46,6 +46,7 @@ main ul li .logo {
     box-shadow: 0 0 2px var(--lln-color-border);
     margin-right: 10px;
     box-sizing: content-box;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 main ul li .logo img,

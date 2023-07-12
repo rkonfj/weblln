@@ -490,7 +490,6 @@ footer .foot a:hover {
     display: block;
     position: sticky;
     bottom: 0;
-    background-color: #fff;
     width: 100%;
   }
 
@@ -536,6 +535,7 @@ footer .foot a:hover {
   .main-content .mobileop svg {
     width: 16px;
     height: 16px;
+    fill: var(--lln-color-text);
   }
 }
 

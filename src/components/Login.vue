@@ -45,10 +45,11 @@ onMounted(async () => {
 <style>
 .sidelogin {
     width: 320px;
-    border: 1px solid var(--lln-color-border);
+    border: 1px solid var(--lln-color-login-border);
     border-radius: 16px;
     padding: 5px 15px;
     margin-top: 10px;
+    background-color: var(--lln-color-login-bg);
     z-index: 12;
 }
 

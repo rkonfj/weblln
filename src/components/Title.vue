@@ -71,6 +71,10 @@ h2 a:hover {
   background-color: rgba(15, 20, 25, 0.1);
 }
 
+h2 a svg {
+  fill: var(--lln-color-text);
+}
+
 @media (max-width: 60rem) {
   h2 a svg {
     width: 20px;
