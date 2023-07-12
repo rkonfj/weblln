@@ -9,7 +9,7 @@ import CalendarIcon from '../components/icons/IconCalendar.vue'
 import Verified from '../components/Verified.vue'
 import UpIcon from '../components/icons/UpIcon.vue'
 
-import { ref, markRaw, onMounted, getCurrentInstance } from 'vue'
+import { ref, markRaw, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import { loadSession } from '../lln'
@@ -24,9 +24,21 @@ const loading = ref(true)
 const haveMore = ref()
 const profileBgImage = ref()
 
+async function onDocumentScroll() {
+  let height = document.documentElement.scrollHeight - document.documentElement.scrollTop
+  if (height === document.documentElement.clientHeight && !loading.value && haveMore.value) {
+    await loadStatus(status.value[status.value.length - 1].createRev)
+  }
+}
+
 onMounted(async () => {
   session.value = loadSession()
   await loadProfile()
+  window.addEventListener('scroll', onDocumentScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onDocumentScroll)
 })
 
 async function loadProfile() {

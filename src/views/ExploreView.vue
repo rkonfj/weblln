@@ -17,6 +17,13 @@ const haveMore = ref()
 const news = ref(0)
 let newsProbeInterval = null
 
+async function onDocumentScroll() {
+  let height = document.documentElement.scrollHeight - document.documentElement.scrollTop
+  if (height === document.documentElement.clientHeight && !loading.value && haveMore.value) {
+    await loadExploreData(status.value[status.value.length - 1].createRev)
+  }
+}
+
 onMounted(async () => {
   let sessionStr = window.localStorage.getItem("session")
   if (sessionStr) {
@@ -26,6 +33,7 @@ onMounted(async () => {
     return
   }
   await loadExploreData()
+  window.addEventListener('scroll', onDocumentScroll)
 })
 
 onActivated(async () => {
@@ -38,6 +46,7 @@ onActivated(async () => {
   if (scrollY && scrollY > 0) {
     nextTick(() => window.scrollTo(0, scrollY))
   }
+  window.removeEventListener('scroll', onDocumentScroll)
 })
 
 onDeactivated(() => {
@@ -48,22 +57,19 @@ onDeactivated(() => {
   window.sessionStorage.setItem('exploreScrollY', window.scrollY)
 })
 
-async function loadExploreData(opts) {
-  if (!opts) {
-    opts = {}
-  }
-  if (!opts.size) {
-    opts.size = 18
-  }
+async function loadExploreData(after) {
   loading.value = true
   try {
-    let resp = await proxy.$lln.status.explore(opts, session.value)
+    let resp = await proxy.$lln.status.explore({
+      after: after,
+      size: 18
+    }, session.value)
     if (resp.headers.get("X-Session-Valid") == "false") {
       session.value = null
     }
     haveMore.value = resp.more
     if (resp.v) {
-      if (!opts.after) {
+      if (!after) {
         status.value = resp.v
       } else {
         for (let s of resp.v) {
@@ -208,7 +214,7 @@ async function notRecommend(s) {
       </div>
     </ul>
     <div class="loadbtn" v-if="haveMore && !loading"
-      @click="loadExploreData({ after: status[status.length - 1].createRev })">
+      @click="loadExploreData(status[status.length - 1].createRev)">
       {{ $t('nav.showmore') }}
     </div>
     <Loading v-if="loading" />
