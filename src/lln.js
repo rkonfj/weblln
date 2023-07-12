@@ -20,7 +20,7 @@ renderer.text = (text) => {
 }
 
 renderer.image = (herf) => {
-    return `<a href="${herf}">${herf}</a>`
+    return `<div class="mdunsupport">■■■</div>`
 }
 
 renderer.code = (code) => {
@@ -28,6 +28,19 @@ renderer.code = (code) => {
         return ''
     }
     return `<div class="codeblock"><div class="copy">Copy</div><pre><code>${code}</code></pre></div>`
+}
+
+renderer.link = function (href, title, text) {
+    if (!href.startsWith('https')) {
+        return href
+    }
+    if(text.startsWith('https')) {
+        text = text.substring(8)
+    }
+    if(!title) {
+        title = ""
+    }
+    return `<a class="mdlink" href="${href}" title="${title}"><span>${text}</span></a>`;
 }
 
 marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })
@@ -63,9 +76,9 @@ async function updateSettings(modRev) {
     let resp = await misc.settings(modRev)
     if (resp.code == 200) {
         window.localStorage.setItem('settings', JSON.stringify(resp.v))
-        if(modRev > 0) {
+        if (modRev > 0) {
             let settings = JSON.parse(window.localStorage.getItem('settings'))
-            if(settings.announcement != resp.v.announcement) {
+            if (settings.announcement != resp.v.announcement) {
                 window.localStorage.removeItem('announced')
             }
         }

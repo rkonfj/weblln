@@ -72,6 +72,7 @@ hr {
     margin: 5px 0;
     font-size: 17px;
 }
+
 .raw p,
 .paragraph p {
     margin-bottom: 10px;
@@ -97,6 +98,27 @@ hr {
     background-color: var(--lln-color-timeline);
     color: var(--lln-color-text);
     z-index: 10;
+}
+
+.mdlink {
+    text-decoration-color: var(--colot-main);
+    display: inline-block;
+}
+
+.mdlink:hover {
+    background: none;
+    transition: 0.4s;
+    text-decoration: underline;
+}
+
+.mdunsupport {
+    display: inline-block;
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    border: 1px solid var(--lln-color-border);
+    box-shadow: 0 0 5px var(--lln-color-border);
+    border-radius: 5px;
+    padding: 0 5px;
 }
 
 @media (max-width: 60rem) {
