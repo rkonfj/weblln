@@ -41,11 +41,6 @@ onActivated(async () => {
   if (!newsProbeInterval) {
     newsProbeInterval = setInterval(newsProbe, 15000)
   }
-
-  let scrollY = parseInt(window.sessionStorage.getItem('exploreScrollY'))
-  if (scrollY && scrollY > 0) {
-    nextTick(() => window.scrollTo(0, scrollY))
-  }
   window.removeEventListener('scroll', onDocumentScroll)
 })
 
@@ -54,7 +49,6 @@ onDeactivated(() => {
     clearInterval(newsProbeInterval)
     newsProbeInterval = null
   }
-  window.sessionStorage.setItem('exploreScrollY', window.scrollY)
 })
 
 async function loadExploreData(after) {

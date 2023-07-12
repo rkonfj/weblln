@@ -39,11 +39,11 @@ const router = createRouter({
       path: '/friends',
       name: 'friends',
       component: () => import('./views/FriendLinksView.vue')
-    },{
+    }, {
       path: '/:user/status/:id',
       name: 'status',
       component: () => import('./views/StatusView.vue')
-    },{
+    }, {
       path: '/:user/status/:id/image/:num',
       name: 'imagestatus',
       component: () => import('./views/StatusImageView.vue')
@@ -57,11 +57,11 @@ const router = createRouter({
       path: '/search/labels/:label',
       name: 'searchlabel',
       component: () => import('./views/SearchView.vue')
-    },{
+    }, {
       path: '/termsofservice',
       name: 'termsofservice',
       component: () => import('./views/TermsOfServiceView.vue')
-    },{
+    }, {
       path: '/privacypolicy',
       name: 'privacypolicy',
       component: () => import('./views/PrivacyPolicyView.vue')
@@ -76,7 +76,14 @@ const router = createRouter({
       name: 'profile',
       component: () => import('./views/ProfileView.vue')
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0, behavior: 'smooth' }
+    }
+  }
 })
 
 export default router

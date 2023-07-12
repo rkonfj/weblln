@@ -91,13 +91,19 @@ hr {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 2px 5px;
+    padding: 0px 5px;
+    margin: 3px 3px 0 0;
+    box-sizing: content-box;
+    color: var(--color-main);
     cursor: pointer;
     font-size: 11px;
     height: 20px;
-    background-color: var(--lln-color-timeline);
-    color: var(--lln-color-text);
     z-index: 10;
+}
+
+.codeblock .copy:hover {
+    background-color: var(--lln-color-timeline);
+    transition: 0.4s;
 }
 
 .mdlink {
