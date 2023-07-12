@@ -115,6 +115,11 @@ async function loadTipMessages() {
       tips.value = resp.v.length
     }
   } catch (e) {
+    if (e.code == 401) {
+      proxy.$toast(proxy.$t('tips.sessionExpired'), { type: 'error' })
+      setTimeout(() => proxy.$router.push('/logout'), 1000)
+      return
+    }
     console.error('load tips messages error: ', e.message)
   }
 
