@@ -3,10 +3,11 @@ import StatusView from './StatusView.vue'
 import BackIcon from '../components/icons/IconBack.vue'
 import CloseIcon from '../components/icons/CloseIcon.vue'
 import NextIcon from '../components/icons/NextIcon.vue'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router';
 import { fileApi } from '../config'
 
+const {proxy} = getCurrentInstance()
 const curImage = ref(0)
 const images = ref()
 const route = useRoute()
@@ -65,13 +66,21 @@ function imageSrc(src) {
     }
     return `${fileApi}${src}`
 }
+
+function back() {
+    if (window.history.length > 1) {
+        proxy.$router.go(-1)
+        return
+    }
+    proxy.$router.replace(`/${proxy.$route.params.user}/status/${proxy.$route.params.id}`)
+}
 </script>
 <template>
     <div class="mainarea">
         <div class="imagepreview" v-swipe="showImage">
             <div v-if="images && images.length > curImage">
                 <div class="count"><span>{{ curImage + 1 }}</span>/<span>{{ images.length }}</span></div>
-                <div class="close btn" @click="$router.go(-1)">
+                <div class="close btn" @click="back">
                     <CloseIcon />
                 </div>
                 <div class="prev btn" v-if="curImage != 0" @click="curImage--">

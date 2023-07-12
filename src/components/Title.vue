@@ -1,6 +1,6 @@
 <template>
   <h2>
-    <a v-if="backbtn" @click="$router.go(-1)">
+    <a v-if="backbtn" @click="back">
       <IconBack />
     </a>
     <div class="block">
@@ -13,8 +13,18 @@
 
 <script setup>
 import IconBack from './icons/IconBack.vue'
-import { ref } from 'vue'
+import { getCurrentInstance } from 'vue'
+
 defineProps(['title', 'backbtn', 'tips'])
+const { proxy } = getCurrentInstance()
+
+function back() {
+  if (window.history.length > 1) {
+    proxy.$router.go(-1)
+    return
+  }
+  proxy.$router.replace({ path: '/explore' })
+}
 </script>
 
 <style scoped>
