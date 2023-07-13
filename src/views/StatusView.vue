@@ -38,7 +38,7 @@ async function loadStatus() {
   try {
     let s = await proxy.$lln.status.getStatus(route.params.id, session.value)
     for (let c of s.content) {
-      if(c.type == 'text') {
+      if (c.type == 'text') {
         document.title = `${c.value} - ${document.title}`
         break
       }
@@ -426,6 +426,15 @@ main .loadbtn {
 
   .stats .item:nth-child(3) {
     margin-left: 0;
+  }
+
+  .operate {
+    height: 46px;
+  }
+
+  .operate svg {
+    height: 18px;
+    width: 18px;
   }
 
   main ul li:hover {
