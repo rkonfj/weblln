@@ -149,7 +149,7 @@ async function deleteStatus() {
       <a class="icon" v-if="!menuOpened" @click.stop="menuOpened = !menuOpened">
         <MenuIcon @click.stop="menuOpened = !menuOpened" />
       </a>
-      <transition name="slide-down">
+      <transition name="slide-fade">
         <ul v-if="menuOpened">
           <li v-for="item in menu" @click.stop="(item.confirmed = item.action(status)) ? '' : (menuOpened = false)">
             <component :is="item.component"></component>

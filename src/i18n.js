@@ -61,7 +61,9 @@ const messages = {
             show: 'Show',
             recommend: 'Recommend',
             notRecommend: 'Not recommend',
-            confirm: 'Confirm'
+            confirm: 'Confirm',
+            disable: 'Diable',
+            enable: 'Enable'
         },
         tips: {
             success: 'Done',
@@ -150,7 +152,9 @@ const messages = {
             show: '展示',
             recommend: '推荐',
             notRecommend: '不推荐',
-            confirm: '确认'
+            confirm: '确认',
+            disable: '禁用',
+            enable: '解除禁用'
         },
         tips: {
             success: '完成',

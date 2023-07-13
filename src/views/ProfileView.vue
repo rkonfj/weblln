@@ -8,11 +8,15 @@ import ProfileBgImage from '../components/ProfileBgImage.vue'
 import CalendarIcon from '../components/icons/IconCalendar.vue'
 import Verified from '../components/Verified.vue'
 import UpIcon from '../components/icons/UpIcon.vue'
+import MenuIcon from '../components/icons/MenuIcon.vue'
+import DisableIcon from '../components/icons/DisableIcon.vue'
+import SuccessIcon from '../components/icons/SuccessIcon.vue'
 
 import { ref, markRaw, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { DateTime } from 'luxon'
 import { loadSession } from '../lln'
+import { disableUser as apiDisableUser, enableUser as apiEnableUser } from '../api/admin'
 
 const emit = defineEmits(['shouldLogin'])
 const { proxy } = getCurrentInstance()
@@ -23,6 +27,8 @@ const status = ref([])
 const loading = ref(true)
 const haveMore = ref()
 const profileBgImage = ref()
+const menuOpened = ref()
+const disableConfirmed = ref()
 
 async function onDocumentScroll() {
   let height = document.documentElement.scrollHeight - document.documentElement.scrollTop
@@ -31,10 +37,17 @@ async function onDocumentScroll() {
   }
 }
 
+function closeMenu() {
+  menuOpened.value = false
+  disableConfirmed.value = false
+}
+
 onMounted(async () => {
   session.value = loadSession()
   await loadProfile()
   window.addEventListener('scroll', onDocumentScroll)
+  document.addEventListener('click', closeMenu)
+  window.addEventListener('touchmove', closeMenu)
 })
 
 onBeforeUnmount(() => {
@@ -120,6 +133,46 @@ function recommend(s) {
       }
     })
 }
+
+async function disableUser() {
+  if (!disableConfirmed.value) {
+    disableConfirmed.value = true
+    return
+  }
+  try {
+    await apiDisableUser(profile.value.id, session.value)
+    profile.value.disabled = true
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+  } catch (e) {
+    if (e.code == 403 || e.code == 401) {
+      proxy.$toast(proxy.$t('tips.sessionExpired'), { type: 'error' })
+      proxy.$router.replace('/logout')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  disableConfirmed.value = false
+}
+
+async function enableUser() {
+  if (!disableConfirmed.value) {
+    disableConfirmed.value = true
+    return
+  }
+  try {
+    await apiEnableUser(profile.value.id, session.value)
+    profile.value.disabled = false
+    proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+  } catch (e) {
+    if (e.code == 403 || e.code == 401) {
+      proxy.$toast(proxy.$t('tips.sessionExpired'), { type: 'error' })
+      proxy.$router.replace('/logout')
+      return
+    }
+    proxy.$toast(e.message, { type: 'error' })
+  }
+  disableConfirmed.value = false
+}
 </script>
 <template>
   <main>
@@ -134,8 +187,30 @@ function recommend(s) {
           <Avatar class="avatar" :src="profile.picture" />
         </div>
         <div class="info">
-          <Button class="follow" v-if="!session || session.id != profile.id" @click="follow"
-            :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
+          <div class="operates">
+            <div v-if="session && session.admin && session.id != profile.id" class="menuArea">
+              <a class="icon" v-if="!menuOpened" @click.stop="menuOpened = !menuOpened">
+                <MenuIcon @click.stop="menuOpened = !menuOpened" />
+              </a>
+              <transition name="slide-fade">
+
+                <ul v-if="menuOpened" class="menu">
+                  <li v-if="!profile.disabled" @click.stop="disableUser">
+                    <DisableIcon />
+                    <span v-if="!disableConfirmed">{{ $t('btn.disable') }}</span>
+                    <span v-if="disableConfirmed">{{ $t('btn.confirm') }}</span>
+                  </li>
+                  <li v-if="profile.disabled" @click.stop="enableUser">
+                    <SuccessIcon />
+                    <span v-if="!disableConfirmed">{{ $t('btn.enable') }}</span>
+                    <span v-if="disableConfirmed">{{ $t('btn.confirm') }}</span>
+                  </li>
+                </ul>
+              </transition>
+            </div>
+            <Button class="follow" v-if="!session || session.id != profile.id" @click="follow"
+              :btn="session && profile.following ? $t('user.following') : $t('btn.follow')" />
+          </div>
           <div class="n">{{ profile.name }}
             <Verified v-if="profile.verifiedCode > 0" size="18" :code="profile.verifiedCode"
               :title="$t(`verified.c${profile.verifiedCode}`)" />
@@ -253,11 +328,67 @@ main .loadbtn {
   cursor: pointer;
 }
 
-.mainarea .follow {
-  display: inline-block;
+.mainarea .operates {
+  display: flex;
   position: absolute;
   top: -45px;
   right: 15px;
+  align-items: center;
+}
+
+.mainarea .operates .menuArea {
+  position: relative;
+  width: 165px;
+  height: 35px;
+  display: flex;
+  justify-content: right;
+}
+
+.mainarea .operates .menuArea .icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: content-box;
+  border: .5px solid var(--lln-color-timeline);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 10px;
+  color: var(--lln-color-text);
+}
+
+.mainarea .operates .menuArea .icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mainarea .operates .menu {
+  top: 0;
+  right: 10px;
+  position: absolute;
+  background-color: var(--color-background);
+  border: 1px solid var(--lln-color-border);
+  border-radius: 15px;
+  box-shadow: 0 0 5px var(--lln-color-border);
+  padding: 0;
+}
+
+.mainarea .operates .menu li {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 42px;
+  line-height: 42px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.mainarea .operates .menu li svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
 }
 
 .mainarea .profile .bio {
