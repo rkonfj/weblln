@@ -614,6 +614,16 @@ footer .foot a:hover {
   opacity: 0;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @media (min-width: 60rem) {
   .Toastify {
     --toastify-icon-color-success: #fff;
