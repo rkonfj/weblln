@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import lln from '../lln'
+import { renderText, fullMarkdownRender } from '../lln'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
@@ -98,10 +98,10 @@ function calcImageClass(i) {
 <template>
     <div class="raw">
         <div class="sf" v-if="simple" v-for="c in paragraphs">
-            <div class="paragraph" v-html="lln.renderText(c)"></div>
+            <div class="paragraph" v-html="fullMarkdownRender(c)"></div>
         </div>
         <div class="overview" v-if="!simple && paragraphs.length > 0">
-            <div v-html="lln.renderText(paragraphs[0])"></div>
+            <div v-html="renderText(paragraphs[0])"></div>
             <div v-if="paragraphs.length > 1">...<a class="showMore">{{ $t('status.showmore') }}</a></div>
         </div>
         <div class="sf" v-if="imageErrCount > 0">

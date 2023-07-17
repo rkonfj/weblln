@@ -127,6 +127,16 @@ hr {
     padding: 0 5px;
 }
 
+.mdimg {
+    display: block;
+    max-width: 100%;
+    width: fit-content;
+    margin: 5px auto;
+    border: 1px solid var(--lln-color-border);
+    box-shadow: 0 0 5px var(--lln-color-border);
+    border-radius: 5px;
+}
+
 @media (max-width: 60rem) {
     pre {
         font-size: 12px;

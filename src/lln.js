@@ -5,9 +5,8 @@ import misc from './api/misc'
 
 const atRegex = /@([a-zA-Z\u00C0-\u017F\d_]+)/g
 const labelRegex = /#([a-zA-Z\u4e00-\u9fa5\d_]+)/g
-const renderer = new marked.Renderer()
 
-renderer.text = (text) => {
+function commonText(text)  {
     text = text.replaceAll(atRegex, m => `<a class="at" href="/${m.substring(1)}">${m}</a>`)
     text = text.replaceAll(labelRegex, m => {
         let t = `&${m};`
@@ -19,18 +18,14 @@ renderer.text = (text) => {
     return text
 }
 
-renderer.image = (herf) => {
-    return `<div class="mdunsupport">■■■</div>`
-}
-
-renderer.code = (code) => {
+function code(code) {
     if (!code || code.length == 0) {
         return ''
     }
     return `<div class="codeblock"><div class="copy">Copy</div><pre><code>${code}</code></pre></div>`
 }
 
-renderer.link = function (href, title, text) {
+function link (href, title, text) {
     if (!href.startsWith('https')) {
         return href
     }
@@ -43,10 +38,30 @@ renderer.link = function (href, title, text) {
     return `<a class="mdlink" href="${href}" title="${title}"><span>${text}</span></a>`;
 }
 
-marked.use({ renderer: renderer, breaks: true, mangle: false, headerIds: false })
+marked.use({ breaks: true, mangle: false, headerIds: false })
+
+const renderer = new marked.Renderer()
+renderer.text = commonText
+renderer.code = code
+renderer.link = link
+renderer.image = (herf) => {
+    return `<div class="mdunsupport">■■■</div>`
+}
+
+const fullMdRenderer = new marked.Renderer()
+fullMdRenderer.text = commonText
+fullMdRenderer.code = code
+fullMdRenderer.link = link
+fullMdRenderer.image = (herf, title, text) => {
+    return `<img src="${herf}" class="mdimg" alt="${text}" />`
+}
 
 export function renderText(text) {
-    return marked.parse(text)
+    return marked(text, {renderer: renderer})
+}
+
+export function fullMarkdownRender(text) {
+    return marked(text, {renderer: fullMdRenderer})
 }
 
 export function loadSession() {
