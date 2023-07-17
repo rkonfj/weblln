@@ -11,6 +11,7 @@ import CommentIcon from './icons/IconComment.vue'
 import DefaultAvatarIcon from './icons/DefaultAvatarIcon.vue'
 import LikeIcon from './icons/IconLike.vue'
 import LikedIcon from './icons/LikedIcon.vue'
+import ViewsIcon from './icons/ViewsIcon.vue'
 import ShareIcon from '../components/icons/ShareIcon.vue'
 import MenuIcon from '../components/icons/MenuIcon.vue'
 import DeleteIcon from '../components/icons/DeleteIcon.vue'
@@ -216,6 +217,11 @@ async function deleteStatus() {
             <LikeIcon v-if="!status.liked" :title="$t('btn.like')" />
             <LikedIcon class="like" v-if="status.liked" />
           </div><span>{{ status.likeCount }}</span>
+        </a>
+        <a :title="$t('status.views')">
+          <div class="icon">
+            <ViewsIcon :title="$t('status.views')" />
+          </div><span>{{ status.views }}</span>
         </a>
         <a @click.stop="share" :title="$t('btn.share')">
           <div class="icon">
@@ -466,8 +472,8 @@ async function deleteStatus() {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30px;
-  width: 30px;
+  height: 34px;
+  width: 34px;
   border-radius: 50%;
 }
 
@@ -500,6 +506,21 @@ async function deleteStatus() {
 
   .avatararea .timeline {
     width: 1.5px;
+  }
+
+  .content .op a span {
+    font-size: 12px;
+    margin-left: 3px;
+  }
+
+  .content .op a .icon {
+    height: 26px;
+    width: 26px;
+  }
+
+  .content .op a .icon svg {
+    width: 16px;
+    height: 16px;
   }
 }
 </style>
