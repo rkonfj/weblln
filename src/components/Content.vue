@@ -259,4 +259,11 @@ function calcImageClass(i) {
     max-height: 400px;
     min-height: 80px;
 }
+
+@media (max-width: 60rem) {
+    .raw .sf .icon {
+        width: 16px;
+        height: 16px;
+    }
+}
 </style>

@@ -516,6 +516,7 @@ async function deleteStatus() {
   .content .op a .icon {
     height: 26px;
     width: 26px;
+    margin-left: 1px;
   }
 
   .content .op a .icon svg {
