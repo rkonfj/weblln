@@ -33,7 +33,6 @@ onMounted(async () => {
     return
   }
   await loadExploreData()
-  window.addEventListener('scroll', onDocumentScroll)
 })
 
 onActivated(async () => {
@@ -41,7 +40,7 @@ onActivated(async () => {
   if (!newsProbeInterval) {
     newsProbeInterval = setInterval(newsProbe, 15000)
   }
-  window.removeEventListener('scroll', onDocumentScroll)
+  window.addEventListener('scroll', onDocumentScroll)
 })
 
 onDeactivated(() => {
@@ -49,6 +48,7 @@ onDeactivated(() => {
     clearInterval(newsProbeInterval)
     newsProbeInterval = null
   }
+  window.removeEventListener('scroll', onDocumentScroll)
 })
 
 async function loadExploreData(after) {
