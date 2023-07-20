@@ -60,7 +60,7 @@ function openGoogleSearch() {
     background-color: var(--lln-color-border);
     padding: 12px 0 12px 50px;
     line-height: 18px;
-    font-size: 18px;
+    font-size: 15px;
     border-radius: 30px;
     width: 100%;
     font-weight: normal;

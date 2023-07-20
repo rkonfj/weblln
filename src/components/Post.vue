@@ -658,8 +658,9 @@ function stopPasteImageURL() {
 }
 
 .content .operate .func a svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+    fill: var(--color-main);
 }
 
 .content .operate .postbtn .newp {
