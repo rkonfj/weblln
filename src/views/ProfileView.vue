@@ -218,7 +218,9 @@ async function enableUser() {
           <div class="un">@{{ profile.uniqueName }}</div>
           <div class="bio" v-if="profile.bio && profile.bio.length > 0">{{ profile.bio }}</div>
           <div class="join">
-            <CalendarIcon /><span>{{ DateTime.fromISO(profile.createTime).toRelative() }}</span>加入
+            <CalendarIcon /><span
+              :title="`${DateTime.fromISO(profile.createTime).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}`">{{
+                DateTime.fromISO(profile.createTime).toRelative() }}</span>加入
           </div>
         </div>
         <div class="info">

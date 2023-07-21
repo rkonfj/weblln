@@ -288,6 +288,9 @@ async function deleteStatus() {
 }
 
 .status .menu .icon {
+  position: absolute;
+  right: 0;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
