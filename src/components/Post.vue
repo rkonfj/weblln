@@ -171,7 +171,7 @@ function editParagraph(i) {
     }
 
     if (paragraphs.value.length - 1 > i) {
-        for (let p of paragraphs.value.splice(i + 1)) {
+        for (let p of paragraphs.value.splice(i + 1).reverse()) {
             paragraphsContinue.value.unshift(p)
         }
     }
