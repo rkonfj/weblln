@@ -4,6 +4,7 @@ import Post from '../components/Post.vue'
 import Title from '../components/Title.vue'
 import Loading from '../components/Loading.vue'
 import NotIcon from '../components/icons/NotIcon.vue'
+import HomeIcon from '../components/icons/IconHome.vue'
 
 
 import { ref, markRaw, onMounted, getCurrentInstance, onActivated, onDeactivated, nextTick } from 'vue'
@@ -188,9 +189,19 @@ async function notRecommend(s) {
     }
   }
 }
+function toHome() {
+  if (window.scrollY == 0) {
+    proxy.$emit('openNav')
+    return
+  }
+  proxy.$router.replace('/explore')
+}
 </script>
 <template>
   <main>
+    <a class="home" @click.stop="toHome">
+      <HomeIcon />
+    </a>
     <Title :title="session ? $t('nav.home') : $t('nav.explore')" />
     <Post v-if="session" @posted="loadNewStatus" :placeholder="$t('status.prompt')" :btntext="$t('status.post')" />
     <a v-if="!loadingNews && news > 0" class="loadNewStatus" @click="loadNewStatus">{{ $t('btn.show') }}<span>{{ news
@@ -216,6 +227,9 @@ async function notRecommend(s) {
 </template>
 
 <style scoped>
+main .home {
+  display: none;
+}
 main .loadNewStatus {
   cursor: pointer;
   justify-content: center;
@@ -253,6 +267,26 @@ main .loadbtn {
 @media (max-width: 60rem) {
   main ul li:hover {
     background-color: unset;
+  }
+  main .home {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 0.4rem;
+    background-color: var(--color-background);
+  }
+  main .home svg {
+    width: 2.0rem;
+    height: 2.0rem;
+    fill: var(--color-main);
   }
 }
 </style>

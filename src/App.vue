@@ -229,7 +229,7 @@ function closeAnnouncement() {
         <NotificationIcon @click="openNotification" />
       </div>
     </div>
-    <RouterView @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" v-slot="{ Component }">
+    <RouterView @shouldLogin="shakeLogin" @tipsDeleted="loadTipMessages" @openNav="openNav" v-slot="{ Component }">
       <transition>
         <keep-alive>
           <component v-if="!loading && $route.meta.keepalive" :is="Component" :key="$route.name" />
@@ -538,8 +538,8 @@ footer .foot a:hover {
   }
 
   .main-content .mobileop svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     fill: var(--lln-color-text);
   }
 }
