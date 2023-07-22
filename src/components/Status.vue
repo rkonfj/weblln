@@ -29,6 +29,7 @@ const avatar = ref()
 const menuOpened = ref()
 const confirmed = ref()
 const statusCard = ref()
+const navigatorShare = ref(navigator.share)
 
 function closeMenu() {
   menuOpened.value = false
@@ -105,6 +106,13 @@ function share() {
   navigator.clipboard.writeText(`${window.location.origin}/${props.status.user.uniqueName}/status/${props.status.id}`)
     .then(() => proxy.$toast(proxy.$t('tips.copied')))
     .catch(() => proxy.$toast(proxy.$t('misc.badop')))
+}
+
+function shareTo() {
+  navigator.share({
+    text: props.status.content[0].value,
+    url: `https://${window.location.host}/${props.status.user.uniqueName}/status/${props.status.id}`
+  })
 }
 
 async function follow() {
@@ -193,6 +201,9 @@ function embedtweet() {
           </li>
           <li @click.stop="embedtweet">
             <CodeIcon /><span>{{ $t('btn.embedtweet') }}</span>
+          </li>
+          <li v-if="navigatorShare" @click.stop="shareTo">
+            <ShareIcon /><span>{{ $t('btn.share') }}...</span>
           </li>
         </ul>
       </transition>
