@@ -2,7 +2,7 @@
 import { onMounted, ref, nextTick, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
-
+import h2c from 'html2canvas'
 import lln from '../lln'
 
 import Content from './Content.vue'
@@ -28,6 +28,7 @@ const session = ref()
 const avatar = ref()
 const menuOpened = ref()
 const confirmed = ref()
+const statusCard = ref()
 
 function closeMenu() {
   menuOpened.value = false
@@ -143,9 +144,27 @@ async function deleteStatus() {
   }
   confirmed.value = false
 }
+
+function embedtweet() {
+  if (props.simple) {
+    proxy.$toast('不支持', { type: 'warning' })
+    return
+  }
+  closeMenu()
+  proxy.$toast(proxy.$t('tips.processing'))
+  setTimeout(() => {
+    h2c(statusCard.value.parentElement, { useCORS: true }).then((canvas) => {
+      const downloadLink = document.createElement('a')
+      downloadLink.href = canvas.toDataURL('image/png')
+      downloadLink.download = `${props.status.user.uniqueName}-${props.status.id}.png`
+      downloadLink.click()
+      proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
+    })
+  }, 500)
+}
 </script>
 <template>
-  <div class="status">
+  <div class="status" ref="statusCard">
     <div class="menu">
       <a class="icon" v-if="!menuOpened" @click.stop="menuOpened = !menuOpened">
         <MenuIcon @click.stop="menuOpened = !menuOpened" />
@@ -172,7 +191,7 @@ async function deleteStatus() {
           <li @click.stop="follow" v-if="session && status.user.id != session.id && !status.followed">
             <FollowIcon /><span>{{ $t('btn.follow') }} @{{ status.user.uniqueName }}</span>
           </li>
-          <li @click.stop="$toast('暂不支持')">
+          <li @click.stop="embedtweet">
             <CodeIcon /><span>{{ $t('btn.embedtweet') }}</span>
           </li>
         </ul>
