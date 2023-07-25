@@ -53,7 +53,6 @@ h2 .title {
   color: var(--lln-color-text);
 }
 
-
 h2 .tipstitle {
   font-size: 20px;
   line-height: 18px;
@@ -86,6 +85,10 @@ h2 a svg {
 }
 
 @media (max-width: 60rem) {
+  h2 {
+    border-bottom: .5px solid var(--lln-color-border);
+  }
+
   h2 a svg {
     width: 20px;
     height: 20px;
