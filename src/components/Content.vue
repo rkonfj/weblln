@@ -4,6 +4,7 @@ import { renderText, fullMarkdownRender } from '../lln'
 import ErrorIcon from './icons/ErrorIcon.vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import LoadingIcon from './icons/LoadingIcon.vue'
+import Video from './Video.vue'
 
 import { fileApi, cutQuery53, cutQuery56 } from '../config';
 
@@ -11,17 +12,23 @@ const emit = defineEmits(['imagesReady'])
 const props = defineProps(['status', 'simple', 'hideMedia'])
 const images = ref([])
 const paragraphs = ref([])
+const videos = ref([])
 const imageErrCount = ref(0)
 const imageLoadCount = ref(0)
 const hideImages = ref()
 
 const imageBuffer = []
 
-
 onMounted(() => {
     for (let c of props.status.content) {
         if (c.type == 'img') {
             imageBuffer.push(c)
+        } else if (c.type == 'video') {
+            videos.value.push({
+                url: c.value,
+                duration: 0,
+                currentTime: 0
+            })
         } else {
             paragraphs.value.push(c.value)
         }
@@ -79,21 +86,6 @@ function imagePreview(src, h) {
     }
     return `${fileApi}${src}?${cutQuery53}`
 }
-
-function calcImageClass(i) {
-    if (images.value.length == 2) {
-        return 'w50'
-    }
-    if (images.value.length == 3 && i == 0) {
-        return 'w50 h100'
-    }
-    if (images.value.length == 3 && i != 0) {
-        return 'h50'
-    }
-    if (images.value.length == 4 && i != 0) {
-        return 'h50'
-    }
-}
 </script>
 <template>
     <div class="raw">
@@ -117,9 +109,10 @@ function calcImageClass(i) {
             <span class="tips success">点击加载 {{ imageBuffer.length }} 张图片</span>
         </div>
         <div class="media" v-if="images.length > 0 && !hideMedia">
-            <div v-if="images.length == 1" class="image"><img
-                    @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
-                    :src="imagePreview(images[0].v)" alt="Image" /></div>
+            <div v-if="images.length == 1" class="image">
+                <img @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
+                    :src="imagePreview(images[0].v)" alt="Image" />
+            </div>
             <div v-if="images.length == 2" class="image w50 "><img
                     @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/1`)"
                     :src="imagePreview(images[0].v)" alt="Image" /></div>
@@ -154,6 +147,9 @@ function calcImageClass(i) {
                         @click.stop="$router.push(`/${status.user.uniqueName}/status/${status.id}/image/4`)"
                         :src="imagePreview(images[3].v)" alt="Image" /></div>
             </div>
+        </div>
+        <div class="video" v-if="videos.length > 0">
+            <Video :videos="videos" />
         </div>
     </div>
 </template>
@@ -258,6 +254,13 @@ function calcImageClass(i) {
     max-width: 100%;
     max-height: 400px;
     min-height: 80px;
+}
+
+.video {
+    margin: 10px 0;
+    position: relative;
+    width: 100%;
+    max-width: 500px;
 }
 
 @media (max-width: 60rem) {

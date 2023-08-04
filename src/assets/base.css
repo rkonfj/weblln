@@ -37,6 +37,8 @@
 
   --lln-color-border: rgb(239, 243, 244);
   --lln-color-title-bg: rgba(255, 255, 255, 0.5);
+  --lln-color-play-mark: rgba(255, 255, 255, 0.8);
+  --lln-color-play-bg: rgba(0, 0, 0, 0.8);
   --lln-color-text: #000;
   --lln-color-bg-hover: rgba(0, 0, 0, 0.03);
   --lln-color-timeline: rgb(207, 217, 222);
@@ -60,6 +62,8 @@
 
     --lln-color-border: rgb(47, 51, 54);
     --lln-color-title-bg: rgba(0, 0, 0, 0.65);
+    --lln-color-play-mark: rgba(0, 0, 0, 0.7);
+    --lln-color-play-bg: rgb(22, 24, 28);
     --lln-color-text: #e7e9ea;
     --lln-color-bg-hover: rgba(255, 255, 255, 0.03);
     --lln-color-timeline: rgb(51, 54, 57);
