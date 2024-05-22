@@ -153,7 +153,7 @@ async function deleteStatus() {
 </script>
 <template>
   <div class="status" ref="statusCard">
-    <div class="menu">
+    <div class="menu" v-if="session">
       <a class="icon" v-if="!menuOpened" @click.stop="menuOpened = !menuOpened">
         <MenuIcon @click.stop="menuOpened = !menuOpened" />
       </a>
