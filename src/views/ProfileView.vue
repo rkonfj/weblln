@@ -380,16 +380,16 @@ main .loadbtn {
   display: flex;
   align-items: center;
   padding: 0 20px;
-  height: 42px;
-  line-height: 42px;
+  height: 36px;
+  line-height: 36px;
   font-size: 15px;
   cursor: pointer;
   transition: 0.4s;
 }
 
 .mainarea .operates .menu li svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   margin-right: 10px;
 }
 
