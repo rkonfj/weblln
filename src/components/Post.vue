@@ -583,7 +583,7 @@ function stopPasteImageURL() {
 .content .media img {
     object-fit: cover;
     max-width: 100%;
-    max-height: 400px;
+    max-height: 450px;
     min-height: 80px;
 }
 
