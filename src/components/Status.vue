@@ -3,6 +3,8 @@ import { onMounted, ref, nextTick, getCurrentInstance, onBeforeUnmount } from 'v
 import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
 import lln from '../lln'
+import { deleteStatus as apiDeleteStatus } from '../api/admin'
+
 
 import Content from './Content.vue'
 import Avatar from './Avatar.vue'
@@ -138,7 +140,11 @@ async function deleteStatus() {
     return
   }
   try {
-    await proxy.$lln.status.delete(props.status.id, session.value)
+    if (session.value.admin) {
+      await apiDeleteStatus(props.status.id, session.value)
+    } else {
+      await proxy.$lln.status.delete(props.status.id, session.value)
+    }
     emit('deleted')
     proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
   } catch (e) {
@@ -164,7 +170,7 @@ async function deleteStatus() {
             <span v-if="item.confirmed">{{ item.confirmedtitle }}</span>
             <span v-if="!item.confirmed">{{ item.title }}</span>
           </li>
-          <li @click.stop="deleteStatus" v-if="session && status.user.id == session.id && status.comments == 0">
+          <li @click.stop="deleteStatus" v-if="session && (status.user.id == session.id || session.admin) && status.comments == 0">
             <DeleteIcon class="delete" />
             <span v-if="confirmed" class="delete"> {{ $t('tips.confirmdelete') }}</span>
             <span v-if="!confirmed" class="delete">{{ $t('btn.delete') }}</span>
