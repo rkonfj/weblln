@@ -155,6 +155,7 @@ function addMedia(e) {
 
 function removeMedia(idx) {
     images.value.splice(idx, 1)
+    nextTick(updateContentModel)
 }
 
 function addParagraph() {
@@ -277,6 +278,7 @@ async function uploadFile(event) {
         proxy.$toast('正在上传')
         let resp = await proxy.$lln.misc.uploadFile(f, session.value)
         images.value.push(`${resp.path}`)
+        nextTick(updateContentModel)
         proxy.$toast(proxy.$t('tips.success'), { type: 'success' })
     } catch (e) {
         if (e.code == 401) {
