@@ -281,7 +281,6 @@ main .loadbtn {
     right: 0;
     margin: 0 auto;
     top: 0.4rem;
-    background-color: var(--color-background);
   }
   main .home svg {
     width: 2.0rem;
